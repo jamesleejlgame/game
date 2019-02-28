@@ -8,7 +8,7 @@ let SanFranciscoScene = new Phaser.Class({
       Phaser.Scene.call(this, { key: 'SanFranciscoScene' });
     },
 
-  preload: 
+  preload:
     function () {},
 
   create: function () {
@@ -18,7 +18,7 @@ let SanFranciscoScene = new Phaser.Class({
       frames: this.anims.generateFrameNumbers('miriam_left'),
       frameRate: 10,
       repeat: -1
-    }); 
+    });
     this.anims.create({
       key: 'miriam_right',
       frames: this.anims.generateFrameNumbers('miriam_left'),
@@ -36,21 +36,22 @@ let SanFranciscoScene = new Phaser.Class({
       frames: this.anims.generateFrameNumbers('miriam_down'),
       frameRate: 10,
       repeat: -1
-    });        
+    });
 
-    this.miriam = this.physics.add.sprite(50, 100, 'miriam_down', 0);
+    this.miriam = this.physics.add.sprite(435, 300, 'miriam_down', 0);
     this.miriam.setCollideWorldBounds(true);
-    
-    this.cameras.main.setBounds(0, 0, 800, 600);
+
+    this.cameras.main.setBounds(0, 0, 1088, 1024);
+    this.physics.world.setBounds(0, 0, 1088, 1024);
     this.cameras.main.startFollow(this.miriam);
     this.cameras.main.roundPixels = true; // avoid tile bleed
-    
+
     this.cursors = this.input.keyboard.createCursorKeys();
   },
-  
+
   update: function (time, delta) {
     this.miriam.body.setVelocity(0);
-  
+
     if (this.cursors.left.isDown) {
       this.miriam.body.setVelocityX(-1 * MIRIAM_SPEED);
     } else if (this.cursors.right.isDown) {
@@ -60,8 +61,8 @@ let SanFranciscoScene = new Phaser.Class({
       this.miriam.body.setVelocityY(-1 * MIRIAM_SPEED);
     } else if (this.cursors.down.isDown) {
       this.miriam.body.setVelocityY(MIRIAM_SPEED);
-    }        
-  
+    }
+
     if (this.cursors.left.isDown) {
       this.miriam.anims.play('miriam_left', true);
       this.miriam.flipX = false;
@@ -78,5 +79,5 @@ let SanFranciscoScene = new Phaser.Class({
       }
       this.miriam.anims.pause(this.anims.get(this.miriam.anims.getCurrentKey()).frames[0]);
     }
-  }  
+  }
 });
