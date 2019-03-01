@@ -1,5 +1,3 @@
-const MIRIAM_SPEED = 150;
-
 let SanFranciscoScene = new Phaser.Class({
   Extends: Phaser.Scene,
 
@@ -12,11 +10,10 @@ let SanFranciscoScene = new Phaser.Class({
     function () {},
 
   create: function () {
-    var map = this.make.tilemap({ key: 'san_francisco_tilemap' });
-    var tileset = map.addTilesetImage('town_and_city_tileset');
-    var layer = map.createStaticLayer(0, tileset, 0, 0);
+    let map = this.make.tilemap({ key: 'san_francisco_tilemap' });
+    let tileset = map.addTilesetImage('town_and_city_tileset');
+    let layer = map.createStaticLayer(0, tileset, 0, 0);
     layer.setCollisionByProperty({ collides: true });
-    this.impact.world.setCollisionMapFromTilemapLayer(layer, { defaultCollidingSlope: 1 });
 
     this.anims.create({
       key: 'miriam_left',
@@ -43,10 +40,15 @@ let SanFranciscoScene = new Phaser.Class({
       repeat: -1
     });
 
-    this.miriam = this.impact.add.sprite(494, 250, 'miriam_down', 0);
+    this.miriam = this.physics.add.sprite(494, 250, 'miriam_down', 0);
+    this.miriam.setCollideWorldBounds(true);
+    // Checks if miriam collides with any obstacles.
+    this.physics.add.collider(this.miriam, layer);
+    // Calls overlap() if miriam overlaps with the world. (constantly happening)
+    this.physics.add.overlap(this.miriam, layer, (player, tile) => this.overlap(player, tile));
 
     this.cameras.main.setBounds(0, 0, 1024, 1024);
-    this.impact.world.setBounds(0, 0, 1024, 1024);
+    this.physics.world.setBounds(0, 0, 1024, 1024);
     this.cameras.main.startFollow(this.miriam);
     this.cameras.main.roundPixels = true; // avoid tile bleed
 
@@ -82,6 +84,12 @@ let SanFranciscoScene = new Phaser.Class({
         return;
       }
       this.miriam.anims.pause(this.anims.get(this.miriam.anims.getCurrentKey()).frames[0]);
+    }
+  },
+
+  overlap: function(player, tile) {
+    if (tile.properties.door) {
+      this.scene.start('MiriamHouseScene');
     }
   }
 });

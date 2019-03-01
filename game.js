@@ -5,15 +5,18 @@ var config = {
   height: 600,
   pixelArt: true,
   physics: {
-    default: 'impact',
+    default: 'arcade',
     impact: { gravity: 0 }
 },
 scene: [
     BootScene,
     SanFranciscoScene,
+    MiriamHouseScene,
     DrMarioSetupScene
   ]
 };
+
+const MIRIAM_SPEED = 150;
 
 let drMarioPlayers;
 let drMarioGameOver;
