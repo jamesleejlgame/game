@@ -5,12 +5,10 @@ var config = {
   height: 600,
   pixelArt: true,
   physics: {
-    default: 'arcade',
-    arcade: {
-      gravity: { y: 0 },
-    }
-  },
-  scene: [
+    default: 'impact',
+    impact: { gravity: 0 }
+},
+scene: [
     BootScene,
     SanFranciscoScene,
     DrMarioSetupScene

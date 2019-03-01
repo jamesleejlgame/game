@@ -12,7 +12,12 @@ let SanFranciscoScene = new Phaser.Class({
     function () {},
 
   create: function () {
-    this.add.image(0, 0, 'san_francisco').setOrigin(0);
+    var map = this.make.tilemap({ key: 'san_francisco_tilemap' });
+    var tileset = map.addTilesetImage('town_and_city_tileset');
+    var layer = map.createStaticLayer(0, tileset, 0, 0);
+    layer.setCollisionByProperty({ collides: true });
+    this.impact.world.setCollisionMapFromTilemapLayer(layer, { defaultCollidingSlope: 1 });
+
     this.anims.create({
       key: 'miriam_left',
       frames: this.anims.generateFrameNumbers('miriam_left'),
@@ -38,11 +43,10 @@ let SanFranciscoScene = new Phaser.Class({
       repeat: -1
     });
 
-    this.miriam = this.physics.add.sprite(435, 300, 'miriam_down', 0);
-    this.miriam.setCollideWorldBounds(true);
+    this.miriam = this.impact.add.sprite(494, 250, 'miriam_down', 0);
 
-    this.cameras.main.setBounds(0, 0, 1088, 1024);
-    this.physics.world.setBounds(0, 0, 1088, 1024);
+    this.cameras.main.setBounds(0, 0, 1024, 1024);
+    this.impact.world.setBounds(0, 0, 1024, 1024);
     this.cameras.main.startFollow(this.miriam);
     this.cameras.main.roundPixels = true; // avoid tile bleed
 
@@ -50,17 +54,17 @@ let SanFranciscoScene = new Phaser.Class({
   },
 
   update: function (time, delta) {
-    this.miriam.body.setVelocity(0);
+    this.miriam.setVelocity(0);
 
     if (this.cursors.left.isDown) {
-      this.miriam.body.setVelocityX(-1 * MIRIAM_SPEED);
+      this.miriam.setVelocityX(-1 * MIRIAM_SPEED);
     } else if (this.cursors.right.isDown) {
-      this.miriam.body.setVelocityX(MIRIAM_SPEED);
+      this.miriam.setVelocityX(MIRIAM_SPEED);
     }
     if (this.cursors.up.isDown) {
-      this.miriam.body.setVelocityY(-1 * MIRIAM_SPEED);
+      this.miriam.setVelocityY(-1 * MIRIAM_SPEED);
     } else if (this.cursors.down.isDown) {
-      this.miriam.body.setVelocityY(MIRIAM_SPEED);
+      this.miriam.setVelocityY(MIRIAM_SPEED);
     }
 
     if (this.cursors.left.isDown) {
