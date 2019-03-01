@@ -1,9 +1,6 @@
-let players = [];
-
-let NUM_PLAYERS = 2;
-let WIDTH = 8;
-let HEIGHT = 16;
-
+let DR_MARIO_NUM_PLAYERS = 2;
+let DR_MARIO_WIDTH = 8;
+let DR_MARIO_HEIGHT = 16;
 
 const placedPieceTypeEnum = {
   EMPTY: ' ',
@@ -49,14 +46,17 @@ class Piece {
   constructor (column, row, orientation, firstColor, secondColor) {
     /**
      * The column of the bottom left part of the piece.
+     * @type {number?} can be null if representing an upcoming piece.
      */
     this.column = column;
     /**
      * The row of the bottom left part of the piece.
+     * @type {number?} can be null if representing an upcoming piece.
      */
     this.row = row;
     /**
      * The orientation of the piece.
+     * @type {orientationEnum?} can be null if representing an upcoming piece.
      */
     this.orientation = orientation;
     /**
@@ -81,20 +81,66 @@ class Piece {
 };
 
 class Player {
-  constructor () {
+  /**
+   * @param {array<string>?} fieldArrayString represents the field of the player in proper visual display format (the top row of viruses
+   *     is in the first position. If null, then the whole field is empty.
+   *     TODO: This should actually initialize to a random set of values if the fieldArrayString is null.
+   * @param {array<string>?} upcomingPiecesArrayString represents the upcoming pieces. Each string has two characters representing
+   *     the two colors that make up the piece.
+   */
+  constructor (fieldArrayString, upcomingPiecesArrayString) {
     /**
      * @type {Piece}.
      */
     this.piece = null;
     this.upcomingPieces = [];
+    /**
+     * @type {array<array<Piece>>} This is a two dimensional array first sorted by row and then by column.
+     * i.e. (2, 1) represents the 3rd column from the left and the 2nd row from the bottom.
+     */
     this.field = [];
 
-    for (let w = 0; w < WIDTH; ++w) {
+    this.initializeFieldGivenFieldArrayString(fieldArrayString);
+    this.initializeUpcomingPiecesGivenArrayString(upcomingPiecesArrayString);
+  }
+
+  /**
+   * Initializes the field for a given player.
+   * @param {array<string>?} fieldArrayString represents the field of the player in proper visual display format (the top row of viruses
+   * is in the first position.
+   */
+  initializeFieldGivenFieldArrayString (fieldArrayString) {
+    if (!fieldArrayString) {
+      for (let w = 0; w < DR_MARIO_WIDTH; ++w) {
+        let col = [];
+        for (let l = 0; l < DR_MARIO_HEIGHT; ++l) {
+          col.push(new PlacedPiece(placedPieceTypeEnum.EMPTY, colorEnum.NONE));
+        }
+        this.field.push(col);
+      }
+    }
+    for (let w = 0; w < DR_MARIO_WIDTH; ++w) {
       let col = [];
-      for (let l = 0; l < LENGTH; ++l) {
-        col.push(new Piece());
+      for (let l = 0; l < DR_MARIO_HEIGHT; ++l) {
+        let placedPiece = new PlacedPiece();
+        let fieldArrayStringFirstIndex = DR_MARIO_HEIGHT - 1 - l;
+        let fieldArrayStringSecondIndex = 3 * w;
+        placedPiece.type = fieldArrayString[fieldArrayStringFirstIndex][fieldArrayStringSecondIndex];
+        placedPiece.color = fieldArrayString[fieldArrayStringFirstIndex][fieldArrayStringSecondIndex + 1];
+        col.push(placedPiece);
       }
       this.field.push(col);
+    }
+  }
+
+  /**
+   * Initializes the upcoming pieces for the player.
+   * @param {array<string>?} upcomingPiecesArrayString represents the upcoming pieces. Each string has two characters representing
+   *     the two colors that make up the piece.
+   */
+  initializeUpcomingPiecesGivenArrayString (upcomingPiecesArrayString) {
+    for (let i = 0; i < upcomingPiecesArrayString.length; ++i) {
+      this.upcomingPieces.push(new Piece(null, null, null, upcomingPiecesArrayString[i][0], upcomingPiecesArrayString[i][1]));
     }
   }
 
@@ -123,7 +169,7 @@ class Player {
   rotatePiece (rotation) {
     let newPiece = null;
     let oldPiece = this.piece;
-    if (this.piece.column == WIDTH - 1 && this.piece.orientation == orientationEnum.VERTICAL) {
+    if (this.piece.column == DR_MARIO_WIDTH - 1 && this.piece.orientation == orientationEnum.VERTICAL) {
       oldPiece = new Piece(this.piece.column - 1, this.piece.row, this.piece.orientation, this.piece.firstColor, this.piece.secondColor);
     }
     if (oldPiece.orientation == orientationEnum.VERTICAL) {
@@ -152,7 +198,7 @@ class Player {
     let coordinates = piece.getCoordinates();
     for (let i = 0; i < coordinates.length; ++i) {
       let coordinate = coordinates[i];
-      if (coordinate[0] < 0 || coordinate[0] > WIDTH - 1) {
+      if (coordinate[0] < 0 || coordinate[0] > DR_MARIO_WIDTH - 1) {
         return false;
       }
       if (coordinate[1] < 0) {
@@ -184,10 +230,20 @@ class Player {
   }
 };
 
-function initialize () {
-  for (let p = 0; p < NUM_PLAYERS; ++p) {
-    this.players.push(new Player());
+function drMarioInitializeForPuzzle () {
+  drMarioGameOver = false;
+  drMarioPlayers = [];
+  for (let p = 0; p < DR_MARIO_NUM_PLAYERS; ++p) {
+    let field = null;
+    let upcomingPieces = null;
+    if (p == 0) {
+      field = drMarioPuzzlePlayer1Field;
+      upcomingPieces = drMarioPuzzlePlayer1UpcomingPieces;
+    } else if (p == 1) {
+      field = drMarioPuzzlePlayer2Field;
+      upcomingPieces = drMarioPuzzlePlayer2UpcomingPieces;
+    }
+    drMarioPlayers.push(new Player(field, upcomingPieces));
   }
+  console.log(drMarioPlayers);
 }
-
-initialize();

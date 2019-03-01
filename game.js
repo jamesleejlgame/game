@@ -12,8 +12,11 @@ var config = {
   },
   scene: [
     BootScene,
-    SanFranciscoScene
+    SanFranciscoScene,
+    DrMarioSetupScene
   ]
 };
 
-var game = new Phaser.Game(config);
+let drMarioPlayers;
+let drMarioGameOver;
+let game = new Phaser.Game(config);

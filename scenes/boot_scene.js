@@ -9,12 +9,14 @@ var BootScene = new Phaser.Class({
   preload: 
     function () {
       this.load.image('san_francisco', 'assets/san_francisco.png');  
+      this.load.spritesheet('dr_mario_background', 'assets/dr_mario_background.png', { frameWidth: 300, frameHeight: 400, margin: 4 });  
+      this.load.spritesheet('dr_mario_sprites', 'assets/dr_mario_sprites.png', { frameWidth: 28, frameHeight: 30 });  
       this.load.spritesheet('miriam_up', 'assets/miriam_up.png', { frameWidth: 28, frameHeight: 48 });
       this.load.spritesheet('miriam_left', 'assets/miriam_left.png', { frameWidth: 30, frameHeight: 48 });
       this.load.spritesheet('miriam_down', 'assets/miriam_down.png', { frameWidth: 30, frameHeight: 48 });
     },
 
   create: function () {
-    this.scene.start('SanFranciscoScene');
+    this.scene.start('DrMarioSetupScene');
   }
 });
