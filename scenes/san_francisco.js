@@ -1,4 +1,4 @@
-const MIRIAM_SPEED = 80;
+const MIRIAM_SPEED = 150;
 
 let SanFranciscoScene = new Phaser.Class({
   Extends: Phaser.Scene,
