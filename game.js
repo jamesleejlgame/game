@@ -17,6 +17,9 @@ scene: [
 };
 
 const MIRIAM_SPEED = 150;
+let DR_MARIO_NUM_PLAYERS = 2;
+let DR_MARIO_WIDTH = 8;
+let DR_MARIO_HEIGHT = 16;
 
 let drMarioPlayers;
 let drMarioGameOver;

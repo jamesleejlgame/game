@@ -89,7 +89,7 @@ let SanFranciscoScene = new Phaser.Class({
 
   overlap: function(player, tile) {
     if (tile.properties.door) {
-      this.scene.start('MiriamHouseScene');
+      this.scene.start('DrMarioSetupScene');
     }
   }
 });

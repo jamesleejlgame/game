@@ -1,7 +1,3 @@
-let DR_MARIO_NUM_PLAYERS = 2;
-let DR_MARIO_WIDTH = 8;
-let DR_MARIO_HEIGHT = 16;
-
 const placedPieceTypeEnum = {
   EMPTY: ' ',
   LEFT_SIDE: 'L',
@@ -9,7 +5,8 @@ const placedPieceTypeEnum = {
   TOP_SIDE: 'T',
   BOTTOM_SIDE: 'B',
   SINGLE: 'S',
-  VIRUS: 'V'
+  VIRUS: 'V',
+  CLEAR: 'C'
 };
 
 const colorEnum = {
@@ -39,6 +36,49 @@ class PlacedPiece {
   constructor (type, color) {
     this.type = type;
     this.color = color;
+  }
+
+  /**
+   * This function is tightly coupled to dr_mario_setup_scene.
+   * @return {number?} nullable for error. The index of the dr_mario_sprites to use. If it is a virus, then 
+   * return 100 for yellow, 200 for red, or 300 for blue. 
+   * TODO: Decouple this from dr_mario_setup_scene.
+   * TODO: Don't use hundreds for viruses.
+   */
+  getSpriteIndex () {
+    let offset = -1;
+    if (this.type == placedPieceTypeEnum.TOP_SIDE) {
+      offset = 0;
+    } else if (this.type == placedPieceTypeEnum.BOTTOM_SIDE) {
+      offset = 3;
+    } else if (this.type == placedPieceTypeEnum.LEFT_SIDE) {
+      offset = 6;
+    } else if (this.type == placedPieceTypeEnum.RIGHT_SIDE) {
+      offset = 9;
+    } else if (this.type == placedPieceTypeEnum.SINGLE) {
+      offset = 12;
+    } else if (this.type == placedPieceTypeEnum.CLEAR) {
+      offset = 15;
+    } else if (this.type == placedPieceTypeEnum.VIRUS) {
+      if (this.color == colorEnum.YELLOW) {
+        return 100;
+      } else if (this.color == colorEnum.RED) {
+        return 200;
+      } else if (this.color == colorEnum.BLUE) {
+        return 300;
+      }
+    } else {
+      return null;
+    }
+    if (this.color == colorEnum.RED) {
+    } else if (this.color == colorEnum.YELLOW) {
+      offset += 1;
+    } else if (this.color == colorEnum.BLUE) {
+      offset += 2;
+    } else {
+      return null;
+    }
+    return offset;
   }
 };
 
@@ -114,7 +154,7 @@ class Player {
       for (let w = 0; w < DR_MARIO_WIDTH; ++w) {
         let col = [];
         for (let l = 0; l < DR_MARIO_HEIGHT; ++l) {
-          col.push(new PlacedPiece(placedPieceTypeEnum.EMPTY, colorEnum.NONE));
+          col.push(new PlacedPiece(colorEnum.NONE, placedPieceTypeEnum.EMPTY));
         }
         this.field.push(col);
       }
@@ -125,8 +165,8 @@ class Player {
         let placedPiece = new PlacedPiece();
         let fieldArrayStringFirstIndex = DR_MARIO_HEIGHT - 1 - l;
         let fieldArrayStringSecondIndex = 3 * w;
-        placedPiece.type = fieldArrayString[fieldArrayStringFirstIndex][fieldArrayStringSecondIndex];
-        placedPiece.color = fieldArrayString[fieldArrayStringFirstIndex][fieldArrayStringSecondIndex + 1];
+        placedPiece.color = fieldArrayString[fieldArrayStringFirstIndex][fieldArrayStringSecondIndex];
+        placedPiece.type = fieldArrayString[fieldArrayStringFirstIndex][fieldArrayStringSecondIndex + 1];
         col.push(placedPiece);
       }
       this.field.push(col);
@@ -219,11 +259,11 @@ class Player {
   addPieceToField () {
     let coordinates = this.piece.getCoordinates();
     if (this.piece.orientation == orientationEnum.HORIZONTAL) {
-      this.field[coordinates[0][0]][coordinates[0][1]] = new PlacedPiece(placedPieceTypeEnum.LEFT_SIDE, this.piece.firstColor)
-      this.field[coordinates[1][0]][coordinates[1][1]] = new PlacedPiece(placedPieceTypeEnum.RIGHT_SIDE, this.piece.secondColor)
+      this.field[coordinates[0][0]][coordinates[0][1]] = new PlacedPiece(this.piece.firstColor, placedPieceTypeEnum.LEFT_SIDE)
+      this.field[coordinates[1][0]][coordinates[1][1]] = new PlacedPiece(this.piece.secondColor, placedPieceTypeEnum.RIGHT_SIDE)
     } else {
-      this.field[coordinates[0][0]][coordinates[0][1]] = new PlacedPiece(placedPieceTypeEnum.BOTTOM_SIDE, this.piece.firstColor)
-      this.field[coordinates[1][0]][coordinates[1][1]] = new PlacedPiece(placedPieceTypeEnum.TOP_SIDE, this.piece.secondColor)
+      this.field[coordinates[0][0]][coordinates[0][1]] = new PlacedPiece(this.piece.firstColor, placedPieceTypeEnum.BOTTOM_SIDE)
+      this.field[coordinates[1][0]][coordinates[1][1]] = new PlacedPiece(this.piece.secondColor, placedPieceTypeEnum.TOP_SIDE)
     }
     this.piece = this.upcomingPieces.unshift();
     // TODO: Handle clears.
@@ -245,5 +285,4 @@ function drMarioInitializeForPuzzle () {
     }
     drMarioPlayers.push(new Player(field, upcomingPieces));
   }
-  console.log(drMarioPlayers);
 }
