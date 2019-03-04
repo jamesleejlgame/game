@@ -1,3 +1,12 @@
+/**
+ * These objects are of type Text which has the following keys.
+ * m {string}: The message.
+ * question {string}: The question to ask.
+ * answers {array<Text>}: The possible answers to the question.
+ * label {string}: the label of the message. For branching purposes.
+ * next {string}: the label of the next message after this one.
+ */
+
 let miriamChristinaMeetUp1 = [
   { m: "<Phone rings>" },
   { m: "Christina: Hey BFF! Wanna come over? We can talk about how nice I am to everyone and how everyone loves me." },
@@ -5,8 +14,7 @@ let miriamChristinaMeetUp1 = [
   { m: "Miriam: ..." },
   { m: "Miriam: ... okay fine." },
   { m: "Christina: Great! See you soon. Like just yesterday I saw this poodle falling off the edge of a cliff and I..." },
-  { m: "<Click>" },
-  { m: "" }
+  { m: "Miriam: <Click>" },
 ];
 
 let miriamChristinaMeetUp2 = [

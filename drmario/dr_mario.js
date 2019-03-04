@@ -1,3 +1,11 @@
+let DrMario = {
+  NUM_PLAYERS: 2,
+  WIDTH: 8,
+  HEIGHT: 16,
+  drMarioPlayers: [],
+  drMarioGameOver: false
+};
+
 const placedPieceTypeEnum = {
   EMPTY: ' ',
   LEFT_SIDE: 'L',
@@ -40,8 +48,8 @@ class PlacedPiece {
 
   /**
    * This function is tightly coupled to dr_mario_setup_scene.
-   * @return {number?} nullable for error. The index of the dr_mario_sprites to use. If it is a virus, then 
-   * return 100 for yellow, 200 for red, or 300 for blue. 
+   * @return {number?} nullable for error. The index of the dr_mario_sprites to use. If it is a virus, then
+   * return 100 for yellow, 200 for red, or 300 for blue.
    * TODO: Decouple this from dr_mario_setup_scene.
    * TODO: Don't use hundreds for viruses.
    */
@@ -151,19 +159,19 @@ class Player {
    */
   initializeFieldGivenFieldArrayString (fieldArrayString) {
     if (!fieldArrayString) {
-      for (let w = 0; w < DR_MARIO_WIDTH; ++w) {
+      for (let w = 0; w < DrMario.WIDTH; ++w) {
         let col = [];
-        for (let l = 0; l < DR_MARIO_HEIGHT; ++l) {
+        for (let l = 0; l < DrMario.HEIGHT; ++l) {
           col.push(new PlacedPiece(colorEnum.NONE, placedPieceTypeEnum.EMPTY));
         }
         this.field.push(col);
       }
     }
-    for (let w = 0; w < DR_MARIO_WIDTH; ++w) {
+    for (let w = 0; w < DrMario.WIDTH; ++w) {
       let col = [];
-      for (let l = 0; l < DR_MARIO_HEIGHT; ++l) {
+      for (let l = 0; l < DrMario.HEIGHT; ++l) {
         let placedPiece = new PlacedPiece();
-        let fieldArrayStringFirstIndex = DR_MARIO_HEIGHT - 1 - l;
+        let fieldArrayStringFirstIndex = DrMario.HEIGHT - 1 - l;
         let fieldArrayStringSecondIndex = 3 * w;
         placedPiece.color = fieldArrayString[fieldArrayStringFirstIndex][fieldArrayStringSecondIndex];
         placedPiece.type = fieldArrayString[fieldArrayStringFirstIndex][fieldArrayStringSecondIndex + 1];
@@ -188,7 +196,7 @@ class Player {
    * Moves the piece in the given direction. If moving down and the piece cannot be moved, it will be added to the field.
    * @param {directionEnum} dir
    */
-  move_piece (dir) {
+  movePiece (dir) {
     let newPiece = null;
     if (dir == directionEnum.LEFT) {
       newPiece = new Piece(this.piece.column - 1, this.piece.row, this.piece.orientation, this.piece.firstColor, this.piece.secondColor);
@@ -209,7 +217,7 @@ class Player {
   rotatePiece (rotation) {
     let newPiece = null;
     let oldPiece = this.piece;
-    if (this.piece.column == DR_MARIO_WIDTH - 1 && this.piece.orientation == orientationEnum.VERTICAL) {
+    if (this.piece.column == DrMario.WIDTH - 1 && this.piece.orientation == orientationEnum.VERTICAL) {
       oldPiece = new Piece(this.piece.column - 1, this.piece.row, this.piece.orientation, this.piece.firstColor, this.piece.secondColor);
     }
     if (oldPiece.orientation == orientationEnum.VERTICAL) {
@@ -238,7 +246,7 @@ class Player {
     let coordinates = piece.getCoordinates();
     for (let i = 0; i < coordinates.length; ++i) {
       let coordinate = coordinates[i];
-      if (coordinate[0] < 0 || coordinate[0] > DR_MARIO_WIDTH - 1) {
+      if (coordinate[0] < 0 || coordinate[0] > DrMario.WIDTH - 1) {
         return false;
       }
       if (coordinate[1] < 0) {
@@ -271,9 +279,9 @@ class Player {
 };
 
 function drMarioInitializeForPuzzle () {
-  drMarioGameOver = false;
-  drMarioPlayers = [];
-  for (let p = 0; p < DR_MARIO_NUM_PLAYERS; ++p) {
+  DrMario.drMarioGameOver = false;
+  DrMario.drMarioPlayers = [];
+  for (let p = 0; p < DrMario.NUM_PLAYERS; ++p) {
     let field = null;
     let upcomingPieces = null;
     if (p == 0) {
@@ -283,6 +291,6 @@ function drMarioInitializeForPuzzle () {
       field = drMarioPuzzlePlayer2Field;
       upcomingPieces = drMarioPuzzlePlayer2UpcomingPieces;
     }
-    drMarioPlayers.push(new Player(field, upcomingPieces));
+    DrMario.drMarioPlayers.push(new Player(field, upcomingPieces));
   }
 }
