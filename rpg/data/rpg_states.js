@@ -11,11 +11,12 @@ Rpg.Data.States = {
     { type: 'timer', time: 2000 },
     { type: 'dialogue', dialogue: Rpg.Data.Dialogue.miriamChristinaMeetUp1 }
   ],
-  christinaHouseStates: function(christina) {
+  christinaHouseStates: function(christina, james) {
     return [
       { type: 'player', target: christina},
       { type: 'dialogue', dialogue: Rpg.Data.Dialogue.miriamChristinaMeetUp2 },
-      { type: 'npcMove' }
+      { type: 'npcMove', target: james, tweens: ['james_1', 'james_2', 'james_3', 'james_4'] },
+      { type: 'dialogue', dialogue: Rpg.Data.Dialogue.miriamMeetsJames1 },
     ];
   }
 };

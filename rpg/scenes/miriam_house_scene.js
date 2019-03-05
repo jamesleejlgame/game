@@ -12,19 +12,9 @@ Rpg.Scenes.MiriamHouseSceneVars = {
   startingLocationEnum: {
     START_GAME: 0,
     ENTER_DOOR: 1
-  },
-  /**
-   * @type {StateManager} the state manager.
-   */
-  stateManager_: null,
-  /**
-   * @type {DialogueManager} the dialogue manager.
-   */
-  dialogueManager_: null
+  }
 };
-Rpg.Scenes.MiriamHouseSceneVars.stateManager_ = new Rpg.Common.StateManager();
-Rpg.Scenes.MiriamHouseSceneVars.dialogueManager_ = new Rpg.Common.DialogueManager(Rpg.Scenes.MiriamHouseSceneVars.stateManager_);
-Rpg.Scenes.MiriamHouseSceneVars.stateManager_.setDialogueManager(Rpg.Scenes.MiriamHouseSceneVars.dialogueManager_);
+Rpg.Common.Utils.initializeStateAndDialogManagers(Rpg.Scenes.MiriamHouseSceneVars);
 
 Rpg.Scenes.MiriamHouseScene = new Phaser.Class({
   Extends: Phaser.Scene,
@@ -44,7 +34,7 @@ Rpg.Scenes.MiriamHouseScene = new Phaser.Class({
       'miriam_house_tilemap',
       'town_and_city_tileset',
       ['tiles1', 'tiles2']);
-    let map = createMapRet[0];
+    this.map_ = createMapRet[0];
     let layers = createMapRet[1];
 
     Rpg.Common.Utils.createMiriamAnimation(this, 'miriam_left', 'miriam_up', 'miriam_down');
@@ -55,19 +45,14 @@ Rpg.Scenes.MiriamHouseScene = new Phaser.Class({
     } else if (data.startingLocation === Rpg.Scenes.MiriamHouseSceneVars.startingLocationEnum.ENTER_DOOR) {
       miriamStartTileObjectName = "miriam_enterdoor";
     }
-    this.miriam_ = Rpg.Common.Utils.createPlayerControlledRpgCharacter(this, map, miriamStartTileObjectName, 'miriam_down');
-
+    this.miriam_ = Rpg.Common.Utils.createPlayerControlledRpgCharacter(this, this.map_, miriamStartTileObjectName, 'miriam_down');
     Rpg.Common.Utils.addIntersectionWithLayers(this, this.miriam_, layers);
-
     this.cursors_ = this.input.keyboard.createCursorKeys();
-
-    let door = Rpg.Common.Utils.createSpriteAtStartTileName(this, map, 'door');
+    let door = Rpg.Common.Utils.createSpriteAtStartTileName(this, this.map_, 'door');
     this.physics.add.overlap(this.miriam_, door, (player, tile) => {this._overlapDoor();});
-
     this.scene.launch('DialogueScene', {dialogueManager: Rpg.Scenes.MiriamHouseSceneVars.dialogueManager_, scene: this});
-
     this.scene.moveAbove('MiriamHouseScene', 'DialogueScene');
-
+    Rpg.Scenes.ChristinaHouseSceneVars.stateManager_.setSceneInfo(this, this.map_, this.miriam_);
     Rpg.Scenes.MiriamHouseSceneVars.stateManager_.setStates(Rpg.Data.States.miriamHouseStates);
   },
 

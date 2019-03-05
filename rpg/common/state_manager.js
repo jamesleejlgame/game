@@ -12,6 +12,18 @@ Rpg.Common.StateManager = function () {
    */
   this.states = null;
   /**
+   * @type {Phaser.Scene} The Phaser scene.
+   */
+  this.scene = null;
+  /**
+   * @type {Phaser.Tilemap} The Phaser tilemap.
+   */
+  this.map = null;
+  /**
+   * @type {Phaser.Physics.Arcade.Sprite} The Phaser sprite representing the player.
+   */
+  this.player = null;
+  /**
    * @type {number} The time used for state purposes.
    */
   this.time = 0;
@@ -22,7 +34,7 @@ Rpg.Common.StateManager = function () {
 };
 
 /**
- * Checks to see if we should advance to the next state due to time. Must be called in the update function.
+ * Sets the Rpg states.
  * @param {array<Rpg.State object>} states The Rpg states object.
  */
 Rpg.Common.StateManager.prototype.setStates = function (states) {
@@ -30,9 +42,21 @@ Rpg.Common.StateManager.prototype.setStates = function (states) {
 }
 
 /**
+ * Adds the scene information
+ * @param {Phaser.Scene} scene the phaser scene.
+ * @param {Phaser.Tilemap} map the phaser map.
+ * @param {Phaser.Physics.Arcade.Sprite} player the phaser player.
+ */
+Rpg.Common.StateManager.prototype.setSceneInfo = function (scene, map, player) {
+  this.scene = scene;
+  this.map = map;
+  this.player = player;
+}
+
+/**
  * Checks to see if we should advance to the next state due to time. Must be called in the update function.
  * @param {Phaser.Input.Keyboard.Key?} actionKey the action key to check. Nullable.
- * @param {Phaser.Sprite} player the current player to check for actions on if an action key is pressed.
+ * @param {Phaser.Physics.Arcade.Sprite} player the current player to check for actions on if an action key is pressed.
  */
 Rpg.Common.StateManager.prototype.shouldAdvanceToNextState = function (actionKey, player) {
   if (this.index == -1) {
@@ -59,8 +83,10 @@ Rpg.Common.StateManager.prototype.setDialogueManager = function (dialogueManager
   this.dialogueManager_ = dialogueManager;
 };
 
-  /**
+/**
  * Advances to the next state.
+ * @param {Phaser.Scene} scene the phaser scene.
+ * @param {Phaser.Tilemap} map the tilemap to use.
  */
 Rpg.Common.StateManager.prototype.advanceToNextState = function () {
   this.index++;
@@ -68,7 +94,26 @@ Rpg.Common.StateManager.prototype.advanceToNextState = function () {
   if (this.index >= this.states.length) {
     return;
   }
-  if (this.states[this.index].type == 'dialogue') {
-    this.dialogueManager_.setDialogue(this.states[this.index].dialogue);
+  let state = this.states[this.index];
+  if (state.type == 'dialogue') {
+    this.dialogueManager_.setDialogue(state.dialogue);
+    return;
+  }
+  if (state.type == 'npcMove') {
+    tweens = [];
+    let currentX = state.target.x;
+    let currentY = state.target.y;
+    state.tweens.forEach((el) => {
+      let obj = Rpg.Common.Utils.findObjectByName(this.map, el);
+      tweens.push({x: obj.x, y: obj.y, duration: Rpg.Common.Utils.distanceBetweenCoordinates(currentX, currentY, obj.x, obj.y) * 1000 / Rpg.Common.Utils.CHARACTER_SPEED});
+      currentX = obj.x;
+      currentY = obj.y;
+      console.log(tweens);
+    });
+    this.scene.tweens.timeline({
+      targets: state.target,
+      ease: 'Linear',
+      tweens: tweens
+    });
   }
 };

@@ -1,6 +1,6 @@
 Rpg.Common.Utils = {
   // Configurable.
-  PLAYER_SPEED: 150,
+  CHARACTER_SPEED: 150,
   MAX_DISTANCE_FOR_SPRITE_INTERACTION: 50,
 
   // Non configurable.
@@ -69,7 +69,7 @@ Rpg.Common.Utils = {
    * @returns {Phaser.Sprite} the sprite representing the controllable character. defines cursors_ on it.
    */
   createPlayerControlledRpgCharacter: function (scene, map, startTileObjectName, spriteImageName) {
-    let startTileInfo = map.findObject(Rpg.Common.Utils.OBJECT_LAYER_NAME, (obj) => { return obj.name == startTileObjectName; });
+    let startTileInfo = Rpg.Common.Utils.findObjectByName(map, startTileObjectName);
     let player = scene.physics.add.sprite(startTileInfo.x, startTileInfo.y, spriteImageName, 0);
     player.setSize(32, 1);
     player.setCollideWorldBounds(true);
@@ -94,14 +94,14 @@ Rpg.Common.Utils = {
     player.setVelocity(0);
 
     if (cursors.left.isDown) {
-      player.setVelocityX(-1 * Rpg.Common.Utils.PLAYER_SPEED);
+      player.setVelocityX(-1 * Rpg.Common.Utils.CHARACTER_SPEED);
     } else if (cursors.right.isDown) {
-      player.setVelocityX(Rpg.Common.Utils.PLAYER_SPEED);
+      player.setVelocityX(Rpg.Common.Utils.CHARACTER_SPEED);
     }
     if (cursors.up.isDown) {
-      player.setVelocityY(-1 * Rpg.Common.Utils.PLAYER_SPEED);
+      player.setVelocityY(-1 * Rpg.Common.Utils.CHARACTER_SPEED);
     } else if (cursors.down.isDown) {
-      player.setVelocityY(Rpg.Common.Utils.PLAYER_SPEED);
+      player.setVelocityY(Rpg.Common.Utils.CHARACTER_SPEED);
     }
 
     if (cursors.left.isDown) {
@@ -142,12 +142,17 @@ Rpg.Common.Utils = {
    * @return {Phaser.Sprite} the added sprite.
    */
   createSpriteAtStartTileName: function (scene, map, startTileName) {
-    let startTileInfo = map.findObject(Rpg.Common.Utils.OBJECT_LAYER_NAME, (obj) => { return obj.name == startTileName; });
+    let startTileInfo = Rpg.Common.Utils.findObjectByName(map, startTileName);
     return scene.physics.add.sprite(startTileInfo.x, startTileInfo.y);
   },
-
-
-
+  /**
+   * Finds the objects in a tilemap by the given name. (In the 'objects' layer)
+   * @param {string} name the name of the object.
+   * @return {Phaser.GameObjects.GameObject} the object.
+   */
+  findObjectByName (map, name) {
+    return map.findObject(Rpg.Common.Utils.OBJECT_LAYER_NAME, (obj) => { return obj.name == name; });
+  },
   /**
    * Creates an npc character.
    * @param {Phaser.Scene} scene the phaser scene we are creating on.
@@ -157,7 +162,7 @@ Rpg.Common.Utils = {
    * @returns {Phaser.Sprite} the sprite representing the controllable character. defines cursors_ on it.
    */
   createNPCCharacter: function (scene, map, startTileObjectName, spriteImageName) {
-    let startTileInfo = map.findObject(Rpg.Common.Utils.OBJECT_LAYER_NAME, (obj) => { return obj.name == startTileObjectName; });
+    let startTileInfo = Rpg.Common.Utils.findObjectByName(map, startTileObjectName);
     let npc = scene.physics.add.sprite(startTileInfo.x, startTileInfo.y, spriteImageName, 0);
     npc.setImmovable(true);
     return npc;
@@ -169,7 +174,28 @@ Rpg.Common.Utils = {
    * @param {Phaser.Sprite} sprite2 the second sprite.
    */
   areSpritesInRangeToInteract: function (sprite1, sprite2) {
-    return Math.sqrt(Math.pow(sprite1.x - sprite2.x, 2) + Math.pow(sprite1.y - sprite2.y, 2)) <
+    return Rpg.Common.Utils.distanceBetweenCoordinates(sprite1.x, sprite1.y, sprite2.x, sprite2.y) <
     Rpg.Common.Utils.MAX_DISTANCE_FOR_SPRITE_INTERACTION;
+  },
+
+  /**
+   * Returns the distance between two coordinates.
+   * @param {number} x1 the first x coordinate.
+   * @param {number} y1 the first y coordinate.
+   * @param {number} x2 the second x coordinate.
+   * @param {number} y2 the second y coordinate.
+   */
+  distanceBetweenCoordinates: function (x1, y1, x2, y2) {
+    return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
+  },
+
+  /**
+   * Defines the state and dialog managers on the scene variable.
+   * @param {SceneVars} sceneVars the scene vars to define the managers on.
+   */
+  initializeStateAndDialogManagers: function (sceneVars) {
+    sceneVars.stateManager_ = new Rpg.Common.StateManager();
+    sceneVars.dialogueManager_ = new Rpg.Common.DialogueManager(sceneVars.stateManager_);
+    sceneVars.stateManager_.setDialogueManager(sceneVars.dialogueManager_);
   }
 };
