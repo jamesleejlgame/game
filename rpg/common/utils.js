@@ -1,39 +1,35 @@
-let Common = {
+Rpg.Common.Utils = {
+  // Configurable.
   PLAYER_SPEED: 150,
   MAX_DISTANCE_FOR_SPRITE_INTERACTION: 50,
 
-  /**
-   * Creates a playable rpg character.
-   * @param {Phaser.Scene} scene the phaser scene we are creating on.
-   * @param {Phaser.Map} map the phaser map.
-   * @param {string} startTileObjectName the starting tile object name.
-   * @param {string} spriteImageName the name of the sprite image as defined in boot_scene.js.
-   * @returns {Phaser.Sprite} the sprite representing the controllable character. defines cursors_ on it.
-   * TODO: Don't hardcode 'objects'.
-   */
-  createPlayerControlledRpgCharacter: function (scene, map, startTileObjectName, spriteImageName) {
-    let startTileInfo = map.findObject('objects', (obj) => { return obj.name == startTileObjectName; });
-    let player = scene.physics.add.sprite(startTileInfo.x, startTileInfo.y, spriteImageName, 0);
-    player.setSize(32, 1);
-    player.setCollideWorldBounds(true);
-    scene.cameras.main.startFollow(player);
-    return player;
-  },
+  // Non configurable.
+  OBJECT_LAYER_NAME: 'objects',
 
   /**
-   * Creates an npc character.
-   * @param {Phaser.Scene} scene the phaser scene we are creating on.
-   * @param {Phaser.Map} map the phaser map.
-   * @param {string} startTileObjectName the starting tile object name.
-   * @param {string} spriteImageName the name of the sprite image as defined in boot_scene.js.
-   * @returns {Phaser.Sprite} the sprite representing the controllable character. defines cursors_ on it.
-   * TODO: Don't hardcode 'objects'.
+   * Run in the create function of a scene to create a map.
+   * @param {Phaser.Scene} scene the phaser scene.
+   * @param {string} tilemapName the name of the tilemap.
+   * @param {string} tilesetName the name of the tilset.
+   * @param {array<string>} tileLayers an array of layer names.
+   * @returns [{Phaser.Map, {array<Phaser.Tilemaps.StaticTilemapLayer>}] all the phaser layers in the order passed in.
    */
-  createNPCCharacter: function (scene, map, startTileObjectName, spriteImageName) {
-    let startTileInfo = map.findObject('objects', (obj) => { return obj.name == startTileObjectName; });
-    let npc = scene.physics.add.sprite(startTileInfo.x, startTileInfo.y, spriteImageName, 0);
-    npc.setImmovable(true);
-    return npc;
+  createMap: function (scene, tilemapName, tilesetName, tileLayers) {
+    let map = scene.make.tilemap({ key: tilemapName });
+    let ret = [];
+    ret.push(map)
+    let tileset = map.addTilesetImage(tilesetName);
+    let layers = []
+    tileLayers.forEach(function (tileLayer) {
+      let layer = map.createStaticLayer(tileLayer, tileset, 0, 0);
+      layer.setCollisionByProperty({ collides: true });
+      layers.push(layer);
+    });
+    scene.cameras.main.setBounds(0, 0, 1024, 1024);
+    scene.physics.world.setBounds(0, 0, 1024, 1024);
+    scene.cameras.main.roundPixels = true; // avoid tile bleed
+    ret.push(layers)
+    return ret;
   },
 
   /**
@@ -65,6 +61,23 @@ let Common = {
   },
 
   /**
+   * Creates a playable rpg character.
+   * @param {Phaser.Scene} scene the phaser scene we are creating on.
+   * @param {Phaser.Map} map the phaser map.
+   * @param {string} startTileObjectName the starting tile object name.
+   * @param {string} spriteImageName the name of the sprite image as defined in boot_scene.js.
+   * @returns {Phaser.Sprite} the sprite representing the controllable character. defines cursors_ on it.
+   */
+  createPlayerControlledRpgCharacter: function (scene, map, startTileObjectName, spriteImageName) {
+    let startTileInfo = map.findObject(Rpg.Common.Utils.OBJECT_LAYER_NAME, (obj) => { return obj.name == startTileObjectName; });
+    let player = scene.physics.add.sprite(startTileInfo.x, startTileInfo.y, spriteImageName, 0);
+    player.setSize(32, 1);
+    player.setCollideWorldBounds(true);
+    scene.cameras.main.startFollow(player);
+    return player;
+  },
+
+  /**
    * Updates the player controlled character RPG style animation in the given scene.
    * @param {Phaser.Scene} scene a phaser scene.
    * @param {Phaser.Cursor} the cursors on the scene.
@@ -81,14 +94,14 @@ let Common = {
     player.setVelocity(0);
 
     if (cursors.left.isDown) {
-      player.setVelocityX(-1 * Common.PLAYER_SPEED);
+      player.setVelocityX(-1 * Rpg.Common.Utils.PLAYER_SPEED);
     } else if (cursors.right.isDown) {
-      player.setVelocityX(Common.PLAYER_SPEED);
+      player.setVelocityX(Rpg.Common.Utils.PLAYER_SPEED);
     }
     if (cursors.up.isDown) {
-      player.setVelocityY(-1 * Common.PLAYER_SPEED);
+      player.setVelocityY(-1 * Rpg.Common.Utils.PLAYER_SPEED);
     } else if (cursors.down.isDown) {
-      player.setVelocityY(Common.PLAYER_SPEED);
+      player.setVelocityY(Rpg.Common.Utils.PLAYER_SPEED);
     }
 
     if (cursors.left.isDown) {
@@ -110,39 +123,6 @@ let Common = {
   },
 
   /**
-   * Retrieves the dialogue scene.
-   */
-  getDialogueScene: function () {
-    return game.scene.getScene('DialogueScene');
-  },
-
-  /**
-   * Run in the create function of a scene to create a map.
-   * @param {Phaser.Scene} scene the phaser scene.
-   * @param {string} tilemapName the name of the tilemap.
-   * @param {string} tilesetName the name of the tilset.
-   * @param {array<string>} tileLayers an array of layer names.
-   * @returns [{Phaser.Map, {array<Phaser.Tilemaps.StaticTilemapLayer>}] all the phaser layers in the order passed in.
-   */
-  createMap: function (scene, tilemapName, tilesetName, tileLayers) {
-    let map = scene.make.tilemap({ key: tilemapName });
-    let ret = [];
-    ret.push(map)
-    let tileset = map.addTilesetImage(tilesetName);
-    let layers = []
-    tileLayers.forEach(function (tileLayer) {
-      let layer = map.createStaticLayer(tileLayer, tileset, 0, 0);
-      layer.setCollisionByProperty({ collides: true });
-      layers.push(layer);
-    });
-    scene.cameras.main.setBounds(0, 0, 1024, 1024);
-    scene.physics.world.setBounds(0, 0, 1024, 1024);
-    scene.cameras.main.roundPixels = true; // avoid tile bleed
-    ret.push(layers)
-    return ret;
-  },
-
-  /**
    * Adds the intersection of the player and tile layers.
    * @param {Phaser.Scene} scene the phaser scene.
    * @param {Phaser.Sprite} player the sprite representing the player.
@@ -159,33 +139,37 @@ let Common = {
    * @param {Phaser.Scene} scene the phaser scene.
    * @param {Phaser.Map} map the phaser map.
    * @param {string} startTileName the name of the object position within Tiled.
-   * TODO: Don't hardcode 'objects'.
    * @return {Phaser.Sprite} the added sprite.
    */
   createSpriteAtStartTileName: function (scene, map, startTileName) {
-    let startTileInfo = map.findObject('objects', (obj) => { return obj.name == startTileName; });
+    let startTileInfo = map.findObject(Rpg.Common.Utils.OBJECT_LAYER_NAME, (obj) => { return obj.name == startTileName; });
     return scene.physics.add.sprite(startTileInfo.x, startTileInfo.y);
   },
 
+
+
   /**
-   * Sets a new dialogue.
-   * @param {Object} sceneVars the SceneVars type object at the top of _scene.js files. Assumes dialogue__array and
-   *     dialogue__index are set.
-   * @param {*} dialogueArray
+   * Creates an npc character.
+   * @param {Phaser.Scene} scene the phaser scene we are creating on.
+   * @param {Phaser.Map} map the phaser map.
+   * @param {string} startTileObjectName the starting tile object name.
+   * @param {string} spriteImageName the name of the sprite image as defined in boot_scene.js.
+   * @returns {Phaser.Sprite} the sprite representing the controllable character. defines cursors_ on it.
    */
-  setDialogueInSceneVars: function (sceneVars, dialogueArray) {
-    sceneVars.dialogue__array = dialogueArray;
-    sceneVars.dialogue__index = 0;
-    Common.getDialogueScene().setTextObject(sceneVars);
+  createNPCCharacter: function (scene, map, startTileObjectName, spriteImageName) {
+    let startTileInfo = map.findObject(Rpg.Common.Utils.OBJECT_LAYER_NAME, (obj) => { return obj.name == startTileObjectName; });
+    let npc = scene.physics.add.sprite(startTileInfo.x, startTileInfo.y, spriteImageName, 0);
+    npc.setImmovable(true);
+    return npc;
   },
 
   /**
    * Returns whether two sprites are close enough to interact.
-   * @param {Phaser.Sprite} sprite1
-   * @param {Phaser.Sprite} sprite2
+   * @param {Phaser.Sprite} sprite1 the first sprite.
+   * @param {Phaser.Sprite} sprite2 the second sprite.
    */
   areSpritesInRangeToInteract: function (sprite1, sprite2) {
     return Math.sqrt(Math.pow(sprite1.x - sprite2.x, 2) + Math.pow(sprite1.y - sprite2.y, 2)) <
-      Common.MAX_DISTANCE_FOR_SPRITE_INTERACTION;
+    Rpg.Common.Utils.MAX_DISTANCE_FOR_SPRITE_INTERACTION;
   }
-}
+};

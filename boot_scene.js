@@ -26,7 +26,7 @@ var BootScene = new Phaser.Class({
     },
 
   create: function () {
-    //this.scene.start('MiriamHouseScene', {startingLocation: MiriamHouseSceneVars.startingLocationEnum.START_GAME});
-    this.scene.start('ChristinaHouseScene');
+    this.scene.start('MiriamHouseScene', {startingLocation: Rpg.Scenes.MiriamHouseSceneVars.startingLocationEnum.START_GAME});
+    //this.scene.start('ChristinaHouseScene');
   }
 });

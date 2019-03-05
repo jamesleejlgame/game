@@ -10,11 +10,10 @@ let config = {
   },
   scene: [
     BootScene,
-    SanFranciscoScene,
-    DialogueScene,
-    MiriamHouseScene,
-    ChristinaHouseScene,
-    DrMarioSetupScene
+    Rpg.CommonScenes.DialogueScene,
+    Rpg.Scenes.MiriamHouseScene,
+    Rpg.Scenes.SanFranciscoScene,
+    Rpg.Scenes.ChristinaHouseScene
   ]
 };
 
