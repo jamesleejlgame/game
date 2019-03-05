@@ -8,7 +8,7 @@
  * @key {string} label: the label of the message. For branching purposes.
  * @key {string} next: the label of the next message after this one.
  */
-Rpg.Data.Dialogue = {
+let Dialogue = {
   miriamChristinaMeetUp1: [
     { m: "<Phone rings>" },
     { m: "Christina: Hey BFF! Wanna come over? We can talk about how nice I am to everyone and how everyone loves me." },
@@ -188,5 +188,6 @@ Rpg.Data.Dialogue = {
     { label: "proposal_no", m: "Aww, hope you had fun with the game anyway!", next: "proposal_end" },
     { label: "proposal_end" }
   ]
-};
+}
 
+export { Dialogue }

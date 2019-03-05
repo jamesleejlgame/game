@@ -188,14 +188,4 @@ Rpg.Common.Utils = {
   distanceBetweenCoordinates: function (x1, y1, x2, y2) {
     return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
   },
-
-  /**
-   * Defines the state and dialog managers on the scene variable.
-   * @param {SceneVars} sceneVars the scene vars to define the managers on.
-   */
-  initializeStateAndDialogManagers: function (sceneVars) {
-    sceneVars.stateManager_ = new Rpg.Common.StateManager();
-    sceneVars.dialogueManager_ = new Rpg.Common.DialogueManager(sceneVars.stateManager_);
-    sceneVars.stateManager_.setDialogueManager(sceneVars.dialogueManager_);
-  }
 };

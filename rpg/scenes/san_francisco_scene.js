@@ -1,29 +1,27 @@
-/**
- * Holds information relevant to the MiriamHouse scene.
- */
-Rpg.Scenes.SanFranciscoSceneVars = {
+import { MiriamHouseScene } from './miriam_house_scene.js'
+import { RpgScene } from '../common/rpg_scene.js';
+
+class SanFranciscoScene extends RpgScene {
+
   /**
    * The possible miriam starting locations.
    */
-  startingLocationEnum: {
+  static startingLocationEnum = {
     MIRIAM_HOUSE: 0,
     CHRISTINA_HOUSE: 1
   }
-}
 
-Rpg.Scenes.SanFranciscoScene = new Phaser.Class({
-  Extends: Phaser.Scene,
-
-  initialize: function () {
-    Phaser.Scene.call(this, { key: 'SanFranciscoScene' });
-  },
+  constructor ()
+  {
+    super('SanFranciscoScene');
+  }
 
   /**
    * Creates the scene.
    * @param {Object} data an object that contains the keys:
    *   startingLocation {startingLocationEnum} the starting location of the miriam sprite.
    */
-  create: function (data) {
+  create (data) {
     let createMapRet = Rpg.Common.Utils.createMap(
       this,
       'san_francisco_tilemap',
@@ -35,9 +33,9 @@ Rpg.Scenes.SanFranciscoScene = new Phaser.Class({
     Rpg.Common.Utils.createMiriamAnimation(this, 'miriam_left', 'miriam_up', 'miriam_down');
 
     let miriamStartTileObjectName;
-    if (data.startingLocation === Rpg.Scenes.SanFranciscoSceneVars.startingLocationEnum.MIRIAM_HOUSE) {
+    if (data.startingLocation === SanFranciscoScene.startingLocationEnum.MIRIAM_HOUSE) {
       miriamStartTileObjectName = "miriam_miriamhouse";
-    } else if (data.startingLocation === Rpg.Scenes.SanFranciscoSceneVars.startingLocationEnum.CHRISTINA_HOUSE) {
+    } else if (data.startingLocation === SanFranciscoScene.startingLocationEnum.CHRISTINA_HOUSE) {
       miriamStartTileObjectName = "miriam_christinahouse";
     }
     this.miriam_ = Rpg.Common.Utils.createPlayerControlledRpgCharacter(this, map, miriamStartTileObjectName, 'miriam_down');
@@ -49,17 +47,16 @@ Rpg.Scenes.SanFranciscoScene = new Phaser.Class({
     let christinaHouse = Rpg.Common.Utils.createSpriteAtStartTileName(this, map, 'christinahouse');
     this.physics.add.overlap(this.miriam_, miriamHouse, (player, tile) => {this._overlapMiriamHouse();});
     this.physics.add.overlap(this.miriam_, christinaHouse, (player, tile) => {this._overlapChristinaHouse();});
-  },
+    this.stateManager_.setStates([]);
+  }
 
-  update: function (time, delta) {
-    Rpg.Common.Utils.updatePlayerAnimation(this, this.cursors_, this.miriam_, 'miriam_left', 'miriam_up', 'miriam_down');
-  },
+  _overlapMiriamHouse () {
+    this.scene.start('MiriamHouseScene', {startingLocation: MiriamHouseScene.startingLocationEnum.ENTER_DOOR});
+  }
 
-  _overlapMiriamHouse: function() {
-    this.scene.start('MiriamHouseScene', {startingLocation: Rpg.Scenes.MiriamHouseSceneVars.startingLocationEnum.ENTER_DOOR});
-  },
-
-  _overlapChristinaHouse: function() {
+  _overlapChristinaHouse () {
     this.scene.start('ChristinaHouseScene');
   }
-});
+}
+
+export { SanFranciscoScene };

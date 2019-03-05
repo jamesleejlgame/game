@@ -4,11 +4,11 @@
  * This class is tightly coupled with Rpg.DialogueManager.
  * TODO: Handle Text keys other than 'm'.
  */
-Rpg.CommonScenes.DialogueScene = new Phaser.Class({
-  Extends: Phaser.Scene,
-  initialize: function DialogueScene () {
-    Phaser.Scene.call(this, { key: 'DialogueScene' });
-  },
+class DialogueScene extends Phaser.Scene {
+  constructor ()
+  {
+    super({ key: 'DialogueScene' });
+  }
 
   /**
    * Creates a dialogue scene.
@@ -16,7 +16,7 @@ Rpg.CommonScenes.DialogueScene = new Phaser.Class({
    *   dialogueManager {Object} a scene vars object initialized with dialogue_manager.
    *   scene {Phaser.Scene} the phaser scene calling this.
    */
-  create: function (data) {
+  create (data) {
     /**
      * @type {Phaser.GameObjects.Graphics} The Phaser graphics object.
      */
@@ -41,28 +41,28 @@ Rpg.CommonScenes.DialogueScene = new Phaser.Class({
     this.spaceBar_ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
     this.updateDisplayedText();
-  },
+  }
 
-  update: function () {
+  update () {
     if (this.dialogueManager_.array.length > 0 && Phaser.Input.Keyboard.JustDown(this.spaceBar_)) {
       this.dialogueManager_.advanceIndex(this);
     }
-  },
+  }
 
   /**
    * Clears the displayed text.
    */
-  _clearDisplayedText: function () {
+  _clearDisplayedText () {
     this.graphics_.clear();
     this.text_.setVisible(false);
     this.dialogueManager_.array = [];
     this.dialogueManager_.index = 0;
-  },
+  }
 
   /**
    * Updates the displayed text.
    */
-  updateDisplayedText: function () {
+  updateDisplayedText () {
     if (this.dialogueManager_.index >= this.dialogueManager_.array.length) {
       this._clearDisplayedText();
       return;
@@ -74,4 +74,6 @@ Rpg.CommonScenes.DialogueScene = new Phaser.Class({
     this.text_.setVisible(true);
     this.text_.setText(this.dialogueManager_.array[this.dialogueManager_.index]['m']);
   }
-});
+}
+
+export { DialogueScene }

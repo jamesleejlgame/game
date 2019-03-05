@@ -108,7 +108,6 @@ Rpg.Common.StateManager.prototype.advanceToNextState = function () {
       tweens.push({x: obj.x, y: obj.y, duration: Rpg.Common.Utils.distanceBetweenCoordinates(currentX, currentY, obj.x, obj.y) * 1000 / Rpg.Common.Utils.CHARACTER_SPEED});
       currentX = obj.x;
       currentY = obj.y;
-      console.log(tweens);
     });
     this.scene.tweens.timeline({
       targets: state.target,
