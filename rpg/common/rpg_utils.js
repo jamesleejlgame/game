@@ -1,10 +1,10 @@
-Rpg.Common.Utils = {
+class RpgUtils {
   // Configurable.
-  CHARACTER_SPEED: 150,
-  MAX_DISTANCE_FOR_SPRITE_INTERACTION: 50,
+  static CHARACTER_SPEED = 150
+  static MAX_DISTANCE_FOR_SPRITE_INTERACTION = 50
 
   // Non configurable.
-  OBJECT_LAYER_NAME: 'objects',
+  static OBJECT_LAYER_NAME = 'objects'
 
   /**
    * Run in the create function of a scene to create a map.
@@ -14,7 +14,7 @@ Rpg.Common.Utils = {
    * @param {array<string>} tileLayers an array of layer names.
    * @returns [{Phaser.Map, {array<Phaser.Tilemaps.StaticTilemapLayer>}] all the phaser layers in the order passed in.
    */
-  createMap: function (scene, tilemapName, tilesetName, tileLayers) {
+  static createMap (scene, tilemapName, tilesetName, tileLayers) {
     let map = scene.make.tilemap({ key: tilemapName });
     let ret = [];
     ret.push(map)
@@ -30,16 +30,16 @@ Rpg.Common.Utils = {
     scene.cameras.main.roundPixels = true; // avoid tile bleed
     ret.push(layers)
     return ret;
-  },
+  }
 
   /**
-   * Creates a miriam RPG style animation in the given scene.
+   * Creates a player RPG style animation in the given scene.
    * @param {Phaser.Scene} scene the phaser scene.
    * @param {string} player_left_anim_name the animation string name for moving left.
    * @param {string} player_up_anim_name the animation string name for moving up.
    * @param {string} player_down_anim_name the animation string name for moving down.
    */
-  createMiriamAnimation: function (scene, player_left_anim_name, player_up_anim_name, player_down_anim_name) {
+  static createPlayerAnimation (scene, player_left_anim_name, player_up_anim_name, player_down_anim_name) {
     scene.anims.create({
       key: player_left_anim_name,
       frames: scene.anims.generateFrameNumbers(player_left_anim_name),
@@ -58,7 +58,7 @@ Rpg.Common.Utils = {
       frameRate: 10,
       repeat: -1
     });
-  },
+  }
 
   /**
    * Creates a playable rpg character.
@@ -68,14 +68,14 @@ Rpg.Common.Utils = {
    * @param {string} spriteImageName the name of the sprite image as defined in boot_scene.js.
    * @returns {Phaser.Sprite} the sprite representing the controllable character. defines cursors_ on it.
    */
-  createPlayerControlledRpgCharacter: function (scene, map, startTileObjectName, spriteImageName) {
-    let startTileInfo = Rpg.Common.Utils.findObjectByName(map, startTileObjectName);
+  static createPlayerControlledRpgCharacter (scene, map, startTileObjectName, spriteImageName) {
+    let startTileInfo = RpgUtils.findObjectByName(map, startTileObjectName);
     let player = scene.physics.add.sprite(startTileInfo.x, startTileInfo.y, spriteImageName, 0);
     player.setSize(32, 1);
     player.setCollideWorldBounds(true);
     scene.cameras.main.startFollow(player);
     return player;
-  },
+  }
 
   /**
    * Updates the player controlled character RPG style animation in the given scene.
@@ -87,21 +87,21 @@ Rpg.Common.Utils = {
    * @param {string} player_down_anim_name the animation string name for moving down.
    * Note: Right is not included because it is left flipped.
    */
-  updatePlayerAnimation: function (scene, cursors, player, player_left_anim_name, player_up_anim_name, player_down_anim_name) {
+  static updatePlayerAnimation (scene, cursors, player, player_left_anim_name, player_up_anim_name, player_down_anim_name) {
     if (!player) {
       return;
     }
     player.setVelocity(0);
 
     if (cursors.left.isDown) {
-      player.setVelocityX(-1 * Rpg.Common.Utils.CHARACTER_SPEED);
+      player.setVelocityX(-1 * RpgUtils.CHARACTER_SPEED);
     } else if (cursors.right.isDown) {
-      player.setVelocityX(Rpg.Common.Utils.CHARACTER_SPEED);
+      player.setVelocityX(RpgUtils.CHARACTER_SPEED);
     }
     if (cursors.up.isDown) {
-      player.setVelocityY(-1 * Rpg.Common.Utils.CHARACTER_SPEED);
+      player.setVelocityY(-1 * RpgUtils.CHARACTER_SPEED);
     } else if (cursors.down.isDown) {
-      player.setVelocityY(Rpg.Common.Utils.CHARACTER_SPEED);
+      player.setVelocityY(RpgUtils.CHARACTER_SPEED);
     }
 
     if (cursors.left.isDown) {
@@ -120,7 +120,7 @@ Rpg.Common.Utils = {
       }
       player.anims.pause(scene.anims.get(player.anims.getCurrentKey()).frames[0]);
     }
-  },
+  }
 
   /**
    * Adds the intersection of the player and tile layers.
@@ -128,11 +128,11 @@ Rpg.Common.Utils = {
    * @param {Phaser.Sprite} player the sprite representing the player.
    * @param {array<Phaser.TileMaps.StaticTilemapLayer} layers the tilemap layers.
    */
-  addIntersectionWithLayers: function (scene, player, layers) {
+  static addIntersectionWithLayers (scene, player, layers) {
     layers.forEach(function (layer) {
       scene.physics.add.collider(player, layer);
     });
-  },
+  }
 
   /**
    * Creates a sprite at the object with the given name within the tilemap.
@@ -141,18 +141,20 @@ Rpg.Common.Utils = {
    * @param {string} startTileName the name of the object position within Tiled.
    * @return {Phaser.Sprite} the added sprite.
    */
-  createSpriteAtStartTileName: function (scene, map, startTileName) {
-    let startTileInfo = Rpg.Common.Utils.findObjectByName(map, startTileName);
+  static createSpriteAtStartTileName (scene, map, startTileName) {
+    let startTileInfo = RpgUtils.findObjectByName(map, startTileName);
     return scene.physics.add.sprite(startTileInfo.x, startTileInfo.y);
-  },
+  }
+
   /**
    * Finds the objects in a tilemap by the given name. (In the 'objects' layer)
    * @param {string} name the name of the object.
    * @return {Phaser.GameObjects.GameObject} the object.
    */
-  findObjectByName (map, name) {
-    return map.findObject(Rpg.Common.Utils.OBJECT_LAYER_NAME, (obj) => { return obj.name == name; });
-  },
+  static findObjectByName (map, name) {
+    return map.findObject(RpgUtils.OBJECT_LAYER_NAME, (obj) => { return obj.name == name; });
+  }
+
   /**
    * Creates an npc character.
    * @param {Phaser.Scene} scene the phaser scene we are creating on.
@@ -161,22 +163,22 @@ Rpg.Common.Utils = {
    * @param {string} spriteImageName the name of the sprite image as defined in boot_scene.js.
    * @returns {Phaser.Sprite} the sprite representing the controllable character. defines cursors_ on it.
    */
-  createNPCCharacter: function (scene, map, startTileObjectName, spriteImageName) {
-    let startTileInfo = Rpg.Common.Utils.findObjectByName(map, startTileObjectName);
+  static createNPCCharacter (scene, map, startTileObjectName, spriteImageName) {
+    let startTileInfo = RpgUtils.findObjectByName(map, startTileObjectName);
     let npc = scene.physics.add.sprite(startTileInfo.x, startTileInfo.y, spriteImageName, 0);
     npc.setImmovable(true);
     return npc;
-  },
+  }
 
   /**
    * Returns whether two sprites are close enough to interact.
    * @param {Phaser.Sprite} sprite1 the first sprite.
    * @param {Phaser.Sprite} sprite2 the second sprite.
    */
-  areSpritesInRangeToInteract: function (sprite1, sprite2) {
-    return Rpg.Common.Utils.distanceBetweenCoordinates(sprite1.x, sprite1.y, sprite2.x, sprite2.y) <
-    Rpg.Common.Utils.MAX_DISTANCE_FOR_SPRITE_INTERACTION;
-  },
+  static areSpritesInRangeToInteract (sprite1, sprite2) {
+    return RpgUtils.distanceBetweenCoordinates(sprite1.x, sprite1.y, sprite2.x, sprite2.y) <
+    RpgUtils.MAX_DISTANCE_FOR_SPRITE_INTERACTION;
+  }
 
   /**
    * Returns the distance between two coordinates.
@@ -185,7 +187,9 @@ Rpg.Common.Utils = {
    * @param {number} x2 the second x coordinate.
    * @param {number} y2 the second y coordinate.
    */
-  distanceBetweenCoordinates: function (x1, y1, x2, y2) {
+  static distanceBetweenCoordinates (x1, y1, x2, y2) {
     return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
-  },
-};
+  }
+}
+
+export { RpgUtils }

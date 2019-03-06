@@ -14,7 +14,6 @@ class DialogueScene extends Phaser.Scene {
    * Creates a dialogue scene.
    * @param {Object} data The object containing the keys:
    *   dialogueManager {Object} a scene vars object initialized with dialogue_manager.
-   *   scene {Phaser.Scene} the phaser scene calling this.
    */
   create (data) {
     /**
@@ -26,10 +25,6 @@ class DialogueScene extends Phaser.Scene {
      */
     this.dialogueManager_ = data.dialogueManager;
     this.dialogueManager_.setDialogueScene(this);
-    /**
-     * @type {Phaser.Scene} the phaser scene calling this.
-     */
-    this.scene_ = data.scene;
     /**
      * @type {Phaser.GameObjects.Text} The current text to display.
      */
@@ -45,7 +40,7 @@ class DialogueScene extends Phaser.Scene {
 
   update () {
     if (this.dialogueManager_.array.length > 0 && Phaser.Input.Keyboard.JustDown(this.spaceBar_)) {
-      this.dialogueManager_.advanceIndex(this);
+      this.dialogueManager_.advanceIndex();
     }
   }
 
