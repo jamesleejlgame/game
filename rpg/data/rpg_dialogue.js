@@ -97,10 +97,7 @@ class Dialogue {
   static preDrMario = [
     { m: "Miriam: Yesss.. 12314 points to 503. I win again. I can't believe I found supercalifragilisticexpialidocious." },
     { m: "James: Omg. We need a game other than Ruzzle. Oh, want to play Dr. Mario? It's gonna be kinda unfair though, I have 20 years of tetris experience. I'm basically a god." },
-    { m: "Miriam: Okay... but you're gonna have to give me a handicap." }
-  ]
-
-  static duringDrMario = [
+    { m: "Miriam: Okay... but you're gonna have to give me a handicap." },
     { m: "James: Oops I set the handicap in the wrong direction. Wahahahaha." }
   ]
 
@@ -129,11 +126,14 @@ class Dialogue {
     { m: "James: *huff* It should be just a little further to the top. Let's rest a bit?" },
     { m: "Miriam: Sure. Hmm where are all the other tourists by the way? We started with so many. Also the path's kinda disappeared." },
     { m: "James: Yeah weird. Well don't worry, I'm sure we're on the right track. I used James Maps TM. It's never wrong, you know." },
-    { m: "Miriam: *suspicious*" },
-    { m: "James: Okay I'm ready, we can keep going. Wait - ahhhh!" }
+    { m: "Miriam: *suspicious*" }
   ]
 
   static japanHike2 = [
+    { m: "James: Okay I'm ready, we can keep going. Wait - ahhhh!" }
+  ]
+
+  static japanHike3 = [
     { m: "Miriam: Omg that's a ninja star!" },
     { m: "James: It came from that direction! What's going on over there??" }
   ]
