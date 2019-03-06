@@ -69,6 +69,17 @@ class StateManager {
   };
 
   /**
+   * Returns the current state or null if there is no valid state.
+   * @return {State} the current state.
+   */
+  getState () {
+    if (this.index < 0 || this.index >= this.states.length) {
+      return null;
+    }
+    return this.states[this.index];
+  }
+
+  /**
    * Advances to the next state.
    * @param {Phaser.Scene} scene the phaser scene.
    * @param {Phaser.Tilemap} map the tilemap to use.
@@ -77,14 +88,17 @@ class StateManager {
     this.index++;
     this.time = (new Date().getTime());
     if (this.index >= this.states.length) {
+      this.scene.advanceToNextScene();
       return;
     }
     let state = this.states[this.index];
     if (state.type == 'dialogue') {
+      this.scene.stopPlayerMovement()
       this.scene.setDialogueOnDialogueManager(state.dialogue);
       return;
     }
     if (state.type == 'npcMove') {
+      this.scene.stopPlayerMovement()
       let tweens = [];
       let currentX = state.target.x;
       let currentY = state.target.y;
@@ -97,7 +111,8 @@ class StateManager {
       this.scene.tweens.timeline({
         targets: state.target,
         ease: 'Linear',
-        tweens: tweens
+        tweens: tweens,
+        onComplete: () => { this.advanceToNextState() }
       });
     }
   }

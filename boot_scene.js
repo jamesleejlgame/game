@@ -9,7 +9,9 @@ class BootScene extends Phaser.Scene {
   preload () {
     this.load.tilemapTiledJSON('san_francisco_tilemap', 'assets/san_francisco_tiled.json');
     this.load.tilemapTiledJSON('christina_house_tilemap', 'assets/christina_house.json');
+    this.load.tilemapTiledJSON('christina_house2_tilemap', 'assets/christina_house2.json');
     this.load.tilemapTiledJSON('miriam_house_tilemap', 'assets/miriam_house.json');
+    this.load.tilemapTiledJSON('pub_quiz_tilemap', 'assets/pub_quiz.json');
     this.load.image('town_and_city_tileset', 'assets/town_and_city_tileset.png');
     this.load.image('dr_mario_background', 'assets/dr_mario_background2.png');
     this.load.spritesheet('dr_mario_sprites', 'assets/dr_mario_sprites2.png', { frameWidth: 19, frameHeight: 19, spacing: 1 });
@@ -20,12 +22,15 @@ class BootScene extends Phaser.Scene {
     this.load.spritesheet('miriam_left', 'assets/miriam_left.png', { frameWidth: 30, frameHeight: 48 });
     this.load.spritesheet('miriam_down', 'assets/miriam_down.png', { frameWidth: 30, frameHeight: 48 });
     this.load.spritesheet('christina_down', 'assets/christina_down.gif', { frameWidth: 30, frameHeight: 48 });
+    this.load.spritesheet('christina_up', 'assets/christina_up.gif', { frameWidth: 30, frameHeight: 48 });
     this.load.spritesheet('james_down', 'assets/james_down.gif', { frameWidth: 30, frameHeight: 48 });
+    this.load.spritesheet('james_left', 'assets/james_left.gif', { frameWidth: 30, frameHeight: 48 });
     this.load.spritesheet('karen_up', 'assets/karen_up.gif', { frameWidth: 30, frameHeight: 48 });
   }
 
   create () {
     this.scene.start('MiriamHouseScene', {startingLocation: MiriamHouseScene.startingLocationEnum.START_GAME});
+    //this.scene.start('PubQuizScene');
   }
 }
 

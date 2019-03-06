@@ -3,7 +3,9 @@ import { BootScene } from './boot_scene.js'
 import { DialogueScene } from './rpg/common_scenes/dialogue_scene.js';
 
 import { ChristinaHouseScene } from './rpg/scenes/christina_house_scene.js';
+import { ChristinaHouse2Scene } from './rpg/scenes/christina_house2_scene.js';
 import { MiriamHouseScene } from './rpg/scenes/miriam_house_scene.js';
+import { PubQuizScene } from './rpg/scenes/pub_quiz_scene.js';
 import { SanFranciscoScene } from './rpg/scenes/san_francisco_scene.js';
 
 let config = {
@@ -21,7 +23,9 @@ let config = {
     DialogueScene,
     MiriamHouseScene,
     SanFranciscoScene,
-    ChristinaHouseScene
+    ChristinaHouseScene,
+    ChristinaHouse2Scene,
+    PubQuizScene
   ]
 };
 

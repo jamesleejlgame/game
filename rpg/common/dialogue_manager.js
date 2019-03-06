@@ -51,6 +51,7 @@ class DialogueManager {
     this.dialogueScene.updateDisplayedText();
     if (didDialogueJustEnd) {
       this.scene.advanceToNextState();
+      return;
     }
   }
 }

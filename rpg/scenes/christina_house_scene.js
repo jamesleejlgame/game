@@ -45,6 +45,14 @@ class ChristinaHouseScene extends RpgScene {
     this.scene.stop('DialogueScene');
     this.scene.start('SanFranciscoScene', {startingLocation: SanFranciscoScene.startingLocationEnum.CHRISTINA_HOUSE});
   }
+
+  /**
+   * @override
+   */
+  advanceToNextScene () {
+    this.scene.stop('DialogueScene');
+    this.scene.start('PubQuizScene');
+  }
 }
 
 export { ChristinaHouseScene };

@@ -25,7 +25,7 @@ class RpgScene extends Phaser.Scene {
      */
     this.map_ = null;
     /**
-     * @type {Phaser.Physics.Action.Sprite} the phaser sprite the player is controlling. 
+     * @type {Phaser.Physics.Action.Sprite} the phaser sprite the player is controlling.
      */
     this.player_ = null;
     /**
@@ -46,7 +46,7 @@ class RpgScene extends Phaser.Scene {
     this.actionKey_ = null;
   }
 
-  create (tilemapName, tilesetName, tilelayerNames, 
+  create (tilemapName, tilesetName, tilelayerNames,
     playerLeftAnimationName, playerUpAnimationName, playerDownAnimationName,
     playerStartTileObjectName,
     sceneName,
@@ -77,8 +77,12 @@ class RpgScene extends Phaser.Scene {
   update (time, delta) {
     if (this.stateManager_.shouldAdvanceToNextState(this.actionKey_, this.player_)) {
       this.stateManager_.advanceToNextState();
+      return;
     }
-    RpgUtils.updatePlayerAnimation(this, this.cursors_, this.player_, this.playerLeftAnimationName_, this.playerUpAnimationName_, this.playerDownAnimationName_);
+    let state = this.stateManager_.getState()
+    if (state && (state.type == 'player' || state.type == 'playerFreeMovement' || state.type == 'timer')) {
+      RpgUtils.updatePlayerAnimation(this, this.cursors_, this.player_, this.playerLeftAnimationName_, this.playerUpAnimationName_, this.playerDownAnimationName_);
+    }
   }
 
   /**
@@ -90,10 +94,28 @@ class RpgScene extends Phaser.Scene {
   }
 
   /**
+   * Stops the movement of the sprite controlled by the player.
+   */
+  stopPlayerMovement () {
+    if (this.anims.get(this.player_.anims.getCurrentKey()) == undefined) {
+      return;
+    }
+    this.player_.setVelocity(0);
+    this.player_.anims.pause(this.anims.get(this.player_.anims.getCurrentKey()).frames[0]);
+  }
+
+  /**
    * Advances to the next state in the state manager.
    */
   advanceToNextState () {
     this.stateManager_.advanceToNextState();
+  }
+
+  /**
+   * Advances to the next scene.
+   */
+  advanceToNextScene () {
+    throw 'Should be overridden.'
   }
 
   /**

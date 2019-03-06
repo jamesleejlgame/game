@@ -1,6 +1,7 @@
 import { MiriamHouseScene } from './miriam_house_scene.js'
 import { RpgScene } from '../common/rpg_scene.js';
 import { RpgUtils } from '../common/rpg_utils.js'
+import { States } from '../data/rpg_states.js'
 
 class SanFranciscoScene extends RpgScene {
 
@@ -37,7 +38,7 @@ class SanFranciscoScene extends RpgScene {
       'miriam_left', 'miriam_up', 'miriam_down',
       miriamStartTileObjectName,
       'SanFranciscoHouseScene',
-      [])
+      States.sanFranciscoStates)
 
     let miriamHouse = RpgUtils.createSpriteAtStartTileName(this, this.map_, 'miriamhouse');
     let christinaHouse = RpgUtils.createSpriteAtStartTileName(this, this.map_, 'christinahouse');
