@@ -1,4 +1,4 @@
-import { RpgScene } from '../common/rpg_scene.js';
+import { RpgScene } from '../common/rpg_scene.js'
 import { RpgUtils } from '../common/rpg_utils.js'
 import { States } from '../data/rpg_states.js'
 import { ChristinaHouseScene } from './christina_house_scene.js'
@@ -37,11 +37,11 @@ class MiriamHouseScene extends RpgScene {
     super.create(
       'miriam_house_tilemap',
       'town_and_city_tileset',
-      ['tiles1', 'tiles2'],
+      ['base_tiles', 'tiles2'],
       'miriam_left', 'miriam_up', 'miriam_down',
       miriamStartTileObjectName,
-      'MiriamHouseScene',
-      States.miriamHouseStates)
+      States.miriamHouseStates,
+      data)
 
     let door = RpgUtils.createSpriteAtStartTileName(this, this.map_, 'door');
     this.physics.add.overlap(this.player_, door, (player, tile) => {this._overlapDoor();});
@@ -51,8 +51,7 @@ class MiriamHouseScene extends RpgScene {
    * Handle case where Miriam overlaps with the door.
    */
   _overlapDoor () {
-    this.scene.stop('DialogueScene');
-    this.scene.start('SanFranciscoScene', {startingLocation: SanFranciscoScene.startingLocationEnum.MIRIAM_HOUSE});
+    this.switchScene('SanFranciscoScene', {startingLocation: SanFranciscoScene.startingLocationEnum.MIRIAM_HOUSE}, false)
   }
 }
 

@@ -1,11 +1,13 @@
+// TODO: Populate stuffed animals.
+
 import { RpgScene } from '../common/rpg_scene.js';
 import { RpgUtils } from '../common/rpg_utils.js'
 import { States } from '../data/rpg_states.js'
 
-class PubQuizScene extends RpgScene {
+class MiriamHouseBootcampScene extends RpgScene {
   constructor ()
   {
-    super('PubQuizScene');
+    super('MiriamHouseBootcampScene');
   }
 
   /**
@@ -15,25 +17,24 @@ class PubQuizScene extends RpgScene {
    */
   create (data) {
     super.create(
-      'pub_quiz_tilemap',
+      'miriam_house3_tilemap',
       'town_and_city_tileset',
       ['base_tiles', 'tiles2'],
-      'miriam_left', 'miriam_up', 'miriam_down',
-      'miriam',
-      States.pubQuizStates,
+      null, null, null,
+      null,
+      States.miriamHouseBootCamp,
       data)
 
-    this.christina_ = RpgUtils.createNPCCharacter(this, this.map_, 'christina', 'christina_up');
     this.james_ = RpgUtils.createNPCCharacter(this, this.map_, 'james', 'james_left');
-    this.karen_ = RpgUtils.createNPCCharacter(this, this.map_, 'karen', 'karen_up');
+    this.miriam_ = RpgUtils.createNPCCharacter(this, this.map_, 'miriam', 'miriam_left', true);
   }
 
   /**
    * @override
    */
   advanceToNextScene () {
-    this.switchScene('ChristinaHouse2Scene', {fadeIn: true}, true)
+    this.switchScene('PreDrMarioScene', {fadeIn: true}, true)
   }
 }
 
-export { PubQuizScene };
+export { MiriamHouseBootcampScene };

@@ -22,11 +22,11 @@ class ChristinaHouseScene extends RpgScene {
     super.create(
       'christina_house_tilemap',
       'town_and_city_tileset',
-      ['tiles1', 'tiles2'],
+      ['base_tiles', 'tiles2'],
       'miriam_left', 'miriam_up', 'miriam_down',
       'miriam_enterdoor',
-      'ChristinaHouseScene',
-      [])
+      [],
+      data)
 
     this.christina_ = RpgUtils.createNPCCharacter(this, this.map_, 'christina_start', 'christina_down');
     this.james_ = RpgUtils.createNPCCharacter(this, this.map_, 'james_start', 'james_down');
@@ -42,16 +42,14 @@ class ChristinaHouseScene extends RpgScene {
    * Handle case where Miriam overlaps with the door.
    */
   _overlapDoor () {
-    this.scene.stop('DialogueScene');
-    this.scene.start('SanFranciscoScene', {startingLocation: SanFranciscoScene.startingLocationEnum.CHRISTINA_HOUSE});
+    this.switchScene('SanFranciscoScene', {startingLocation: SanFranciscoScene.startingLocationEnum.CHRISTINA_HOUSE}, false)
   }
 
   /**
    * @override
    */
   advanceToNextScene () {
-    this.scene.stop('DialogueScene');
-    this.scene.start('PubQuizScene');
+    this.switchScene('PubQuizScene', {fadeIn: true}, true)
   }
 }
 

@@ -1,3 +1,4 @@
+import { RpgConstants } from './constants.js'
 import { RpgUtils } from './rpg_utils.js'
 
 /**
@@ -98,23 +99,72 @@ class StateManager {
       return;
     }
     if (state.type == 'npcMove') {
-      this.scene.stopPlayerMovement()
-      let tweens = [];
-      let currentX = state.target.x;
-      let currentY = state.target.y;
-      state.tweens.forEach((el) => {
-        let obj = RpgUtils.findObjectByName(this.map, el);
-        tweens.push({x: obj.x, y: obj.y, duration: RpgUtils.distanceBetweenCoordinates(currentX, currentY, obj.x, obj.y) * 1000 / RpgUtils.CHARACTER_SPEED});
-        currentX = obj.x;
-        currentY = obj.y;
-      });
-      this.scene.tweens.timeline({
-        targets: state.target,
-        ease: 'Linear',
-        tweens: tweens,
-        onComplete: () => { this.advanceToNextState() }
-      });
+      this.animateTweens(state.npc, true);
+      return;
     }
+    if (state.type == 'npcVisibility') {
+      state.npc.target.setVisible(state.npc.visible);
+      this.advanceToNextState();
+      return;
+    }
+    if (state.type == 'npcsMove') {
+      state.npcs.forEach((npc, index) => this.animateTweens(npc, index == 0));
+      return;
+    }
+    if (state.type == 'renderLayer') {
+      // TODO: Assumes there is only one tileset.
+      let layer = this.map.createStaticLayer(state.layer, this.map.getTileset(state.tilesetName), 0, 0);
+      this.advanceToNextState();
+      return;
+    }
+  }
+
+  /**
+   * @param {Npc object} npc the npc object defined in RpgStates.
+   * @param {boolean} isFirst whether this is the first npc or not.
+   */
+  animateTweens (npc, isFirst) {
+    let target = npc.target;
+    let tweens = [];
+    let currentX = target.x;
+    let currentY = target.y;
+    npc.tweens.forEach((tween, index) => {
+      let obj = RpgUtils.findObjectByName(this.map, tween.location);
+      tweens.push({
+        x: obj.x,
+        y: obj.y,
+        duration: RpgUtils.distanceBetweenCoordinates(currentX, currentY, obj.x, obj.y) * 1000 / RpgConstants.CHARACTER_SPEED,
+        onStartCallback: () => {
+          target.flipX = false;
+          if (tween.flipX) {
+            target.flipX = tween.flipX;
+          }
+          target.anims.play(tween.animation, true);
+        },
+        onComplete: () => {
+          if (index != npc.tweens.length - 1) {
+            return;
+          }
+          if (tween.animationEnd) {
+            target.flipX = false;
+            if (tween.animationFlipXOnEnd) {
+                target.flipX = tween.animationFlipXOnEnd;
+              }
+              target.anims.play(tween.animationEnd, true);
+          }
+          target.anims.stop();
+        }
+      });
+      currentX = obj.x;
+      currentY = obj.y;
+    });
+
+    this.scene.tweens.timeline({
+      targets: target,
+      ease: 'Linear',
+      tweens: tweens,
+      onComplete: () => { if (isFirst) { this.advanceToNextState() } }
+    });
   }
 }
 

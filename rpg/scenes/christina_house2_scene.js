@@ -1,3 +1,5 @@
+// TODO: Make miriam face christina.
+
 import { RpgScene } from '../common/rpg_scene.js'
 import { RpgUtils } from '../common/rpg_utils.js'
 import { States } from '../data/rpg_states.js'
@@ -22,13 +24,13 @@ class ChristinaHouse2Scene extends RpgScene {
     super.create(
       'christina_house2_tilemap',
       'town_and_city_tileset',
-      ['tiles1', 'tiles2'],
+      ['base_tiles', 'tiles2'],
       'miriam_left', 'miriam_up', 'miriam_down',
       'miriam',
-      'ChristinaHouse2Scene',
-      [])
+      [],
+      data)
 
-    this.christina_ = RpgUtils.createNPCCharacter(this, this.map_, 'christina', 'christina_down');
+    this.christina_ = RpgUtils.createNPCCharacter(this, this.map_, 'christina', 'christina_left');
     this.james_ = RpgUtils.createNPCCharacter(this, this.map_, 'james', 'james_down');
     super.setStates(States.christinaHouse2States(this.james_));
 
@@ -40,8 +42,7 @@ class ChristinaHouse2Scene extends RpgScene {
    * @override
    */
   advanceToNextScene () {
-    this.scene.stop('DialogueScene');
-    this.scene.start('PubQuizScene');
+    this.switchScene('AlcatrazScene', {fadeIn: true}, true)
   }
 }
 

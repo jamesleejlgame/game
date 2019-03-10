@@ -34,11 +34,11 @@ class SanFranciscoScene extends RpgScene {
     super.create(
       'san_francisco_tilemap',
       'town_and_city_tileset',
-      ['tiles1', 'tiles2'],
+      ['base_tiles', 'tiles2'],
       'miriam_left', 'miriam_up', 'miriam_down',
       miriamStartTileObjectName,
-      'SanFranciscoHouseScene',
-      States.sanFranciscoStates)
+      States.sanFranciscoStates,
+      data)
 
     let miriamHouse = RpgUtils.createSpriteAtStartTileName(this, this.map_, 'miriamhouse');
     let christinaHouse = RpgUtils.createSpriteAtStartTileName(this, this.map_, 'christinahouse');
@@ -47,11 +47,11 @@ class SanFranciscoScene extends RpgScene {
   }
 
   _overlapMiriamHouse () {
-    this.scene.start('MiriamHouseScene', {startingLocation: MiriamHouseScene.startingLocationEnum.ENTER_DOOR});
+    this.switchScene('MiriamHouseScene', {startingLocation: MiriamHouseScene.startingLocationEnum.ENTER_DOOR}, false)
   }
 
   _overlapChristinaHouse () {
-    this.scene.start('ChristinaHouseScene');
+    this.switchScene('ChristinaHouseScene', {}, false)
   }
 }
 

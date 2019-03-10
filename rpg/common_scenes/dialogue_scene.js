@@ -14,6 +14,7 @@ class DialogueScene extends Phaser.Scene {
    * Creates a dialogue scene.
    * @param {Object} data The object containing the keys:
    *   dialogueManager {Object} a scene vars object initialized with dialogue_manager.
+   *   visible {boolean} whether this is visible or not.
    */
   create (data) {
     /**
@@ -34,7 +35,10 @@ class DialogueScene extends Phaser.Scene {
      * @type {Phaser.Input.Keyboard.Key} the spacebar key.
      */
     this.spaceBar_ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
-
+    /**
+     * Whether the dialogue is visible or not.
+     */
+    this.visible_ = data.visible;
     this.updateDisplayedText();
   }
 
@@ -42,6 +46,15 @@ class DialogueScene extends Phaser.Scene {
     if (this.dialogueManager_.array.length > 0 && Phaser.Input.Keyboard.JustDown(this.spaceBar_)) {
       this.dialogueManager_.advanceIndex();
     }
+  }
+
+  /**
+   * Sets the visibility of the dialogue scene.
+   * @param {Boolean} visibility
+   */
+  setVisibility (visibility) {
+    this.visible_ = visibility;
+    this.updateDisplayedText();
   }
 
   /**
@@ -58,6 +71,9 @@ class DialogueScene extends Phaser.Scene {
    * Updates the displayed text.
    */
   updateDisplayedText () {
+    if (!this.visible_) {
+      return;
+    }
     if (this.dialogueManager_.index >= this.dialogueManager_.array.length) {
       this._clearDisplayedText();
       return;

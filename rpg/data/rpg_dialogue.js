@@ -61,20 +61,21 @@ class Dialogue {
   ]
 
   static christinaLocksJamesInAlcatraz1 = [
-    { m: "Christina: Hmm yeah this wasn't so interesting but I want to do all the touristy things." },
-    { m: "James: Yeah, it's kinda lame." },
+    { m: "Christina: Hmm yeah I guess you're right. Alcatraz isn't that interesting. But I want to do all the touristy things while I'm here." },
+    { m: "James: Yeah, it's pretty lame, we're almost done though." },
     { m: "Christina: Hey, let's try standing in the cells." },
-    { m: "James: K." }
+    { m: "James: Sure." }
   ]
 
   static christinaLocksJamesInAlcatraz2 = [
-    { m: "Christina: Going to New York with Miriam, huh! I was teaching her a lesson! You can stay in there and rot!" }
+    { m: "Christina: Going to New York with Miriam, huh?! I'm her BFF. If I decide not to go with her, NO ONE's going with her! You can stay in there and rot!" }
   ]
 
   static jamesCallsMiriamFromAlcatraz = [
     { m: "<Phone rings>" },
     { m: "Miriam: Hello?" },
     { m: "James: Help!! Christina locked me in Alcatraz!" },
+    { m: "Miriam: Omg, we're on our way!" },
     { m: "Miriam: We have to save James, everyone!" },
     { m: "Council: Let's go!" }
   ]
@@ -89,7 +90,8 @@ class Dialogue {
   static miriamHouseBootCamp = [
     { m: "James: Wait.. we're still in SF." },
     { m: "Miriam: Oh, umm..." },
-    { m: "Miriam: Hmm okay so we want to iterate over everything in the array so... for (int i = 0; i < 10; ++i) { performAction(); ..." },
+    { m: "Miriam: Hmm... so we have to iterate over everything in the array so I think it's..." },
+    { m: "for (int i = 0; i < 10; ++i) { performAction(); ..." },
     { m: "Miriam: Ugh, I hate this. K let's go to Sunnyvale!" },
     { m: "James: Okay!" }
   ]
@@ -98,7 +100,8 @@ class Dialogue {
     { m: "Miriam: Yesss.. 12314 points to 503. I win again. I can't believe I found supercalifragilisticexpialidocious." },
     { m: "James: Omg. We need a game other than Ruzzle. Oh, want to play Dr. Mario? It's gonna be kinda unfair though, I have 20 years of tetris experience. I'm basically a god." },
     { m: "Miriam: Okay... but you're gonna have to give me a handicap." },
-    { m: "James: Oops I set the handicap in the wrong direction. Wahahahaha." }
+    { m: "James: Oh yeah definitely, that sounds fair. I'll set it to level 20 for me, and level 1 for you." },
+    { m: "James: Oops I accidentally set the handicap in the wrong direction. Bahahahaha." }
   ]
 
   static postDrMario = [
@@ -107,11 +110,12 @@ class Dialogue {
   ]
 
   static cookingClassMiriam = [
-    { m: "Chef Gaby: Perfect, perfect! I have nothing to teach you. We have openings for head chef positions btw." }
+    { m: "Chef Gaby: Perfect, Miriam, perfect! I have nothing to teach you." },
+    { m: "Chef Gaby: Actually, we have openings a head chef position if you're interested. You could even teach me a thing or two." }
   ]
 
   static cookingClassJames = [
-    { m: "Chef Gaby: You should be cutting things more evenly. Just watch Miriam and do everything she does." }
+    { m: "Chef Gaby: You should be cutting things more evenly, James. Just watch Miriam and do everything she does." }
   ]
 
   static japanIntro = [
@@ -122,15 +126,16 @@ class Dialogue {
 
   static japanHike1 = [
     { m: "James: Omg, no... more... mountains." },
-    { m: "Miriam: I know.. but they're all so beautiful!" },
-    { m: "James: *huff* It should be just a little further to the top. Let's rest a bit?" },
+    { m: "Miriam: I know.. but Kyoto's so beautiful!" },
+    { m: "James: *huff* It should be just a little further to our hotel. Let's rest a bit?" },
     { m: "Miriam: Sure. Hmm where are all the other tourists by the way? We started with so many. Also the path's kinda disappeared." },
-    { m: "James: Yeah weird. Well don't worry, I'm sure we're on the right track. I used James Maps TM. It's never wrong, you know." },
+    { m: "James: Yeah weird. Well don't worry, I'm sure we're on the right track. I used James Maps. It's never wrong, you know." },
     { m: "Miriam: *suspicious*" }
   ]
 
   static japanHike2 = [
-    { m: "James: Okay I'm ready, we can keep going. Wait - ahhhh!" }
+    { m: "James: Okay I'm ready, we can keep going." },
+    { m: "James: Wait -- ahhhh!" }
   ]
 
   static japanHike3 = [
@@ -139,7 +144,8 @@ class Dialogue {
   ]
 
   static japanHikeBattle = [
-    { m: "Itachi: I will never let you destroy this sanctuary!" }
+    { m: "Jiraiya: Watch out! The Mist are attacking this sanctuary." },
+    { m: "Jiraiya: I'm on my way to fight them, you two better head back to the hotel soon before more ninjas arrive. It's about 20 miles away." }
   ]
 
   static preOvercookedGame = [
@@ -149,7 +155,7 @@ class Dialogue {
     { m: "James: Hmm, yeah true." },
     { m: "Miriam: Ooh, look at all these recipes I found from Asian Julia Child. We should make a year's worth of dim sum!" },
     { m: "James: Wait.. a year's worth? Over how long?" },
-    { m: "Miriam: Oh I dunno.. about 4 minutes probably." }
+    { m: "Miriam: Oh I scheduled it for tonight." }
   ]
 
   static miriamHomeopath = [

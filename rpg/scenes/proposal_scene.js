@@ -1,11 +1,14 @@
+// TODO: Populate stuffed animals and hello kitty.
+// TODO: Properly implement dialogue options.
+
 import { RpgScene } from '../common/rpg_scene.js';
 import { RpgUtils } from '../common/rpg_utils.js'
 import { States } from '../data/rpg_states.js'
 
-class PubQuizScene extends RpgScene {
+class ProposalScene extends RpgScene {
   constructor ()
   {
-    super('PubQuizScene');
+    super('ProposalScene');
   }
 
   /**
@@ -15,25 +18,24 @@ class PubQuizScene extends RpgScene {
    */
   create (data) {
     super.create(
-      'pub_quiz_tilemap',
+      'proposal_tilemap',
       'town_and_city_tileset',
       ['base_tiles', 'tiles2'],
-      'miriam_left', 'miriam_up', 'miriam_down',
-      'miriam',
-      States.pubQuizStates,
+      null, null, null,
+      null,
+      States.proposal,
       data)
 
-    this.christina_ = RpgUtils.createNPCCharacter(this, this.map_, 'christina', 'christina_up');
     this.james_ = RpgUtils.createNPCCharacter(this, this.map_, 'james', 'james_left');
-    this.karen_ = RpgUtils.createNPCCharacter(this, this.map_, 'karen', 'karen_up');
+    this.miriam_ = RpgUtils.createNPCCharacter(this, this.map_, 'miriam', 'miriam_left');
   }
 
   /**
    * @override
    */
   advanceToNextScene () {
-    this.switchScene('ChristinaHouse2Scene', {fadeIn: true}, true)
+    this.switchScene('AcceptedScene', {fadeIn: true}, true)
   }
 }
 
-export { PubQuizScene };
+export { ProposalScene };

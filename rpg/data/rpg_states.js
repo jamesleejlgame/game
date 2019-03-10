@@ -7,10 +7,15 @@ import { Dialogue } from './rpg_dialogue.js'
  * @key {string} type the type of state. Currently could be 'timer', or 'dialogue'.
  * @key {number} time only present if the type is 'timer'. How long after the previous state to start the next one.
  * @key {Dialogue} dialogue {Dialogue} the dialogue.
+ *
+ * For Tweens,
+ * @key {string} animationEnd the animation to play at the end of this tween.
+ * @key {boolean} animationFreezeOnEnd whether to freeze the animation at the end.
+ * @key {string} animation the animation name to play.
+ * @key {string} location the object location in the tileset to move to.
  */
 class States {
   static miriamHouseStates = [
-    { type: 'timer', time: 1000 },
     { type: 'dialogue', dialogue: Dialogue.miriamChristinaMeetUp1 },
     { type: 'playerFreeMovement' }
   ]
@@ -23,17 +28,30 @@ class States {
     return [
       { type: 'player', target: christina},
       { type: 'dialogue', dialogue: Dialogue.miriamChristinaMeetUp2 },
-      { type: 'npcMove', target: james, tweens: ['james_1', 'james_2', 'james_3', 'james_4'] },
+      { type: 'npcMove', npc: {
+        target: james,
+        tweens: [
+          {animation: 'james_left', location: 'james_1', flipX: true},
+          {animation: 'james_down', location: 'james_2'},
+          {animation: 'james_left', location: 'james_3'},
+          {animation: 'james_up', location: 'james_4'}]}
+      },
       { type: 'dialogue', dialogue: Dialogue.miriamMeetsJames1 },
-      { type: 'npcMove', target: james, tweens: ['james_3', 'james_2', 'james_1', 'james_start'] },
+      { type: 'npcMove', npc: {
+        target: james,
+        tweens: [
+          {animation: 'james_down', location: 'james_3'},
+          {animation: 'james_left', location: 'james_2', flipX: true},
+          {animation: 'james_up', location: 'james_1'},
+          {animation: 'james_left', location: 'james_start', animationEnd: 'james_down'}
+        ]}
+      },
       { type: 'dialogue', dialogue: Dialogue.miriamMeetsJames2 },
-      { type: 'timer', time: 1000 },
     ];
   }
 
   static pubQuizStates = [
     { type: 'dialogue', dialogue: Dialogue.pubQuiz },
-    { type: 'timer', time: 1000 },
   ];
 
   static christinaHouse2States (james) {
@@ -41,97 +59,131 @@ class States {
       { type: 'dialogue', dialogue: Dialogue.miriamAsksChristinaToWedding},
       { type: 'player', target: james },
       { type: 'dialogue', dialogue: Dialogue.miriamAsksJamesToWedding },
-      { type: 'timer', time: 1000 },
     ];
   }
 
   static alcatraz (christina, james) {
     return [
-      { type: 'npcsMove', 
-        targets: [{target: james, tweens: ['christina_1']}, 
-                  {target: james, tweens: ['james_1']}]},
+      { type: 'npcsMove',
+        npcs: [
+          { target: christina,
+            tweens: [
+              {animation: 'christina_left',
+               location: 'christina_1',
+               animationEnd: 'christina_down',
+               flipX: true,
+              }]},
+          { target: james,
+            tweens:
+            [
+              { animation: 'james_left',
+              location: 'james_1',
+              animationEnd: 'james_up',
+              flipX: true,
+         }]}]},
       { type: 'dialogue', dialogue: Dialogue.christinaLocksJamesInAlcatraz1 },
-      { type: 'npcMove', target: james, tweens: ['james_2'] },
-      { type: 'npcMove', target: christina, tweens: ['christina_2'] },
-      { type: 'renderLayer', layer: 'tiles3' },
+      { type: 'npcMove', npc: {target: james, tweens: [{animation: 'james_down', location: 'james_2', animationEnd: 'james_up'}]} },
+      { type: 'npcMove', npc: {target: christina, tweens: [{animation: 'christina_down', location: 'christina_2'}]} },
+      { type: 'renderLayer', layer: 'tiles3', tilesetName: 'castle_tileset' },
       { type: 'dialogue', dialogue: Dialogue.christinaLocksJamesInAlcatraz2 },
-      { type: 'timer', time: 1000 },
     ];
   }
 
   static jamesCallsMiriam = [
     { type: 'dialogue', dialogue: Dialogue.jamesCallsMiriamFromAlcatraz },
-    { type: 'timer', time: 1000 },
   ];
 
   static postAlcatraz = [
     { type: 'dialogue', dialogue: Dialogue.postAlcatraz },
-    { type: 'timer', time: 1000 },
   ];
 
   static miriamHouseBootCamp = [
     { type: 'dialogue', dialogue: Dialogue.miriamHouseBootCamp },
-    { type: 'timer', time: 1000 },
   ];
 
   static preDrMario = [
     { type: 'dialogue', dialogue: Dialogue.preDrMario },
-    { type: 'timer', time: 1000 },
   ];
 
   static postDrMario = [
     { type: 'dialogue', dialogue: Dialogue.postDrMario },
-    { type: 'timer', time: 1000 },
   ];
 
   static cookingClass (gaby) {
     return [
       { type: 'dialogue', dialogue: Dialogue.cookingClassMiriam },
-      { type: 'npcMove', target: gaby, tweens: ['gaby_1'] },
+      { type: 'npcMove', npc: {target: gaby, tweens: [{animation: 'gaby_down', location: 'gaby_1'}] } },
       { type: 'dialogue', dialogue: Dialogue.cookingClassJames },
-      { type: 'timer', time: 1000 },
     ];
   }
 
-  static japanIntro = [
-    { type: 'dialogue', dialogue: Dialogue.japanIntro },
-    { type: 'timer', time: 1000 },
-  ];
-
-  static japanHike (miriam, james, star) {
+  static japanIntro (miriam, james) {
     return [
-      { type: 'npcsMove', 
-        targets: [{target: miriam, tweens: ['miriam_1']}, 
-                  {target: james, tweens: ['james_1']}]},
-      { type: 'dialogue', dialogue: Dialogue.japanHike1 },
-      { type: 'timer', time: 1000 },
-      { type: 'dialogue', dialogue: Dialogue.japanHike2 },
-      { type: 'npcMove', target: star, tweens: ['star_1'] },
-      { type: 'dialogue', dialogue: Dialogue.japanHike3 },
-      { type: 'timer', time: 1000 },
+      { type: 'npcsMove',
+        npcs: [
+          { target: miriam,
+            tweens: [
+              {animation: 'miriam_left',
+               location: 'miriam_1',
+               flipX: true,
+               animationEnd: 'miriam_down'
+              }]},
+          { target: james,
+            tweens:
+            [
+              { animation: 'james_left',
+              location: 'james_1',
+              flipX: true,
+              animationEnd: 'james_up'
+            }]}]},
+      { type: 'dialogue', dialogue: Dialogue.japanIntro },
     ];
   }
 
-  static japanHikeBattle = [
-    { type: 'dialogue', dialogue: Dialogue.japanHikeBattle },
-    { type: 'timer', time: 1000 },
-  ];
+  static japanHike (miriam, james, star, jiraiya) {
+    return [
+      { type: 'npcsMove',
+        npcs: [
+          { target: miriam,
+            tweens: [
+              {animation: 'miriam_left',
+               location: 'miriam_1',
+               flipX: true,
+               animationEnd: 'miriam_up'
+              }]},
+          { target: james,
+            tweens:
+            [
+              { animation: 'james_left',
+              location: 'james_1',
+              flipX: true,
+              animationEnd: 'james_down'
+            }]}]},
+      { type: 'dialogue', dialogue: Dialogue.japanHike1 },
+      { type: 'timer', time: 3000 },
+      { type: 'dialogue', dialogue: Dialogue.japanHike2 },
+      { type: 'npcVisibility', npc: {target: star, visible: true} },
+      { type: 'npcMove', npc: {target: star, tweens: [{animation: 'shuriken', location: 'star_1'}] } },
+      { type: 'npcVisibility', npc: {target: star, visible: false} },
+      { type: 'dialogue', dialogue: Dialogue.japanHike3 },
+      { type: 'npcVisibility', npc: {target: jiraiya, visible: true} },
+      { type: 'dialogue', dialogue: Dialogue.japanHikeBattle },
+    ];
+  }
 
-  static preOvercookedBattle = [
+  static preOvercookedGame = [
     { type: 'dialogue', dialogue: Dialogue.preOvercookedGame },
-    { type: 'timer', time: 1000 },
   ];
 
   static miriamCallsHomeopath = [
     { type: 'dialogue', dialogue: Dialogue.miriamHomeopath },
-    { type: 'timer', time: 1000 },
   ];
 
   static preHarryPotterBattle = [
     { type: 'dialogue', dialogue: Dialogue.preHarryPotterBattle },
-    { type: 'timer', time: 1000 },
   ];
 
+  // TODO: Use this.
   static harryPotterBattle (harry, snape, spider, attack) {
     return [
       { type: 'npcMove', target: harry, tweens: ['harry_1'] },
@@ -139,7 +191,6 @@ class States {
       { type: 'npcMove', target: attack, tweens: ['attack_1'] },
       { type: 'npcAppear', target: snape, location: 'snape' },
       { type: 'dialogue', dialogue: Dialogue.duringHarryPotterBattle },
-      { type: 'timer', time: 1000 },
     ];
   }
 
@@ -147,34 +198,43 @@ class States {
     { type: 'dialogue', dialogue: Dialogue.miriamReceivesPills },
     { type: 'timer', time: 1000 },
     { type: 'dialogue', dialogue: Dialogue.miriamCured },
-    { type: 'timer', time: 1000 },
   ];
 
   static hike (miriam, james) {
     return [
-      { type: 'npcsMove', 
-        targets: [{target: miriam, tweens: ['miriam_1']}, 
-                  {target: james, tweens: ['james_1']}]},
+      { type: 'npcsMove',
+        npcs: [
+          { target: miriam,
+            tweens: [
+              {animation: 'miriam_left',
+               location: 'miriam_1',
+               flipX: true,
+               animationEnd: 'miriam_up'
+              }]},
+          { target: james,
+            tweens:
+            [
+              { animation: 'james_left',
+              location: 'james_1',
+              flipX: true,
+              animationEnd: 'james_down'
+            }]}]},
       { type: 'dialogue', dialogue: Dialogue.hiking1 },
-      { type: 'npcMove', target: james, tweens: ['james_2'] },
+      { type: 'npcMove', npc: {target: james, tweens: [{animation: 'james_left', flipX: true, animationEnd: 'james_up', location: 'james_2'}] } },
       { type: 'dialogue', dialogue: Dialogue.hiking2 },
-      { type: 'timer', time: 1000 },
     ];
   }
 
   static babysitting = [
     { type: 'dialogue', dialogue: Dialogue.babysitting },
-    { type: 'timer', time: 1000 },
   ];
 
   static escapeRoom = [
     { type: 'dialogue', dialogue: Dialogue.escapeRoom },
-    { type: 'timer', time: 1000 },
   ];
 
   static proposal = [
     { type: 'dialogue', dialogue: Dialogue.proposal },
-    { type: 'timer', time: 1000 },
   ];
 
 }

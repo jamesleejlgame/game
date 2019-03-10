@@ -1,8 +1,6 @@
-class RpgUtils {
-  // Configurable.
-  static CHARACTER_SPEED = 150
-  static MAX_DISTANCE_FOR_SPRITE_INTERACTION = 50
+import { RpgConstants } from './constants.js'
 
+class RpgUtils {
   // Non configurable.
   static OBJECT_LAYER_NAME = 'objects'
 
@@ -35,28 +33,16 @@ class RpgUtils {
   /**
    * Creates a player RPG style animation in the given scene.
    * @param {Phaser.Scene} scene the phaser scene.
-   * @param {string} player_left_anim_name the animation string name for moving left.
-   * @param {string} player_up_anim_name the animation string name for moving up.
-   * @param {string} player_down_anim_name the animation string name for moving down.
+   * @param {array<string>} animationNames the names of the animations.
    */
-  static createPlayerAnimation (scene, player_left_anim_name, player_up_anim_name, player_down_anim_name) {
-    scene.anims.create({
-      key: player_left_anim_name,
-      frames: scene.anims.generateFrameNumbers(player_left_anim_name),
-      frameRate: 10,
-      repeat: -1
-    });
-    scene.anims.create({
-      key: player_up_anim_name,
-      frames: scene.anims.generateFrameNumbers(player_up_anim_name),
-      frameRate: 10,
-      repeat: -1
-    });
-    scene.anims.create({
-      key: player_down_anim_name,
-      frames: scene.anims.generateFrameNumbers(player_down_anim_name),
-      frameRate: 10,
-      repeat: -1
+  static initializeAnimations (scene, animationNames) {
+    animationNames.forEach((animationName) => {
+      scene.anims.create({
+        key: animationName,
+        frames: scene.anims.generateFrameNumbers(animationName),
+        frameRate: 10,
+        repeat: -1
+      });
     });
   }
 
@@ -71,7 +57,8 @@ class RpgUtils {
   static createPlayerControlledRpgCharacter (scene, map, startTileObjectName, spriteImageName) {
     let startTileInfo = RpgUtils.findObjectByName(map, startTileObjectName);
     let player = scene.physics.add.sprite(startTileInfo.x, startTileInfo.y, spriteImageName, 0);
-    player.setSize(32, 1);
+    player.setSize(4, 4);
+    player.setDepth(startTileInfo.y);
     player.setCollideWorldBounds(true);
     scene.cameras.main.startFollow(player);
     return player;
@@ -92,16 +79,17 @@ class RpgUtils {
       return;
     }
     player.setVelocity(0);
+    player.setDepth(player.y);
 
     if (cursors.left.isDown) {
-      player.setVelocityX(-1 * RpgUtils.CHARACTER_SPEED);
+      player.setVelocityX(-1 * RpgConstants.CHARACTER_SPEED);
     } else if (cursors.right.isDown) {
-      player.setVelocityX(RpgUtils.CHARACTER_SPEED);
+      player.setVelocityX(RpgConstants.CHARACTER_SPEED);
     }
     if (cursors.up.isDown) {
-      player.setVelocityY(-1 * RpgUtils.CHARACTER_SPEED);
+      player.setVelocityY(-1 * RpgConstants.CHARACTER_SPEED);
     } else if (cursors.down.isDown) {
-      player.setVelocityY(RpgUtils.CHARACTER_SPEED);
+      player.setVelocityY(RpgConstants.CHARACTER_SPEED);
     }
 
     if (cursors.left.isDown) {
@@ -161,12 +149,17 @@ class RpgUtils {
    * @param {Phaser.Map} map the phaser map.
    * @param {string} startTileObjectName the starting tile object name.
    * @param {string} spriteImageName the name of the sprite image as defined in boot_scene.js.
+   * @param {boolean?} flipX whether or not to flip the x axis of the sprite.
    * @returns {Phaser.Sprite} the sprite representing the controllable character. defines cursors_ on it.
    */
-  static createNPCCharacter (scene, map, startTileObjectName, spriteImageName) {
+  static createNPCCharacter (scene, map, startTileObjectName, spriteImageName, flipX) {
     let startTileInfo = RpgUtils.findObjectByName(map, startTileObjectName);
     let npc = scene.physics.add.sprite(startTileInfo.x, startTileInfo.y, spriteImageName, 0);
     npc.setImmovable(true);
+    npc.setDepth(startTileInfo.y);
+    if (flipX) {
+      npc.setFlipX(true);
+    }
     return npc;
   }
 
@@ -177,7 +170,7 @@ class RpgUtils {
    */
   static areSpritesInRangeToInteract (sprite1, sprite2) {
     return RpgUtils.distanceBetweenCoordinates(sprite1.x, sprite1.y, sprite2.x, sprite2.y) <
-    RpgUtils.MAX_DISTANCE_FOR_SPRITE_INTERACTION;
+    RpgConstants.MAX_DISTANCE_FOR_SPRITE_INTERACTION;
   }
 
   /**

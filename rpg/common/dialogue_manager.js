@@ -25,6 +25,14 @@ class DialogueManager {
   }
 
   /**
+   * Whether or not the dialogue scene should be visible.
+   * @param {Boolean} visibility
+   */
+  setDialogueVisible (visibility) {
+    this.dialogueScene.setVisibility(visibility);
+  }
+
+  /**
    * Sets the dialogue scene.
    * @param {Phaser.Scene} dialogueScene the dialogue scene.
    */
