@@ -22,10 +22,15 @@ class JamesCallsMiriamScene extends RpgScene {
       ['base_tiles', 'tiles2'],
       null, null, null,
       null,
-      States.jamesCallsMiriam,
+      [],
       data)
 
     this.miriam_ = RpgUtils.createNPCCharacter(this, this.map_, 'miriam', 'miriam_down');
+    this.homura_ = RpgUtils.createNPCCharacter(this, this.map_, 'homura', 'homura_down');
+    this.stitch_ = RpgUtils.createNPCCharacter(this, this.map_, 'stitch', 'stitch_down');
+    this.wimblebear_ = RpgUtils.createNPCCharacter(this, this.map_, 'wimblebear', 'wimble_down');
+    this.hellokitty_ = RpgUtils.createNPCCharacter(this, this.map_, 'hellokitty', 'hellokitty_down');
+    super.setStates(States.jamesCallsMiriamFromAlcatraz(this.miriam_));
   }
 
   /**

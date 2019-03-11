@@ -133,7 +133,7 @@ class StateManager {
       tweens.push({
         x: obj.x,
         y: obj.y,
-        duration: RpgUtils.distanceBetweenCoordinates(currentX, currentY, obj.x, obj.y) * 1000 / RpgConstants.CHARACTER_SPEED,
+        duration: this.calculateDuration(currentX, currentY, obj.x, obj.y),
         onStartCallback: () => {
           target.flipX = false;
           if (tween.flipX) {
@@ -165,6 +165,10 @@ class StateManager {
       tweens: tweens,
       onComplete: () => { if (isFirst) { this.advanceToNextState() } }
     });
+  }
+
+  calculateDuration (x1, y1, x2, y2) {
+    return Math.max(0.1, RpgUtils.distanceBetweenCoordinates(x1, y1, x2, y2) * 1000 / RpgConstants.CHARACTER_SPEED);
   }
 }
 

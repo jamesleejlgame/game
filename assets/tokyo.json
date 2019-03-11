@@ -65,6 +65,30 @@
                  "width":0,
                  "x":82,
                  "y":365
+                }, 
+                {
+                 "height":0,
+                 "id":7,
+                 "name":"miriam_2",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":556,
+                 "y":314
+                }, 
+                {
+                 "height":0,
+                 "id":8,
+                 "name":"james_2",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":555,
+                 "y":365
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -85,7 +109,7 @@
          "y":0
         }],
  "nextlayerid":4,
- "nextobjectid":7,
+ "nextobjectid":9,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.2.2",

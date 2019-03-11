@@ -30,8 +30,8 @@ class ChristinaHouse2Scene extends RpgScene {
       [],
       data)
 
-    this.christina_ = RpgUtils.createNPCCharacter(this, this.map_, 'christina', 'christina_left');
-    this.james_ = RpgUtils.createNPCCharacter(this, this.map_, 'james', 'james_down');
+    this.christina_ = RpgUtils.createNPCCharacter(this, this.map_, 'christina', 'christina_up');
+    this.james_ = RpgUtils.createNPCCharacter(this, this.map_, 'james', 'james_left', true);
     super.setStates(States.christinaHouse2States(this.james_));
 
     this.physics.add.collider(this.player_, this.christina_);

@@ -25,6 +25,10 @@ class PostAlcatrazScene extends RpgScene {
 
     this.james_ = RpgUtils.createNPCCharacter(this, this.map_, 'james', 'james_up');
     this.miriam_ = RpgUtils.createNPCCharacter(this, this.map_, 'miriam', 'miriam_up');
+    this.homura_ = RpgUtils.createNPCCharacter(this, this.map_, 'homura', 'homura_down');
+    this.stitch_ = RpgUtils.createNPCCharacter(this, this.map_, 'stitch', 'stitch_down');
+    this.wimblebear_ = RpgUtils.createNPCCharacter(this, this.map_, 'wimblebear', 'wimble_down');
+    this.hellokitty_ = RpgUtils.createNPCCharacter(this, this.map_, 'hellokitty', 'hellokitty_down');
   }
 
   /**

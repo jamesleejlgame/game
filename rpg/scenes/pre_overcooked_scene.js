@@ -23,8 +23,8 @@ class PreOvercookedScene extends RpgScene {
       States.preOvercookedGame,
       data)
 
-    this.james_ = RpgUtils.createNPCCharacter(this, this.map_, 'james', 'james_up');
-    this.miriam_ = RpgUtils.createNPCCharacter(this, this.map_, 'miriam', 'miriam_down');
+    this.james_ = RpgUtils.createNPCCharacter(this, this.map_, 'james', 'james_left');
+    this.miriam_ = RpgUtils.createNPCCharacter(this, this.map_, 'miriam', 'miriam_left', true);
   }
 
   /**

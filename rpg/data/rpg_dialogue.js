@@ -34,15 +34,27 @@ class Dialogue {
     { m: "Christina: He does that. What a weirdo. What do you think of setting him up with Karen? So anyway, there I was hanging on the edge of the cliff..." }
   ]
 
-  static pubQuiz = [
+  static pubQuiz1 = [
     { m: "Announcer: That's right, Pocahontas is the only princess based on a real person. 10 points to the Mighty Morphing Flower Arrangers." },
+  ];
+
+  static pubQuiz2 = [
     { m: "Christina: So James, Karen's really into pool too. " },
     { m: "Karen: Actually I've never pla..." },
     { m: "Christina: ... and she loooooves video games!" },
     { m: "Karen: Oh yeah Candy Crush is so fun!" },
+  ];
+
+  static pubQuiz3 = [
     { m: "James: So how was your day, Miriam?" },
+  ];
+
+  static pubQuiz4 = [
     { m: "Miriam: It was good. Not as good as Karen's day, you should ask her about hers." },
     { m: "James: Oh okay maybe in a little while. Oh yeah I want to learn singing, can you teach me?" },
+  ];
+
+  static pubQuiz5 = [
     { m: "Christina & Miriam: Hmm this isn't working." }
   ]
 
@@ -71,11 +83,14 @@ class Dialogue {
     { m: "Christina: Going to New York with Miriam, huh?! I'm her BFF. If I decide not to go with her, NO ONE's going with her! You can stay in there and rot!" }
   ]
 
-  static jamesCallsMiriamFromAlcatraz = [
+  static jamesCallsMiriamFromAlcatraz1 = [
     { m: "<Phone rings>" },
     { m: "Miriam: Hello?" },
     { m: "James: Help!! Christina locked me in Alcatraz!" },
     { m: "Miriam: Omg, we're on our way!" },
+  ];
+
+  static jamesCallsMiriamFromAlcatraz2 = [
     { m: "Miriam: We have to save James, everyone!" },
     { m: "Council: Let's go!" }
   ]
@@ -110,12 +125,12 @@ class Dialogue {
   ]
 
   static cookingClassMiriam = [
-    { m: "Chef Gaby: Perfect, Miriam, perfect! I have nothing to teach you." },
+    { m: "Chef Gaby: That's perfect, Miriam! I have nothing to teach you." },
     { m: "Chef Gaby: Actually, we have openings a head chef position if you're interested. You could even teach me a thing or two." }
   ]
 
   static cookingClassJames = [
-    { m: "Chef Gaby: You should be cutting things more evenly, James. Just watch Miriam and do everything she does." }
+    { m: "Chef Gaby: Oh, hmm... you should be cutting things more evenly, James. Just watch Miriam and do everything she does." }
   ]
 
   static japanIntro = [
@@ -127,7 +142,7 @@ class Dialogue {
   static japanHike1 = [
     { m: "James: Omg, no... more... mountains." },
     { m: "Miriam: I know.. but Kyoto's so beautiful!" },
-    { m: "James: *huff* It should be just a little further to our hotel. Let's rest a bit?" },
+    { m: "James: *huff* It should be just a little further to our hotel. Should we rest a bit?" },
     { m: "Miriam: Sure. Hmm where are all the other tourists by the way? We started with so many. Also the path's kinda disappeared." },
     { m: "James: Yeah weird. Well don't worry, I'm sure we're on the right track. I used James Maps. It's never wrong, you know." },
     { m: "Miriam: *suspicious*" }
@@ -191,12 +206,18 @@ class Dialogue {
 
   static hiking1 = [
     { m: "James: This hike was only supposed to be one mile!" },
+  ];
+
+  static hiking2 = [
     { m: "Miriam: Oh look there's a sign!" }
   ]
 
-  static hiking2 = [
+  static hiking3 = [
     { m: "James: The oregon trail 3.6 miles that way. The blair witch house 4 miles the other way? I don't want to go to either of those!" },
     { m: "Miriam: Let's turn back." },
+  ]
+
+  static hiking4 = [
     { m: "James: We're never hiking again." }
   ]
 

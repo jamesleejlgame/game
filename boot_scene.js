@@ -34,6 +34,10 @@ class BootScene extends Phaser.Scene {
     this.load.image('dr_mario_background', 'assets/dr_mario_background2.png');
     this.load.image('jiraiya', 'assets/jiraiya.png');
     this.load.image('adrianna_up', 'assets/adrianna_up.gif');
+    this.load.image('homura_down', 'assets/homura_down.gif');
+    this.load.image('stitch_down', 'assets/stitch_down.png');
+    this.load.image('wimble_down', 'assets/wimble_down.gif');
+    this.load.image('hellokitty_down', 'assets/hellokitty_down.png');
     this.load.spritesheet('dr_mario_sprites', 'assets/dr_mario_sprites2.png', { frameWidth: 19, frameHeight: 19, spacing: 1 });
     this.load.spritesheet('dr_mario_yellow_virus', 'assets/dr_mario_yellow_virus.png', { frameWidth: 20, frameHeight: 20 });
     this.load.spritesheet('dr_mario_blue_virus', 'assets/dr_mario_blue_virus.png', { frameWidth: 20, frameHeight: 20 });

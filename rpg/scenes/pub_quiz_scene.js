@@ -18,14 +18,16 @@ class PubQuizScene extends RpgScene {
       'pub_quiz_tilemap',
       'town_and_city_tileset',
       ['base_tiles', 'tiles2'],
-      'miriam_left', 'miriam_up', 'miriam_down',
-      'miriam',
-      States.pubQuizStates,
+      null, null, null,
+      null,
+      [],
       data)
 
     this.christina_ = RpgUtils.createNPCCharacter(this, this.map_, 'christina', 'christina_up');
     this.james_ = RpgUtils.createNPCCharacter(this, this.map_, 'james', 'james_left');
+    this.miriam_ = RpgUtils.createNPCCharacter(this, this.map_, 'miriam', 'miriam_down');
     this.karen_ = RpgUtils.createNPCCharacter(this, this.map_, 'karen', 'karen_up');
+    super.setStates(States.pubQuizStates(this.james_, this.miriam_));
   }
 
   /**

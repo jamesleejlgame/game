@@ -39,8 +39,8 @@
                  "type":"",
                  "visible":true,
                  "width":0,
-                 "x":337,
-                 "y":393
+                 "x":323,
+                 "y":455
                 }, 
                 {
                  "height":0,
@@ -51,8 +51,8 @@
                  "type":"",
                  "visible":true,
                  "width":0,
-                 "x":253,
-                 "y":531
+                 "x":268,
+                 "y":360
                 }, 
                 {
                  "height":0,
@@ -63,8 +63,8 @@
                  "type":"",
                  "visible":true,
                  "width":0,
-                 "x":292,
-                 "y":530
+                 "x":346,
+                 "y":361
                 }, 
                 {
                  "height":0,
@@ -75,8 +75,8 @@
                  "type":"",
                  "visible":true,
                  "width":0,
-                 "x":334,
-                 "y":526
+                 "x":322,
+                 "y":356
                 }, 
                 {
                  "height":0,
@@ -87,20 +87,8 @@
                  "type":"",
                  "visible":true,
                  "width":0,
-                 "x":382,
-                 "y":525
-                }, 
-                {
-                 "height":0,
-                 "id":20,
-                 "name":"junebear",
-                 "point":true,
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":0,
-                 "x":428,
-                 "y":524
+                 "x":389,
+                 "y":361
                 }],
          "opacity":1,
          "type":"objectgroup",

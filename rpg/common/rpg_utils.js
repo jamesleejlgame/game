@@ -181,7 +181,7 @@ class RpgUtils {
    * @param {number} y2 the second y coordinate.
    */
   static distanceBetweenCoordinates (x1, y1, x2, y2) {
-    return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
+    return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2)) + 1;
   }
 }
 

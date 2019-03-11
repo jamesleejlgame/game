@@ -50,9 +50,39 @@ class States {
     ];
   }
 
-  static pubQuizStates = [
-    { type: 'dialogue', dialogue: Dialogue.pubQuiz },
-  ];
+  static pubQuizStates (james, miriam) {
+    return [
+      { type: 'dialogue', dialogue: Dialogue.pubQuiz1 },
+      { type: 'npcMove', npc: {
+        target: james,
+        tweens: [
+          {animation: 'james_down', location: 'james'},
+        ]}
+      },
+      { type: 'dialogue', dialogue: Dialogue.pubQuiz2 },
+      { type: 'npcMove', npc: {
+        target: james,
+        tweens: [
+          {animation: 'james_left', location: 'james'},
+        ]}
+      },
+      { type: 'dialogue', dialogue: Dialogue.pubQuiz3 },
+      { type: 'npcMove', npc: {
+        target: miriam,
+        tweens: [
+          {animation: 'miriam_left', location: 'miriam', flipX: true},
+        ]}
+      },
+      { type: 'dialogue', dialogue: Dialogue.pubQuiz4 },
+      { type: 'npcMove', npc: {
+        target: miriam,
+        tweens: [
+          {animation: 'miriam_down', location: 'miriam'},
+        ]}
+      },
+      { type: 'dialogue', dialogue: Dialogue.pubQuiz5 }
+    ]
+  };
 
   static christinaHouse2States (james) {
     return [
@@ -86,6 +116,14 @@ class States {
       { type: 'npcMove', npc: {target: christina, tweens: [{animation: 'christina_down', location: 'christina_2'}]} },
       { type: 'renderLayer', layer: 'tiles3', tilesetName: 'castle_tileset' },
       { type: 'dialogue', dialogue: Dialogue.christinaLocksJamesInAlcatraz2 },
+    ];
+  }
+
+  static jamesCallsMiriamFromAlcatraz (miriam) {
+    return [
+      { type: 'dialogue', dialogue: Dialogue.jamesCallsMiriamFromAlcatraz1 },
+      { type: 'npcMove', npc: {target: miriam, tweens: [{animation: 'miriam_up', location: 'miriam'}]} },
+      { type: 'dialogue', dialogue: Dialogue.jamesCallsMiriamFromAlcatraz2 },
     ];
   }
 
@@ -137,6 +175,21 @@ class States {
               animationEnd: 'james_up'
             }]}]},
       { type: 'dialogue', dialogue: Dialogue.japanIntro },
+      { type: 'npcsMove',
+        npcs: [
+          { target: miriam,
+            tweens: [
+              {animation: 'miriam_left',
+               location: 'miriam_2',
+               flipX: true,
+              }]},
+          { target: james,
+            tweens:
+            [
+              { animation: 'james_left',
+              location: 'james_2',
+              flipX: true,
+            }]}]},
     ];
   }
 
@@ -160,13 +213,28 @@ class States {
               animationEnd: 'james_down'
             }]}]},
       { type: 'dialogue', dialogue: Dialogue.japanHike1 },
-      { type: 'timer', time: 3000 },
+      { type: 'timer', time: 1500 },
       { type: 'dialogue', dialogue: Dialogue.japanHike2 },
       { type: 'npcVisibility', npc: {target: star, visible: true} },
       { type: 'npcMove', npc: {target: star, tweens: [{animation: 'shuriken', location: 'star_1'}] } },
       { type: 'npcVisibility', npc: {target: star, visible: false} },
       { type: 'dialogue', dialogue: Dialogue.japanHike3 },
       { type: 'npcVisibility', npc: {target: jiraiya, visible: true} },
+      { type: 'npcsMove',
+        npcs: [
+          { target: miriam,
+            tweens: [
+              {animation: 'miriam_left',
+               location: 'miriam_1',
+               flipX: true,
+              }]},
+          { target: james,
+            tweens:
+            [
+              { animation: 'james_left',
+              location: 'james_1',
+              flipX: true,
+            }]}]},
       { type: 'dialogue', dialogue: Dialogue.japanHikeBattle },
     ];
   }
@@ -179,6 +247,7 @@ class States {
     { type: 'dialogue', dialogue: Dialogue.miriamHomeopath },
   ];
 
+  // TODO: Use this.
   static preHarryPotterBattle = [
     { type: 'dialogue', dialogue: Dialogue.preHarryPotterBattle },
   ];
@@ -220,8 +289,12 @@ class States {
               animationEnd: 'james_down'
             }]}]},
       { type: 'dialogue', dialogue: Dialogue.hiking1 },
-      { type: 'npcMove', npc: {target: james, tweens: [{animation: 'james_left', flipX: true, animationEnd: 'james_up', location: 'james_2'}] } },
+      { type: 'npcMove', npc: {target: miriam, tweens: [{animation: 'miriam_left', location: 'miriam_1', flipX: true}]} },
       { type: 'dialogue', dialogue: Dialogue.hiking2 },
+      { type: 'npcMove', npc: {target: james, tweens: [{animation: 'james_left', flipX: true, animationEnd: 'james_up', location: 'james_2'}] } },
+      { type: 'dialogue', dialogue: Dialogue.hiking3 },
+      { type: 'npcMove', npc: {target: james, tweens: [{animation: 'james_left', location: 'james_2'}] } },
+      { type: 'dialogue', dialogue: Dialogue.hiking4 },
     ];
   }
 
