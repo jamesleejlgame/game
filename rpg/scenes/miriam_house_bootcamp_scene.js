@@ -1,5 +1,3 @@
-// TODO: Populate stuffed animals.
-
 import { RpgScene } from '../common/rpg_scene.js';
 import { RpgUtils } from '../common/rpg_utils.js'
 import { States } from '../data/rpg_states.js'

@@ -1,49 +1,64 @@
-let DrMario = {
-  NUM_PLAYERS: 2,
-  WIDTH: 8,
-  HEIGHT: 16,
-  drMarioPlayers: [],
-  drMarioGameOver: false
-};
+import { DrMarioPuzzleData } from './dr_mario_puzzle_data.js'
 
-const placedPieceTypeEnum = {
-  EMPTY: ' ',
-  LEFT_SIDE: 'L',
-  RIGHT_SIDE: 'R',
-  TOP_SIDE: 'T',
-  BOTTOM_SIDE: 'B',
-  SINGLE: 'S',
-  VIRUS: 'V',
-  CLEAR: 'C'
-};
+class DrMario {
+  static NUM_PLAYERS = 2
+  static WIDTH = 8
+  static HEIGHT = 16
 
-const colorEnum = {
-  NONE: ' ',
-  RED: 'R',
-  BLUE: 'B',
-  YELLOW: 'Y'
-};
+  static placedPieceTypeEnum = {
+    EMPTY: ' ',
+    LEFT_SIDE: 'L',
+    RIGHT_SIDE: 'R',
+    TOP_SIDE: 'T',
+    BOTTOM_SIDE: 'B',
+    SINGLE: 'S',
+    VIRUS: 'V',
+    CLEAR: 'C'
+  };
 
-const orientationEnum = {
-  HORIZONTAL: 0,
-  VERTICAL: 1
-};
+  static colorEnum = {
+    NONE: ' ',
+    RED: 'R',
+    BLUE: 'B',
+    YELLOW: 'Y'
+  };
 
-const directionEnum = {
-  LEFT: 0,
-  RIGHT: 1,
-  DOWN: 2
-};
+  static orientationEnum = {
+    HORIZONTAL: 0,
+    VERTICAL: 1
+  };
 
-const rotationEnum = {
-  CLOCKWISE: 0,
-  COUNTERCLOCKWISE: 1
-};
+  static directionEnum = {
+    LEFT: 0,
+    RIGHT: 1,
+    DOWN: 2
+  };
 
-class PlacedPiece {
-  constructor (type, color) {
-    this.type = type;
-    this.color = color;
+  static rotationEnum = {
+    CLOCKWISE: 0,
+    COUNTERCLOCKWISE: 1
+  };
+
+  constructor () {
+    this.players = [],
+    this.gameOver = false
+  }
+
+  initializeForPuzzle () {
+    this.gameOver = false;
+    this.players = [];
+    for (let p = 0; p < DrMario.NUM_PLAYERS; ++p) {
+      let field = null;
+      let upcomingPieces = null;
+      if (p == 0) {
+        field = DrMarioPuzzleData.drMarioPuzzlePlayer1Field;
+        upcomingPieces = DrMarioPuzzleData.drMarioPuzzlePlayer1UpcomingPieces;
+      } else if (p == 1) {
+        field = DrMarioPuzzleData.drMarioPuzzlePlayer2Field;
+        upcomingPieces = DrMarioPuzzleData.drMarioPuzzlePlayer2UpcomingPieces;
+      }
+      this.players.push(new Player(field, upcomingPieces));
+    }
   }
 
   /**
@@ -53,40 +68,51 @@ class PlacedPiece {
    * TODO: Decouple this from dr_mario_setup_scene.
    * TODO: Don't use hundreds for viruses.
    */
-  getSpriteIndex () {
+  static getSpriteIndex (type, color) {
     let offset = -1;
-    if (this.type == placedPieceTypeEnum.TOP_SIDE) {
+    if (type == DrMario.placedPieceTypeEnum.TOP_SIDE) {
       offset = 0;
-    } else if (this.type == placedPieceTypeEnum.BOTTOM_SIDE) {
+    } else if (type == DrMario.placedPieceTypeEnum.BOTTOM_SIDE) {
       offset = 3;
-    } else if (this.type == placedPieceTypeEnum.LEFT_SIDE) {
+    } else if (type == DrMario.placedPieceTypeEnum.LEFT_SIDE) {
       offset = 6;
-    } else if (this.type == placedPieceTypeEnum.RIGHT_SIDE) {
+    } else if (type == DrMario.placedPieceTypeEnum.RIGHT_SIDE) {
       offset = 9;
-    } else if (this.type == placedPieceTypeEnum.SINGLE) {
+    } else if (type == DrMario.placedPieceTypeEnum.SINGLE) {
       offset = 12;
-    } else if (this.type == placedPieceTypeEnum.CLEAR) {
+    } else if (type == DrMario.placedPieceTypeEnum.CLEAR) {
       offset = 15;
-    } else if (this.type == placedPieceTypeEnum.VIRUS) {
-      if (this.color == colorEnum.YELLOW) {
+    } else if (type == DrMario.placedPieceTypeEnum.VIRUS) {
+      if (color == DrMario.colorEnum.YELLOW) {
         return 100;
-      } else if (this.color == colorEnum.RED) {
+      } else if (color == DrMario.colorEnum.RED) {
         return 200;
-      } else if (this.color == colorEnum.BLUE) {
+      } else if (color == DrMario.colorEnum.BLUE) {
         return 300;
       }
     } else {
       return null;
     }
-    if (this.color == colorEnum.RED) {
-    } else if (this.color == colorEnum.YELLOW) {
+    if (color == DrMario.colorEnum.RED) {
+    } else if (color == DrMario.colorEnum.YELLOW) {
       offset += 1;
-    } else if (this.color == colorEnum.BLUE) {
+    } else if (color == DrMario.colorEnum.BLUE) {
       offset += 2;
     } else {
       return null;
     }
     return offset;
+  }
+}
+
+class PlacedPiece {
+  constructor (type, color) {
+    this.type = type;
+    this.color = color;
+  }
+
+  getSpriteIndex () {
+    return DrMario.getSpriteIndex(this.type, this.color);
   }
 };
 
@@ -120,11 +146,19 @@ class Piece {
   getCoordinates() {
     ret = [];
     ret.push([this.column, this.row]);
-    if (this.orientation == orientation.HORIZONTAL) {
+    if (this.orientation == DrMario.orientation.HORIZONTAL) {
       ret.push([this.column + 1, this.row]);
     } else {
       ret.push([this.column, this.row + 1]);
     }
+  }
+
+  getLeftSpriteIndex () {
+    return DrMario.getSpriteIndex(DrMario.placedPieceTypeEnum.LEFT_SIDE, this.firstColor)
+  }
+
+  getRightSpriteIndex () {
+    return DrMario.getSpriteIndex(DrMario.placedPieceTypeEnum.RIGHT_SIDE, this.secondColor)
   }
 };
 
@@ -162,7 +196,7 @@ class Player {
       for (let w = 0; w < DrMario.WIDTH; ++w) {
         let col = [];
         for (let l = 0; l < DrMario.HEIGHT; ++l) {
-          col.push(new PlacedPiece(colorEnum.NONE, placedPieceTypeEnum.EMPTY));
+          col.push(new PlacedPiece(DrMario.colorEnum.NONE, DrMario.placedPieceTypeEnum.EMPTY));
         }
         this.field.push(col);
       }
@@ -198,18 +232,18 @@ class Player {
    */
   movePiece (dir) {
     let newPiece = null;
-    if (dir == directionEnum.LEFT) {
+    if (dir == DrMario.directionEnum.LEFT) {
       newPiece = new Piece(this.piece.column - 1, this.piece.row, this.piece.orientation, this.piece.firstColor, this.piece.secondColor);
-    } else if (direction == directionEnum.RIGHT) {
+    } else if (direction == DrMario.directionEnum.RIGHT) {
       newPiece = new Piece(this.piece.column + 1, this.piece.row, this.piece.orientation, this.piece.firstColor, this.piece.secondColor);
-    } else if (direction == directionEnum.DOWN) {
+    } else if (direction == DrMario.directionEnum.DOWN) {
       newPiece = new Piece(this.piece.column, this.piece.row - 1, this.piece.orientation, this.piece.firstColor, this.piece.secondColor);
     }
     if (this.isPiecePositionValid(newPiece)) {
       this.piece = newPiece;
       return;
     }
-    if (direction == directionEnum.DOWN) {
+    if (direction == DrMario.directionEnum.DOWN) {
       this.addPieceToField();
     }
   }
@@ -217,20 +251,20 @@ class Player {
   rotatePiece (rotation) {
     let newPiece = null;
     let oldPiece = this.piece;
-    if (this.piece.column == DrMario.WIDTH - 1 && this.piece.orientation == orientationEnum.VERTICAL) {
+    if (this.piece.column == DrMario.WIDTH - 1 && this.piece.orientation == DrMario.orientationEnum.VERTICAL) {
       oldPiece = new Piece(this.piece.column - 1, this.piece.row, this.piece.orientation, this.piece.firstColor, this.piece.secondColor);
     }
-    if (oldPiece.orientation == orientationEnum.VERTICAL) {
-      if (rotation == rotationEnum.CLOCKWISE) {
-        newPiece = new Piece(this.piece.column, this.piece.row, orientationEnum.HORIZONTAL, this.piece.firstColor, this.piece.secondColor)
+    if (oldPiece.orientation == DrMario.orientationEnum.VERTICAL) {
+      if (rotation == DrMario.rotationEnum.CLOCKWISE) {
+        newPiece = new Piece(this.piece.column, this.piece.row, DrMario.orientationEnum.HORIZONTAL, this.piece.firstColor, this.piece.secondColor)
       } else {
-        newPiece = new Piece(this.piece.column, this.piece.row, orientationEnum.HORIZONTAL, this.piece.secondColor, this.piece.firstColor)
+        newPiece = new Piece(this.piece.column, this.piece.row, DrMario.orientationEnum.HORIZONTAL, this.piece.secondColor, this.piece.firstColor)
       }
     } else {
-      if (rotation == rotationEnum.CLOCKWISE) {
-        newPiece = new Piece(this.piece.column, this.piece.row, orientationEnum.VERTICAL, this.piece.secondColor, this.piece.firstColor)
+      if (rotation == DrMario.rotationEnum.CLOCKWISE) {
+        newPiece = new Piece(this.piece.column, this.piece.row, DrMario.orientationEnum.VERTICAL, this.piece.secondColor, this.piece.firstColor)
       } else {
-        newPiece = new Piece(this.piece.column, this.piece.row, orientationEnum.VERTICAL, this.piece.firstColor, this.piece.secondColor)
+        newPiece = new Piece(this.piece.column, this.piece.row, DrMario.orientationEnum.VERTICAL, this.piece.firstColor, this.piece.secondColor)
       }
     }
     if (this.isPiecePositionValid(newPiece)) {
@@ -252,7 +286,7 @@ class Player {
       if (coordinate[1] < 0) {
         return false;
       }
-      if (this.field[coordinate[0]][coordinate[1]] != placed_piece_type.EMPTY) {
+      if (this.field[coordinate[0]][coordinate[1]] != DrMario.placed_piece_type.EMPTY) {
         return false;
       }
     }
@@ -267,30 +301,15 @@ class Player {
   addPieceToField () {
     let coordinates = this.piece.getCoordinates();
     if (this.piece.orientation == orientationEnum.HORIZONTAL) {
-      this.field[coordinates[0][0]][coordinates[0][1]] = new PlacedPiece(this.piece.firstColor, placedPieceTypeEnum.LEFT_SIDE)
-      this.field[coordinates[1][0]][coordinates[1][1]] = new PlacedPiece(this.piece.secondColor, placedPieceTypeEnum.RIGHT_SIDE)
+      this.field[coordinates[0][0]][coordinates[0][1]] = new PlacedPiece(this.piece.firstColor, DrMario.placedPieceTypeEnum.LEFT_SIDE)
+      this.field[coordinates[1][0]][coordinates[1][1]] = new PlacedPiece(this.piece.secondColor, DrMario.placedPieceTypeEnum.RIGHT_SIDE)
     } else {
-      this.field[coordinates[0][0]][coordinates[0][1]] = new PlacedPiece(this.piece.firstColor, placedPieceTypeEnum.BOTTOM_SIDE)
-      this.field[coordinates[1][0]][coordinates[1][1]] = new PlacedPiece(this.piece.secondColor, placedPieceTypeEnum.TOP_SIDE)
+      this.field[coordinates[0][0]][coordinates[0][1]] = new PlacedPiece(this.piece.firstColor, DrMario.placedPieceTypeEnum.BOTTOM_SIDE)
+      this.field[coordinates[1][0]][coordinates[1][1]] = new PlacedPiece(this.piece.secondColor, DrMario.placedPieceTypeEnum.TOP_SIDE)
     }
     this.piece = this.upcomingPieces.unshift();
     // TODO: Handle clears.
   }
 };
 
-function drMarioInitializeForPuzzle () {
-  DrMario.drMarioGameOver = false;
-  DrMario.drMarioPlayers = [];
-  for (let p = 0; p < DrMario.NUM_PLAYERS; ++p) {
-    let field = null;
-    let upcomingPieces = null;
-    if (p == 0) {
-      field = drMarioPuzzlePlayer1Field;
-      upcomingPieces = drMarioPuzzlePlayer1UpcomingPieces;
-    } else if (p == 1) {
-      field = drMarioPuzzlePlayer2Field;
-      upcomingPieces = drMarioPuzzlePlayer2UpcomingPieces;
-    }
-    DrMario.drMarioPlayers.push(new Player(field, upcomingPieces));
-  }
-}
+export { DrMario }

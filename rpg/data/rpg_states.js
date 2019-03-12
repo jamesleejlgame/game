@@ -247,7 +247,6 @@ class States {
     { type: 'dialogue', dialogue: Dialogue.miriamHomeopath },
   ];
 
-  // TODO: Use this.
   static preHarryPotterBattle = [
     { type: 'dialogue', dialogue: Dialogue.preHarryPotterBattle },
   ];
@@ -288,6 +287,7 @@ class States {
               flipX: true,
               animationEnd: 'james_down'
             }]}]},
+      { type: 'npcVisibility', npc: {target: jiraiya, visible: true} },
       { type: 'dialogue', dialogue: Dialogue.hiking1 },
       { type: 'npcMove', npc: {target: miriam, tweens: [{animation: 'miriam_left', location: 'miriam_1', flipX: true}]} },
       { type: 'dialogue', dialogue: Dialogue.hiking2 },
@@ -302,14 +302,46 @@ class States {
     { type: 'dialogue', dialogue: Dialogue.babysitting },
   ];
 
+  // TODO: Use this.
   static escapeRoom = [
     { type: 'dialogue', dialogue: Dialogue.escapeRoom },
   ];
 
-  static proposal = [
-    { type: 'dialogue', dialogue: Dialogue.proposal },
+  // TODO: Use this.
+  static proposal (miriam, james, hello_kitty, stitch, wimblebear, homura) {
+    return [
+    { type: 'npcsMove',
+      npcs: [
+        { target: miriam,
+          tweens: [
+            {animation: 'miriam_left',
+            location: 'miriam_1',
+            }]},
+        { target: james,
+          tweens:
+          [
+            { animation: 'james_left',
+            location: 'james_1',
+            animationEnd: 'james_up'
+          }]}]},
+    { type: 'npcVisibility', npc: {target: hello_kitty, visible: true} },
+    { type: 'dialogue', dialogue: Dialogue.proposal1 },
+    { type: 'npcsMove',
+      npcs: [
+        { target: miriam,
+          tweens: [
+            {animation: 'miriam_up',
+            location: 'miriam_1',
+            }]},
+        { target: james,
+          tweens:
+          [
+            { animation: 'james_down',
+            location: 'james_1',
+          }]}]},
+    { type: 'dialogue', dialogue: Dialogue.proposal2 },
   ];
-
+  }
 }
 
 export { States }

@@ -38,6 +38,10 @@ class BootScene extends Phaser.Scene {
     this.load.image('stitch_down', 'assets/stitch_down.png');
     this.load.image('wimble_down', 'assets/wimble_down.gif');
     this.load.image('hellokitty_down', 'assets/hellokitty_down.png');
+    this.load.image('harry_down', 'assets/harry_down.png');
+    this.load.image('hermione_down', 'assets/hermione_down.png');
+    this.load.image('ron_down', 'assets/ron_down.png');
+    this.load.image('snape_left', 'assets/snape_left.png');
     this.load.spritesheet('dr_mario_sprites', 'assets/dr_mario_sprites2.png', { frameWidth: 19, frameHeight: 19, spacing: 1 });
     this.load.spritesheet('dr_mario_yellow_virus', 'assets/dr_mario_yellow_virus.png', { frameWidth: 20, frameHeight: 20 });
     this.load.spritesheet('dr_mario_blue_virus', 'assets/dr_mario_blue_virus.png', { frameWidth: 20, frameHeight: 20 });
@@ -57,7 +61,8 @@ class BootScene extends Phaser.Scene {
   }
 
   create () {
-    this.scene.start('MiriamHouseScene', {startingLocation: MiriamHouseScene.startingLocationEnum.START_GAME, fadeIn: true});
+    //this.scene.start('MiriamHouseScene', {startingLocation: MiriamHouseScene.startingLocationEnum.START_GAME, fadeIn: true});
+    this.scene.start('DrMarioScene');
   }
 }
 

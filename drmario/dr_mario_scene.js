@@ -1,30 +1,32 @@
-let DrMarioSetupScene = new Phaser.Class({
-  Extends: Phaser.Scene,
+import { DrMario } from './dr_mario.js'
 
-  initialize:
-    function DrMarioSetupScene () {
-      Phaser.Scene.call(this, { key: 'DrMarioSetupScene' });
-    },
+class DrMarioScene extends Phaser.Scene {
 
-  create: function () {
-    drMarioInitializeForPuzzle();
+  constructor ()
+  {
+    super({ key: 'DrMarioScene' });
+    this.drMario = new DrMario();
+  }
+
+  create () {
+    this.drMario.initializeForPuzzle();
     this.add.image(400, 300, 'dr_mario_background');
     this.cameras.main.setBounds(0, 0, 800, 600);
     this.physics.world.setBounds(0, 0, 800, 600);
     this.cameras.main.roundPixels = true; // avoid tile bleed
     this.cursors = this.input.keyboard.createCursorKeys();
     for (let p = 0; p < DrMario.NUM_PLAYERS; ++p) {
-      this.populatePlayerNumber(p);
+      this.renderPlayer(p);
     }
-  },
+  }
 
-  update: function (time, delta) {
-  },
+  update (time, delta) {
+  }
 
-  populatePlayerNumber: function (playerNum) {
+  renderPlayer (playerNum) {
     for (let w = 0; w < DrMario.WIDTH; ++w) {
       for (let l = 0; l < DrMario.HEIGHT; ++l) {
-        let spriteIndex = drMarioPlayers[playerNum].field[w][l].getSpriteIndex();
+        let spriteIndex = this.drMario.players[playerNum].field[w][l].getSpriteIndex();
         if (spriteIndex == null) {
           continue;
         } else if (spriteIndex == 100) {
@@ -38,5 +40,11 @@ let DrMarioSetupScene = new Phaser.Class({
         }
       }
     }
+    for (let i = 0; i < 6; ++i) {
+      this.physics.add.sprite(playerNum * 600 + 90, 210 + i * 20, 'dr_mario_sprites', this.drMario.players[playerNum].upcomingPieces[i].getLeftSpriteIndex());
+      this.physics.add.sprite(playerNum * 600 + 90 + 20, 210 + i * 20, 'dr_mario_sprites', this.drMario.players[playerNum].upcomingPieces[i].getRightSpriteIndex());
+    }
   }
-});
+}
+
+export { DrMarioScene }

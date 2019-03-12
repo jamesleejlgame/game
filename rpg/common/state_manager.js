@@ -112,7 +112,6 @@ class StateManager {
       return;
     }
     if (state.type == 'renderLayer') {
-      // TODO: Assumes there is only one tileset.
       let layer = this.map.createStaticLayer(state.layer, this.map.getTileset(state.tilesetName), 0, 0);
       this.advanceToNextState();
       return;

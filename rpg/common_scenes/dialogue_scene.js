@@ -2,7 +2,7 @@
  * A scene for rendering dialogue in a box at the top of the screen.
  *
  * This class is tightly coupled with Rpg.DialogueManager.
- * TODO: Handle Text keys other than 'm'.
+ * TODO: Handle questions.
  */
 class DialogueScene extends Phaser.Scene {
   constructor ()

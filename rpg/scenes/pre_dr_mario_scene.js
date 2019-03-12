@@ -31,7 +31,7 @@ class PreDrMarioScene extends RpgScene {
    * @override
    */
   advanceToNextScene () {
-    this.switchScene('PostDrMarioScene', {fadeIn: true}, true)
+    this.switchScene('DrMarioScene', true)
   }
 }
 

@@ -27,6 +27,7 @@ import { PreOvercookedScene } from './rpg/scenes/pre_overcooked_scene.js';
 import { ProposalScene } from './rpg/scenes/proposal_scene.js';
 import { PubQuizScene } from './rpg/scenes/pub_quiz_scene.js';
 import { SanFranciscoScene } from './rpg/scenes/san_francisco_scene.js';
+import { DrMarioScene } from './drmario/dr_mario_scene.js';
 
 let scenes = [ BootScene ];
 
@@ -63,7 +64,9 @@ let config = {
     HikeScene,
     BabysittingScene,
     EscapeRoomScene,
-    ProposalScene
+    ProposalScene,
+    PreHarryPotterBattleScene,
+    DrMarioScene
   ]
 };
 

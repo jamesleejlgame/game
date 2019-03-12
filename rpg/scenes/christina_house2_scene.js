@@ -1,5 +1,3 @@
-// TODO: Make miriam face christina.
-
 import { RpgScene } from '../common/rpg_scene.js'
 import { RpgUtils } from '../common/rpg_utils.js'
 import { States } from '../data/rpg_states.js'

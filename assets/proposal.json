@@ -68,20 +68,8 @@
                 }, 
                 {
                  "height":0,
-                 "id":7,
-                 "name":"hello_kitty",
-                 "point":true,
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":0,
-                 "x":572,
-                 "y":228
-                }, 
-                {
-                 "height":0,
                  "id":8,
-                 "name":"hello_kitty1",
+                 "name":"hello_kitty",
                  "point":true,
                  "rotation":0,
                  "type":"",
@@ -89,6 +77,42 @@
                  "width":0,
                  "x":580,
                  "y":361
+                }, 
+                {
+                 "height":0,
+                 "id":9,
+                 "name":"wimblebear",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":376,
+                 "y":290
+                }, 
+                {
+                 "height":0,
+                 "id":10,
+                 "name":"homura",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":445,
+                 "y":282
+                }, 
+                {
+                 "height":0,
+                 "id":11,
+                 "name":"stitch",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":520,
+                 "y":282
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -109,7 +133,7 @@
          "y":0
         }],
  "nextlayerid":4,
- "nextobjectid":9,
+ "nextobjectid":12,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.2.2",

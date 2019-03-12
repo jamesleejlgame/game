@@ -234,8 +234,15 @@ class Dialogue {
     { m: "James: Well it's still less stressful than our last activity." }
   ]
 
-  static proposal = [
-    { m: "Hello Kitty: Miriam, James has something to ask you... in person." },
+  static proposal1 = [
+    { m: "Hello Kitty: Here you go, James" },
+  ]
+
+  static proposal2 = [
+    { m: "Hello Kitty: Miriam, James has something to ask you in person." },
+  ];
+
+  static proposal3 = [
     { question: "Hello Kitty: What'd she say?", answers: [
       { m: "yes", next: "proposal_yes" },
       { m: "no", next: "proposal_no" }
@@ -244,6 +251,7 @@ class Dialogue {
     { label: "proposal_no", m: "Aww, hope you had fun with the game anyway!", next: "proposal_end" },
     { label: "proposal_end" }
   ]
+
 }
 
 export { Dialogue }
