@@ -1,11 +1,27 @@
 import { DrMarioPuzzleData } from './dr_mario_puzzle_data.js'
 
 class DrMario {
+  /**
+   * @type {number} the number of players in the game.
+   */
   static NUM_PLAYERS = 2
+  /**
+   * @type {number} the width of a player field.
+   */
   static WIDTH = 8
+  /**
+   * @type {number} the height of a player field.
+   */
   static HEIGHT = 16
+  /**
+   * @type {number} the maximum number of blocks to add to opponent after a combo.
+   */
+  static MAX_COMBO_BLOCKS = 4
 
-  static placedPieceTypeEnum = {
+  /**
+   * @type {string} The type of block this is. Could be a portion of a pill.
+   */
+  static blockTypeEnum = {
     EMPTY: ' ',
     LEFT_SIDE: 'L',
     RIGHT_SIDE: 'R',
@@ -13,9 +29,12 @@ class DrMario {
     BOTTOM_SIDE: 'B',
     SINGLE: 'S',
     VIRUS: 'V',
-    CLEAR: 'C'
+    EXPLODED: 'E'
   };
 
+  /**
+   * @type {string} the color of the current block.
+   */
   static colorEnum = {
     NONE: ' ',
     RED: 'R',
@@ -23,33 +42,67 @@ class DrMario {
     YELLOW: 'Y'
   };
 
+  /**
+   * All colors.
+   */
+  static allColors = [colorEnum.RED, colorEnum.BLUE, colorEnum.YELLOW]
+
+  /**
+   * @type {number} the orientation of the pill.
+   */
   static orientationEnum = {
     HORIZONTAL: 0,
     VERTICAL: 1
   };
 
+  /**
+   * @type {number} a direction of motion of a pill.
+   */
   static directionEnum = {
     LEFT: 0,
     RIGHT: 1,
     DOWN: 2
   };
 
+  /**
+   * @type {number} a rotation direction of motion of a pill.
+   */
   static rotationEnum = {
     CLOCKWISE: 0,
     COUNTERCLOCKWISE: 1
   };
 
-  constructor () {
-    this.players = [],
-    this.gameOver = false
+  /**
+   * @type {number} the possible game states.
+   */
+  static gameStatesEnum = {
+    GAME_OVER: 0,
+    PLAYER_MOVE: 1,
+    ANIMATING: 2,
+    COMBOING: 3
   }
 
+  constructor () {
+    /**
+     * @type {array<Player>} the players in the game.
+     */
+    this.players = [],
+    /**
+     * @type {boolean} whether the game is over or not.
+     */
+    this.gameState = DrMario.gameStatesEnum.GAME_OVER
+  }
+
+  /**
+   * Initializes the game for a puzzle mode.
+   */
   initializeForPuzzle () {
-    this.gameOver = false;
+    this.gameState = DrMario.gameStatesEnum.PLAYER_MOVE;
     this.players = [];
     for (let p = 0; p < DrMario.NUM_PLAYERS; ++p) {
       let field = null;
       let upcomingPieces = null;
+      // TODO: This is hardcoded for only two players.
       if (p == 0) {
         field = DrMarioPuzzleData.drMarioPuzzlePlayer1Field;
         upcomingPieces = DrMarioPuzzleData.drMarioPuzzlePlayer1UpcomingPieces;
@@ -60,108 +113,11 @@ class DrMario {
       this.players.push(new Player(field, upcomingPieces));
     }
   }
-
-  /**
-   * This function is tightly coupled to dr_mario_setup_scene.
-   * @return {number?} nullable for error. The index of the dr_mario_sprites to use. If it is a virus, then
-   * return 100 for yellow, 200 for red, or 300 for blue.
-   * TODO: Decouple this from dr_mario_setup_scene.
-   * TODO: Don't use hundreds for viruses.
-   */
-  static getSpriteIndex (type, color) {
-    let offset = -1;
-    if (type == DrMario.placedPieceTypeEnum.TOP_SIDE) {
-      offset = 0;
-    } else if (type == DrMario.placedPieceTypeEnum.BOTTOM_SIDE) {
-      offset = 3;
-    } else if (type == DrMario.placedPieceTypeEnum.LEFT_SIDE) {
-      offset = 6;
-    } else if (type == DrMario.placedPieceTypeEnum.RIGHT_SIDE) {
-      offset = 9;
-    } else if (type == DrMario.placedPieceTypeEnum.SINGLE) {
-      offset = 12;
-    } else if (type == DrMario.placedPieceTypeEnum.CLEAR) {
-      offset = 15;
-    } else if (type == DrMario.placedPieceTypeEnum.VIRUS) {
-      if (color == DrMario.colorEnum.YELLOW) {
-        return 100;
-      } else if (color == DrMario.colorEnum.RED) {
-        return 200;
-      } else if (color == DrMario.colorEnum.BLUE) {
-        return 300;
-      }
-    } else {
-      return null;
-    }
-    if (color == DrMario.colorEnum.RED) {
-    } else if (color == DrMario.colorEnum.YELLOW) {
-      offset += 1;
-    } else if (color == DrMario.colorEnum.BLUE) {
-      offset += 2;
-    } else {
-      return null;
-    }
-    return offset;
-  }
 }
 
-class PlacedPiece {
-  constructor (type, color) {
-    this.type = type;
-    this.color = color;
-  }
-
-  getSpriteIndex () {
-    return DrMario.getSpriteIndex(this.type, this.color);
-  }
-};
-
-class Piece {
-  constructor (column, row, orientation, firstColor, secondColor) {
-    /**
-     * The column of the bottom left part of the piece.
-     * @type {number?} can be null if representing an upcoming piece.
-     */
-    this.column = column;
-    /**
-     * The row of the bottom left part of the piece.
-     * @type {number?} can be null if representing an upcoming piece.
-     */
-    this.row = row;
-    /**
-     * The orientation of the piece.
-     * @type {orientationEnum?} can be null if representing an upcoming piece.
-     */
-    this.orientation = orientation;
-    /**
-     * The color of the part of the piece represented by column and row.
-     */
-    this.firstColor = firstColor;
-    /**
-     * The color of the part of the piece not in the column and row.
-     */
-    this.secondColor = secondColor;
-  }
-
-  getCoordinates() {
-    ret = [];
-    ret.push([this.column, this.row]);
-    if (this.orientation == DrMario.orientation.HORIZONTAL) {
-      ret.push([this.column + 1, this.row]);
-    } else {
-      ret.push([this.column, this.row + 1]);
-    }
-  }
-
-  getLeftSpriteIndex () {
-    return DrMario.getSpriteIndex(DrMario.placedPieceTypeEnum.LEFT_SIDE, this.firstColor)
-  }
-
-  getRightSpriteIndex () {
-    return DrMario.getSpriteIndex(DrMario.placedPieceTypeEnum.RIGHT_SIDE, this.secondColor)
-  }
-};
-
+/**
+ * A single player in the dr mario game.
+ */
 class Player {
   /**
    * @param {array<string>?} fieldArrayString represents the field of the player in proper visual display format (the top row of viruses
@@ -172,18 +128,210 @@ class Player {
    */
   constructor (fieldArrayString, upcomingPiecesArrayString) {
     /**
-     * @type {Piece}.
+     * @type {Piece?} the current piece for the player.
      */
     this.piece = null;
+    /**
+     * @type {array<Piece>} the upcoming pieces for the player.
+     */
     this.upcomingPieces = [];
     /**
-     * @type {array<array<Piece>>} This is a two dimensional array first sorted by row and then by column.
+     * @type {array<array<PlacedPiece>>} This is a two dimensional array first sorted by row and then by column.
      * i.e. (2, 1) represents the 3rd column from the left and the 2nd row from the bottom.
      */
     this.field = [];
+    /**
+     * @type {number} the number of viruses remaining.
+     */
+    this.numVirusesRemaining = 0;
 
-    this.initializeFieldGivenFieldArrayString(fieldArrayString);
+    this.initializeFieldAndVirusesGivenFieldArrayString(fieldArrayString);
     this.initializeUpcomingPiecesGivenArrayString(upcomingPiecesArrayString);
+  }
+
+  /**
+   * In the player field, replace all exploded placed pieces with empty placed pieces.
+   */
+  replaceExplodedWithEmpty () {
+    for (let w = 0; w < DrMario.WIDTH; ++w) {
+      for (let h = 0; h < DrMario.HEIGHT; ++h) {
+        if (this.field[w][h].type == DrMario.blockTypeEnum.EXPLODED) {
+          this.field[w][h].type = DrMario.blockTypeEnum.EMPTY
+        }
+      }
+    }
+  }
+
+  /**
+   * Whether the player has cleared all their viruses.
+   */
+  clearedAllViruses () {
+    return this.numVirusesRemaining == 0;
+  }
+  // TODO: Function to check if game is over
+
+
+  /**
+   * Taken from https://stackoverflow.com/questions/19269545/how-to-get-n-no-elements-randomly-from-an-array.
+   * @param {array<Anything>} arr array to fetch from.
+   * @param {number} n number of elements to fetch.
+   */
+  static getRandomNElements (arr, n) {
+    var result = new Array(n),
+        len = arr.length,
+        taken = new Array(len);
+    if (n > len)
+        throw new RangeError("getRandom: more elements taken than available");
+    while (n--) {
+        var x = Math.floor(Math.random() * len);
+        result[n] = arr[x in taken ? taken[x] : x];
+        taken[x] = --len in taken ? taken[len] : len;
+    }
+    return result;
+  }
+
+  /**
+   * Adds punishing blocks to the field based on the combo length of the other player.
+   * @param {number} comboLength 
+   */
+  addComboBlocks (comboLength) {
+    let numBlocksToAdd = Math.min(comboLength, DrMario.MAX_COMBO_BLOCKS);
+    let possibleColumns = []
+    for (let w = 0; w < DrMario.WIDTH; ++w) {
+      if (this.field[w][DrMario.HEIGHT - 1].type == DrMario.blockTypeEnum.EMPTY) {
+        possibleColumns.push(w);
+      }
+    }
+    numBlocksToAdd = Math.min(numBlocksToAdd, possibleColumns.length);
+    let columnsToAdd = Player.getRandomNElements(possibleColumns, numBlocksToAdd);
+    let colorsToAdd = []
+    for (let i = 0; i < numBlocksToAdd; ++i) {
+      colorsToAdd.push(DrMario.allColors[Math.floor(Math.random() * 3)])
+    }
+    for (let i = 0; i < numBlocksToAdd; ++i) {
+      this.field[columnsToAdd[i]][DrMario.HEIGHT - 1] = new PlacedPiece(blockTypeEnum.SINGLE, colorsToAdd[i])
+    }
+  }
+
+  /**
+   * Checks the field for any blocks that will be cleared, mark those with an explosion.
+   * Returns the number of combos generated by this field.
+   * @returns {number} the number of combos generated by these explosiions.
+   */
+  markFieldExplosions () {
+    let numCombos = 0;
+    // Vertical explosions.
+    for (let w = 0; w < DrMario.WIDTH; ++w) {
+      let streakLength = 0;
+      let currentColor = DrMario.colorEnum.NONE
+      for (let h = 0; h < DrMario.HEIGHT; ++h) {
+        if (this.field[w][h].type == DrMario.blockTypeEnum.NONE) {
+          streakLength = 0;
+          currentColor = DrMario.colorEnum.NONE
+        } else if (this.field[w][h].color != currentColor) {
+          streakLength = 1;
+          currentColor = this.field[w][h]
+        } else if (this.field[w][h].color == currentColor) {
+          streakLength++;
+          if (streakLength >= 4) {
+            if (streakLength == 4) {
+              numCombos++
+              for (let i = 1; i < 4; ++i) {
+                this.explodePlacedPiece(w, h - i);
+              }
+            }
+            this.explodePlacedPiece(w, h);
+          }
+        }
+      }
+    }
+
+    // Horizontal explosions.
+    for (let h = 0; h < DrMario.HEIGHT; ++h) {
+      let streakLength = 0;
+      let currentColor = DrMario.colorEnum.NONE
+      for (let w = 0; w < DrMario.WIDTH; ++w) {
+        if (this.field[w][h].type == DrMario.blockTypeEnum.NONE) {
+          streakLength = 0;
+          currentColor = DrMario.colorEnum.NONE
+        } else if (this.field[w][h].color != currentColor) {
+          streakLength = 1;
+          currentColor = this.field[w][h]
+        } else if (this.field[w][h].color == currentColor) {
+          streakLength++;
+          if (streakLength >= 4) {
+            if (streakLength == 4) {
+              numCombos++
+              for (let i = 1; i < 4; ++i) {
+                this.markPieceExplosion(w - i, h);
+              }
+            }
+            this.markPieceExplosion(w, h);
+          }
+        }
+      }
+    }
+    return numCombos;
+  }
+
+  /**
+   * Marks the given block as having exploded and handle its neighbours.
+   * @type {number} width the position of the 
+   */
+  markPieceExplosion (col, row) {
+    let piece = this.field[col][row]
+    let connectedPiece = null;
+    if (piece.type == DrMario.blockTypeEnum.TOP_SIDE) {
+      connectedPiece = this.field[col][row - 1]
+    } else if (piece.type == DrMario.blockTypeEnum.BOTTOM_SIDE) {
+      connectedPiece = this.field[col][row + 1]
+    } else if (piece.type == DrMario.blockTypeEnum.LEFT_SIDE) {
+      connectedPiece = this.field[col + 1][row]
+    } else if (piece.type == DrMario.blockTypeEnum.RIGHT_SIDE) {
+      connectedPiece = this.field[col - 1][row]
+    }
+    if (piece.type == DrMario.blockTypeEnum.VIRUS) {
+      this.numVirusesRemaining--
+    }
+    piece.type = DrMario.blockTypeEnum.EXPLODED;
+    if (connectedPiece == null) {
+      return;
+    }
+    connectedPiece.type = DrMario.blockTypeEnum.SINGLE;
+  }
+
+  /**
+   * Move the field back to a valid state instead of the intermediate states caused by events such as combo
+   * blocks being added, or blocks being cleared.
+   * @returns {boolean} true if any block moved during this function.
+   */
+  applyGravityToField () {
+    let blockMoved = false;
+    for (let h = 1; h < DrMario.HEIGHT; ++h) {
+      for (let w = 0; w < DrMario.WIDTH; ++w) {
+        let piece = this.field[w][h];
+        if (this.field[w][h - 1].type != DrMario.blockTypeEnum.EMPTY) {
+          continue;
+        }
+        if (piece.type == DrMario.blockTypeEnum.SINGLE || piece.type == DrMario.blockTypeEnum.BOTTOM || piece.type == DrMario.blockTypeEnum.TOP) {
+          this.field[w][h] = new PlacedPiece(DrMario.blockTypeEnum.EMPTY, DrMario.colorEnum.NONE);
+          this.field[w][h - 1] = piece;
+          blockMoved = true;
+          continue
+        }
+        if (piece.type == DrMario.blockTypeEnum.LEFT) {
+          let connectedPiece = this.field[w][h + 1]
+          if (this.field[w + 1][h - 1].type != DrMario.blockTypeEnum.EMPTY) {
+            continue
+          }
+          this.field[w][h] = new PlacedPiece(DrMario.blockTypeEnum.EMPTY, DrMario.colorEnum.NONE);
+          this.field[w + 1][h] = new PlacedPiece(DrMario.blockTypeEnum.EMPTY, DrMario.colorEnum.NONE);
+          this.field[w][h - 1] = piece;
+          this.field[w + 1][h - 1] = connectedPiece;
+        }
+      }
+    }
+    return blockMoved
   }
 
   /**
@@ -191,12 +339,13 @@ class Player {
    * @param {array<string>?} fieldArrayString represents the field of the player in proper visual display format (the top row of viruses
    * is in the first position.
    */
-  initializeFieldGivenFieldArrayString (fieldArrayString) {
+  initializeFieldAndVirusesGivenFieldArrayString (fieldArrayString) {
+    this.numVirusesRemaining = 0;
     if (!fieldArrayString) {
       for (let w = 0; w < DrMario.WIDTH; ++w) {
         let col = [];
         for (let l = 0; l < DrMario.HEIGHT; ++l) {
-          col.push(new PlacedPiece(DrMario.colorEnum.NONE, DrMario.placedPieceTypeEnum.EMPTY));
+          col.push(new PlacedPiece(DrMario.colorEnum.NONE, DrMario.blockTypeEnum.EMPTY));
         }
         this.field.push(col);
       }
@@ -210,6 +359,9 @@ class Player {
         placedPiece.color = fieldArrayString[fieldArrayStringFirstIndex][fieldArrayStringSecondIndex];
         placedPiece.type = fieldArrayString[fieldArrayStringFirstIndex][fieldArrayStringSecondIndex + 1];
         col.push(placedPiece);
+        if (placedPiece.type == blockTypeEnum.VIRUS) {
+          this.numVirusesRemaining++;
+        }
       }
       this.field.push(col);
     }
@@ -273,8 +425,9 @@ class Player {
   }
 
   /**
-   * This is a static method that acts on a given piece passed in rather than the player's piece.
-   * @param {Piece} piece
+   * This is a static method that acts on a given piece passed in rather than the player's piece. This simply checks if 
+   * the position of the floating piece is valid. It doesn't not verify whether the piece can be placed down there.
+   * @param {Piece} piece the piece to check.
    */
   isPiecePositionValid (piece) {
     let coordinates = piece.getCoordinates();
@@ -301,14 +454,71 @@ class Player {
   addPieceToField () {
     let coordinates = this.piece.getCoordinates();
     if (this.piece.orientation == orientationEnum.HORIZONTAL) {
-      this.field[coordinates[0][0]][coordinates[0][1]] = new PlacedPiece(this.piece.firstColor, DrMario.placedPieceTypeEnum.LEFT_SIDE)
-      this.field[coordinates[1][0]][coordinates[1][1]] = new PlacedPiece(this.piece.secondColor, DrMario.placedPieceTypeEnum.RIGHT_SIDE)
+      this.field[coordinates[0][0]][coordinates[0][1]] = new PlacedPiece(this.piece.firstColor, DrMario.blockTypeEnum.LEFT_SIDE)
+      this.field[coordinates[1][0]][coordinates[1][1]] = new PlacedPiece(this.piece.secondColor, DrMario.blockTypeEnum.RIGHT_SIDE)
     } else {
-      this.field[coordinates[0][0]][coordinates[0][1]] = new PlacedPiece(this.piece.firstColor, DrMario.placedPieceTypeEnum.BOTTOM_SIDE)
-      this.field[coordinates[1][0]][coordinates[1][1]] = new PlacedPiece(this.piece.secondColor, DrMario.placedPieceTypeEnum.TOP_SIDE)
+      this.field[coordinates[0][0]][coordinates[0][1]] = new PlacedPiece(this.piece.firstColor, DrMario.blockTypeEnum.BOTTOM_SIDE)
+      this.field[coordinates[1][0]][coordinates[1][1]] = new PlacedPiece(this.piece.secondColor, DrMario.blockTypeEnum.TOP_SIDE)
     }
     this.piece = this.upcomingPieces.unshift();
     // TODO: Handle clears.
+  }
+};
+
+class PlacedPiece {
+  constructor (type, color) {
+    this.type = type;
+    this.color = color;
+  }
+
+  getSpriteIndex () {
+    return DrMario.getSpriteIndex(this.type, this.color);
+  }
+};
+
+class Piece {
+  constructor (column, row, orientation, firstColor, secondColor) {
+    /**
+     * The column of the bottom left part of the piece.
+     * @type {number?} can be null if representing an upcoming piece.
+     */
+    this.column = column;
+    /**
+     * The row of the bottom left part of the piece.
+     * @type {number?} can be null if representing an upcoming piece.
+     */
+    this.row = row;
+    /**
+     * The orientation of the piece.
+     * @type {orientationEnum?} can be null if representing an upcoming piece.
+     */
+    this.orientation = orientation;
+    /**
+     * The color of the part of the piece represented by column and row.
+     */
+    this.firstColor = firstColor;
+    /**
+     * The color of the part of the piece not in the column and row.
+     */
+    this.secondColor = secondColor;
+  }
+
+  getCoordinates() {
+    ret = [];
+    ret.push([this.column, this.row]);
+    if (this.orientation == DrMario.orientation.HORIZONTAL) {
+      ret.push([this.column + 1, this.row]);
+    } else {
+      ret.push([this.column, this.row + 1]);
+    }
+  }
+
+  getLeftSpriteIndex () {
+    return DrMario.getSpriteIndex(DrMario.blockTypeEnum.LEFT_SIDE, this.firstColor)
+  }
+
+  getRightSpriteIndex () {
+    return DrMario.getSpriteIndex(DrMario.blockTypeEnum.RIGHT_SIDE, this.secondColor)
   }
 };
 

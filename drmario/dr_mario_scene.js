@@ -21,6 +21,7 @@ class DrMarioScene extends Phaser.Scene {
   }
 
   update (time, delta) {
+    console.log(time);
   }
 
   renderPlayer (playerNum) {
@@ -44,6 +45,49 @@ class DrMarioScene extends Phaser.Scene {
       this.physics.add.sprite(playerNum * 600 + 90, 210 + i * 20, 'dr_mario_sprites', this.drMario.players[playerNum].upcomingPieces[i].getLeftSpriteIndex());
       this.physics.add.sprite(playerNum * 600 + 90 + 20, 210 + i * 20, 'dr_mario_sprites', this.drMario.players[playerNum].upcomingPieces[i].getRightSpriteIndex());
     }
+  }
+
+  /**
+   * This function is tightly coupled to dr_mario_setup_scene.
+   * @return {number?} nullable for error. The index of the dr_mario_sprites to use. If it is a virus, then
+   * return 100 for yellow, 200 for red, or 300 for blue.
+   * TODO: Decouple this from dr_mario_setup_scene.
+   * TODO: Don't use hundreds for viruses.
+   */
+  static getSpriteIndex (type, color) {
+    let offset = -1;
+    if (type == DrMario.blockTypeEnum.TOP_SIDE) {
+      offset = 0;
+    } else if (type == DrMario.blockTypeEnum.BOTTOM_SIDE) {
+      offset = 3;
+    } else if (type == DrMario.blockTypeEnum.LEFT_SIDE) {
+      offset = 6;
+    } else if (type == DrMario.blockTypeEnum.RIGHT_SIDE) {
+      offset = 9;
+    } else if (type == DrMario.blockTypeEnum.SINGLE) {
+      offset = 12;
+    } else if (type == DrMario.blockTypeEnum.CLEAR) {
+      offset = 15;
+    } else if (type == DrMario.blockTypeEnum.VIRUS) {
+      if (color == DrMario.colorEnum.YELLOW) {
+        return 100;
+      } else if (color == DrMario.colorEnum.RED) {
+        return 200;
+      } else if (color == DrMario.colorEnum.BLUE) {
+        return 300;
+      }
+    } else {
+      return null;
+    }
+    if (color == DrMario.colorEnum.RED) {
+    } else if (color == DrMario.colorEnum.YELLOW) {
+      offset += 1;
+    } else if (color == DrMario.colorEnum.BLUE) {
+      offset += 2;
+    } else {
+      return null;
+    }
+    return offset;
   }
 }
 
