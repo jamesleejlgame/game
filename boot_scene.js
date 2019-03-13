@@ -62,7 +62,7 @@ class BootScene extends Phaser.Scene {
 
   create () {
     //this.scene.start('MiriamHouseScene', {startingLocation: MiriamHouseScene.startingLocationEnum.START_GAME, fadeIn: true});
-    this.scene.start('DrMarioScene');
+    this.scene.start('PreDrMarioScene');
   }
 }
 

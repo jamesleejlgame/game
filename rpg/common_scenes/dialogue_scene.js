@@ -1,3 +1,5 @@
+// TODO: The 'spacebar' is used here.
+
 /**
  * A scene for rendering dialogue in a box at the top of the screen.
  *

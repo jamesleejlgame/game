@@ -116,7 +116,8 @@ class Dialogue {
     { m: "James: Omg. We need a game other than Ruzzle. Oh, want to play Dr. Mario? It's gonna be kinda unfair though, I have 20 years of tetris experience. I'm basically a god." },
     { m: "Miriam: Okay... but you're gonna have to give me a handicap." },
     { m: "James: Oh yeah definitely, that sounds fair. I'll set it to level 20 for me, and level 1 for you." },
-    { m: "James: Oops I accidentally set the handicap in the wrong direction. Bahahahaha." }
+    { m: "James: Oops I accidentally set the handicap in the wrong direction. Bahahahaha." },
+    { m: "Miriam: What?! Wait.. I think I see a combo!" }
   ]
 
   static postDrMario = [

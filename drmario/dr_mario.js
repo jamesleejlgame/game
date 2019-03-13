@@ -1,3 +1,5 @@
+// TODO: Handle combos adding blocks
+
 import { DrMarioPuzzleData } from './dr_mario_puzzle_data.js'
 
 class DrMario {
@@ -12,21 +14,24 @@ class DrMario {
   /**
    * @type {number} the height of a player field.
    */
-  static HEIGHT = 16
+  static HEIGHT = 17
   /**
    * @type {number} the maximum number of blocks to add to opponent after a combo.
    */
   static MAX_COMBO_BLOCKS = 4
-
+  /**
+   * @type {number} the initial column of a piece.
+   */
+  static INITIAL_COLUMN = 3
   /**
    * @type {string} The type of block this is. Could be a portion of a pill.
    */
   static blockTypeEnum = {
     EMPTY: ' ',
-    LEFT_SIDE: 'L',
-    RIGHT_SIDE: 'R',
-    TOP_SIDE: 'T',
-    BOTTOM_SIDE: 'B',
+    LEFT: 'L',
+    RIGHT: 'R',
+    TOP: 'T',
+    BOTTOM: 'B',
     SINGLE: 'S',
     VIRUS: 'V',
     EXPLODED: 'E'
@@ -45,7 +50,7 @@ class DrMario {
   /**
    * All colors.
    */
-  static allColors = [colorEnum.RED, colorEnum.BLUE, colorEnum.YELLOW]
+  static allColors = [DrMario.colorEnum.RED, DrMario.colorEnum.BLUE, DrMario.colorEnum.YELLOW]
 
   /**
    * @type {number} the orientation of the pill.
@@ -77,9 +82,7 @@ class DrMario {
    */
   static gameStatesEnum = {
     GAME_OVER: 0,
-    PLAYER_MOVE: 1,
-    ANIMATING: 2,
-    COMBOING: 3
+    IN_GAME: 1
   }
 
   constructor () {
@@ -97,12 +100,10 @@ class DrMario {
    * Initializes the game for a puzzle mode.
    */
   initializeForPuzzle () {
-    this.gameState = DrMario.gameStatesEnum.PLAYER_MOVE;
     this.players = [];
     for (let p = 0; p < DrMario.NUM_PLAYERS; ++p) {
       let field = null;
       let upcomingPieces = null;
-      // TODO: This is hardcoded for only two players.
       if (p == 0) {
         field = DrMarioPuzzleData.drMarioPuzzlePlayer1Field;
         upcomingPieces = DrMarioPuzzleData.drMarioPuzzlePlayer1UpcomingPieces;
@@ -110,7 +111,27 @@ class DrMario {
         field = DrMarioPuzzleData.drMarioPuzzlePlayer2Field;
         upcomingPieces = DrMarioPuzzleData.drMarioPuzzlePlayer2UpcomingPieces;
       }
-      this.players.push(new Player(field, upcomingPieces));
+      // TODO: Don't hardcode the player type.
+      this.players.push(new Player(p == 0 ? Player.playerTypeEnum.HUMAN : Player.playerTypeEnum.COMPUTER, field, upcomingPieces));
+    }
+  }
+
+  startGame () {
+    if (this.gameState == DrMario.gameStatesEnum.IN_GAME) {
+      return;
+    }
+    this.gameState = DrMario.gameStatesEnum.IN_GAME
+    for (let p = 0; p < DrMario.NUM_PLAYERS; ++p) {
+      this.players[p].startGame();
+    }
+  }
+
+  // TODO: Only applicable in puzzle mode.
+  checkPlayerOutOfPieces () {
+    for (let p = 0; p < DrMario.NUM_PLAYERS; ++p) {
+      if (this.players[p].piece == null && this.players[p].playerState == Player.playerStatesEnum.PLAYER_MOVE) {
+        this.gameState = DrMario.gameStatesEnum.GAME_OVER
+      }
     }
   }
 }
@@ -120,17 +141,38 @@ class DrMario {
  */
 class Player {
   /**
+   * @type {number} the possible player states.
+   */
+  static playerStatesEnum = {
+    PLAYER_MOVE: 0,
+    ANIMATING: 1,
+  }
+
+  /**
+   * @type {number} the type of player this is.
+   */
+  static playerTypeEnum = {
+    HUMAN: 0,
+    COMPUTER: 1
+  }
+
+  /**
+   * @param {PlayerTypeEnum} the type of player.
    * @param {array<string>?} fieldArrayString represents the field of the player in proper visual display format (the top row of viruses
    *     is in the first position. If null, then the whole field is empty.
    *     TODO: This should actually initialize to a random set of values if the fieldArrayString is null.
    * @param {array<string>?} upcomingPiecesArrayString represents the upcoming pieces. Each string has two characters representing
    *     the two colors that make up the piece.
    */
-  constructor (fieldArrayString, upcomingPiecesArrayString) {
+  constructor (playerType, fieldArrayString, upcomingPiecesArrayString) {
     /**
      * @type {Piece?} the current piece for the player.
      */
     this.piece = null;
+    /**
+     * @type {PlayerTypeEnum} the type of player.
+     */
+    this.playerType = playerType;
     /**
      * @type {array<Piece>} the upcoming pieces for the player.
      */
@@ -144,9 +186,101 @@ class Player {
      * @type {number} the number of viruses remaining.
      */
     this.numVirusesRemaining = 0;
+    /**
+     * @type {playerStatesEnum} the player's current state.
+     */
+    this.playerState = Player.playerStatesEnum.PLAYER_MOVE;
 
     this.initializeFieldAndVirusesGivenFieldArrayString(fieldArrayString);
     this.initializeUpcomingPiecesGivenArrayString(upcomingPiecesArrayString);
+  }
+
+  /**
+   * Initializes the field for a given player.
+   * @param {array<string>?} fieldArrayString represents the field of the player in proper visual display format (the top row of viruses
+   * is in the first position.
+   */
+  initializeFieldAndVirusesGivenFieldArrayString (fieldArrayString) {
+    this.numVirusesRemaining = 0;
+    if (!fieldArrayString) {
+      for (let w = 0; w < DrMario.WIDTH; ++w) {
+        let col = [];
+        for (let l = 0; l < DrMario.HEIGHT; ++l) {
+          col.push(new PlacedPiece(DrMario.colorEnum.NONE, DrMario.blockTypeEnum.EMPTY));
+        }
+        this.field.push(col);
+      }
+    }
+    for (let w = 0; w < DrMario.WIDTH; ++w) {
+      let col = [];
+      for (let l = 0; l < DrMario.HEIGHT; ++l) {
+        let placedPiece = new PlacedPiece();
+        let fieldArrayStringFirstIndex = DrMario.HEIGHT - 1 - l;
+        let fieldArrayStringSecondIndex = 3 * w;
+        placedPiece.color = fieldArrayString[fieldArrayStringFirstIndex][fieldArrayStringSecondIndex];
+        placedPiece.type = fieldArrayString[fieldArrayStringFirstIndex][fieldArrayStringSecondIndex + 1];
+        col.push(placedPiece);
+        if (placedPiece.type == DrMario.blockTypeEnum.VIRUS) {
+          this.numVirusesRemaining++;
+        }
+      }
+      this.field.push(col);
+    }
+  }
+
+  /**
+   * Initializes the upcoming pieces for the player.
+   * @param {array<string>?} upcomingPiecesArrayString represents the upcoming pieces. Each string has two characters representing
+   *     the two colors that make up the piece.
+   */
+  initializeUpcomingPiecesGivenArrayString (upcomingPiecesArrayString) {
+    for (let i = 0; i < upcomingPiecesArrayString.length; ++i) {
+      this.upcomingPieces.push(new Piece(null, null, null, upcomingPiecesArrayString[i][0], upcomingPiecesArrayString[i][1]));
+    }
+  }
+
+  startGame () {
+    this.getNextPiece();
+  }
+
+  getNextPiece () {
+    this.piece = this.upcomingPieces.shift();
+    if (!this.piece) {
+      return
+    }
+    this.piece.column = DrMario.INITIAL_COLUMN;
+    this.piece.row = DrMario.HEIGHT - 2;
+    this.piece.orientation = DrMario.orientationEnum.HORIZONTAL;
+  }
+
+  /**
+   * Moves the piece in the given direction. If moving down and the piece cannot be moved, it will be added to the field.
+   * @param {directionEnum} direction the direction to move the piece.
+   * @returns {...} See the return of addPieceToField.
+   */
+  movePiece (direction) {
+    let newPiece = null;
+    if (direction == DrMario.directionEnum.LEFT) {
+      newPiece = new Piece(this.piece.column - 1, this.piece.row, this.piece.orientation, this.piece.firstColor, this.piece.secondColor);
+    } else if (direction == DrMario.directionEnum.RIGHT) {
+      newPiece = new Piece(this.piece.column + 1, this.piece.row, this.piece.orientation, this.piece.firstColor, this.piece.secondColor);
+    } else if (direction == DrMario.directionEnum.DOWN) {
+      newPiece = new Piece(this.piece.column, this.piece.row - 1, this.piece.orientation, this.piece.firstColor, this.piece.secondColor);
+    }
+    if (this.isPiecePositionValid(newPiece)) {
+      this.piece = newPiece;
+      return [0, []];
+    }
+    if (direction == DrMario.directionEnum.DOWN) {
+      return this.addPieceToField();
+    }
+  }
+
+  maybeMovePieceDown () {
+    if (this.playerState != Player.playerStatesEnum.PLAYER_MOVE) {
+      return [0, []];
+    }
+    return this.movePiece(DrMario.directionEnum.DOWN)
   }
 
   /**
@@ -192,13 +326,13 @@ class Player {
 
   /**
    * Adds punishing blocks to the field based on the combo length of the other player.
-   * @param {number} comboLength 
+   * @param {number} comboLength
    */
   addComboBlocks (comboLength) {
     let numBlocksToAdd = Math.min(comboLength, DrMario.MAX_COMBO_BLOCKS);
     let possibleColumns = []
     for (let w = 0; w < DrMario.WIDTH; ++w) {
-      if (this.field[w][DrMario.HEIGHT - 1].type == DrMario.blockTypeEnum.EMPTY) {
+      if (this.field[w][DrMario.HEIGHT - 2].type == DrMario.blockTypeEnum.EMPTY) {
         possibleColumns.push(w);
       }
     }
@@ -209,7 +343,7 @@ class Player {
       colorsToAdd.push(DrMario.allColors[Math.floor(Math.random() * 3)])
     }
     for (let i = 0; i < numBlocksToAdd; ++i) {
-      this.field[columnsToAdd[i]][DrMario.HEIGHT - 1] = new PlacedPiece(blockTypeEnum.SINGLE, colorsToAdd[i])
+      this.field[columnsToAdd[i]][DrMario.HEIGHT - 2] = new PlacedPiece(DrMario.blockTypeEnum.SINGLE, colorsToAdd[i])
     }
   }
 
@@ -225,22 +359,22 @@ class Player {
       let streakLength = 0;
       let currentColor = DrMario.colorEnum.NONE
       for (let h = 0; h < DrMario.HEIGHT; ++h) {
-        if (this.field[w][h].type == DrMario.blockTypeEnum.NONE) {
+        if (this.field[w][h].type == DrMario.blockTypeEnum.EMPTY) {
           streakLength = 0;
           currentColor = DrMario.colorEnum.NONE
         } else if (this.field[w][h].color != currentColor) {
           streakLength = 1;
-          currentColor = this.field[w][h]
+          currentColor = this.field[w][h].color
         } else if (this.field[w][h].color == currentColor) {
           streakLength++;
           if (streakLength >= 4) {
             if (streakLength == 4) {
               numCombos++
               for (let i = 1; i < 4; ++i) {
-                this.explodePlacedPiece(w, h - i);
+                this.markPieceExplosion(w, h - i);
               }
             }
-            this.explodePlacedPiece(w, h);
+            this.markPieceExplosion(w, h);
           }
         }
       }
@@ -251,12 +385,12 @@ class Player {
       let streakLength = 0;
       let currentColor = DrMario.colorEnum.NONE
       for (let w = 0; w < DrMario.WIDTH; ++w) {
-        if (this.field[w][h].type == DrMario.blockTypeEnum.NONE) {
+        if (this.field[w][h].type == DrMario.blockTypeEnum.EMPTY) {
           streakLength = 0;
           currentColor = DrMario.colorEnum.NONE
         } else if (this.field[w][h].color != currentColor) {
           streakLength = 1;
-          currentColor = this.field[w][h]
+          currentColor = this.field[w][h].color
         } else if (this.field[w][h].color == currentColor) {
           streakLength++;
           if (streakLength >= 4) {
@@ -276,18 +410,18 @@ class Player {
 
   /**
    * Marks the given block as having exploded and handle its neighbours.
-   * @type {number} width the position of the 
+   * @type {number} width the position of the
    */
   markPieceExplosion (col, row) {
     let piece = this.field[col][row]
     let connectedPiece = null;
-    if (piece.type == DrMario.blockTypeEnum.TOP_SIDE) {
+    if (piece.type == DrMario.blockTypeEnum.TOP) {
       connectedPiece = this.field[col][row - 1]
-    } else if (piece.type == DrMario.blockTypeEnum.BOTTOM_SIDE) {
+    } else if (piece.type == DrMario.blockTypeEnum.BOTTOM) {
       connectedPiece = this.field[col][row + 1]
-    } else if (piece.type == DrMario.blockTypeEnum.LEFT_SIDE) {
+    } else if (piece.type == DrMario.blockTypeEnum.LEFT) {
       connectedPiece = this.field[col + 1][row]
-    } else if (piece.type == DrMario.blockTypeEnum.RIGHT_SIDE) {
+    } else if (piece.type == DrMario.blockTypeEnum.RIGHT) {
       connectedPiece = this.field[col - 1][row]
     }
     if (piece.type == DrMario.blockTypeEnum.VIRUS) {
@@ -320,7 +454,7 @@ class Player {
           continue
         }
         if (piece.type == DrMario.blockTypeEnum.LEFT) {
-          let connectedPiece = this.field[w][h + 1]
+          let connectedPiece = this.field[w + 1][h]
           if (this.field[w + 1][h - 1].type != DrMario.blockTypeEnum.EMPTY) {
             continue
           }
@@ -332,72 +466,6 @@ class Player {
       }
     }
     return blockMoved
-  }
-
-  /**
-   * Initializes the field for a given player.
-   * @param {array<string>?} fieldArrayString represents the field of the player in proper visual display format (the top row of viruses
-   * is in the first position.
-   */
-  initializeFieldAndVirusesGivenFieldArrayString (fieldArrayString) {
-    this.numVirusesRemaining = 0;
-    if (!fieldArrayString) {
-      for (let w = 0; w < DrMario.WIDTH; ++w) {
-        let col = [];
-        for (let l = 0; l < DrMario.HEIGHT; ++l) {
-          col.push(new PlacedPiece(DrMario.colorEnum.NONE, DrMario.blockTypeEnum.EMPTY));
-        }
-        this.field.push(col);
-      }
-    }
-    for (let w = 0; w < DrMario.WIDTH; ++w) {
-      let col = [];
-      for (let l = 0; l < DrMario.HEIGHT; ++l) {
-        let placedPiece = new PlacedPiece();
-        let fieldArrayStringFirstIndex = DrMario.HEIGHT - 1 - l;
-        let fieldArrayStringSecondIndex = 3 * w;
-        placedPiece.color = fieldArrayString[fieldArrayStringFirstIndex][fieldArrayStringSecondIndex];
-        placedPiece.type = fieldArrayString[fieldArrayStringFirstIndex][fieldArrayStringSecondIndex + 1];
-        col.push(placedPiece);
-        if (placedPiece.type == blockTypeEnum.VIRUS) {
-          this.numVirusesRemaining++;
-        }
-      }
-      this.field.push(col);
-    }
-  }
-
-  /**
-   * Initializes the upcoming pieces for the player.
-   * @param {array<string>?} upcomingPiecesArrayString represents the upcoming pieces. Each string has two characters representing
-   *     the two colors that make up the piece.
-   */
-  initializeUpcomingPiecesGivenArrayString (upcomingPiecesArrayString) {
-    for (let i = 0; i < upcomingPiecesArrayString.length; ++i) {
-      this.upcomingPieces.push(new Piece(null, null, null, upcomingPiecesArrayString[i][0], upcomingPiecesArrayString[i][1]));
-    }
-  }
-
-  /**
-   * Moves the piece in the given direction. If moving down and the piece cannot be moved, it will be added to the field.
-   * @param {directionEnum} dir
-   */
-  movePiece (dir) {
-    let newPiece = null;
-    if (dir == DrMario.directionEnum.LEFT) {
-      newPiece = new Piece(this.piece.column - 1, this.piece.row, this.piece.orientation, this.piece.firstColor, this.piece.secondColor);
-    } else if (direction == DrMario.directionEnum.RIGHT) {
-      newPiece = new Piece(this.piece.column + 1, this.piece.row, this.piece.orientation, this.piece.firstColor, this.piece.secondColor);
-    } else if (direction == DrMario.directionEnum.DOWN) {
-      newPiece = new Piece(this.piece.column, this.piece.row - 1, this.piece.orientation, this.piece.firstColor, this.piece.secondColor);
-    }
-    if (this.isPiecePositionValid(newPiece)) {
-      this.piece = newPiece;
-      return;
-    }
-    if (direction == DrMario.directionEnum.DOWN) {
-      this.addPieceToField();
-    }
   }
 
   rotatePiece (rotation) {
@@ -425,7 +493,7 @@ class Player {
   }
 
   /**
-   * This is a static method that acts on a given piece passed in rather than the player's piece. This simply checks if 
+   * This is a static method that acts on a given piece passed in rather than the player's piece. This simply checks if
    * the position of the floating piece is valid. It doesn't not verify whether the piece can be placed down there.
    * @param {Piece} piece the piece to check.
    */
@@ -439,29 +507,67 @@ class Player {
       if (coordinate[1] < 0) {
         return false;
       }
-      if (this.field[coordinate[0]][coordinate[1]] != DrMario.placed_piece_type.EMPTY) {
+      if (this.field[coordinate[0]][coordinate[1]].type != DrMario.blockTypeEnum.EMPTY) {
         return false;
       }
     }
     return true;
   }
 
+  copy (o) {
+    var output, v, key;
+    output = Array.isArray(o) ? [] : {};
+    for (key in o) {
+        v = o[key];
+        output[key] = (typeof v === "object") ? this.copy(v) : v;
+    }
+    return output;
+  }
+
   /**
    * Adds the current player piece to the field in its current position. THere is no error checking for whether it
    * actually has a piece underneath it to rest on or not.
    * @param {Piece} piece
+   * @returns {array{Misc}} an array of two different types.
+   * - Position 0 is a number representing the number of combos that were generated by this addition
+   * - Position 1 is an array of fields needed to render what occurred. This only exists if numCombos is
+   *   greater than 0.
    */
   addPieceToField () {
     let coordinates = this.piece.getCoordinates();
-    if (this.piece.orientation == orientationEnum.HORIZONTAL) {
-      this.field[coordinates[0][0]][coordinates[0][1]] = new PlacedPiece(this.piece.firstColor, DrMario.blockTypeEnum.LEFT_SIDE)
-      this.field[coordinates[1][0]][coordinates[1][1]] = new PlacedPiece(this.piece.secondColor, DrMario.blockTypeEnum.RIGHT_SIDE)
+    if (this.piece.orientation == DrMario.orientationEnum.HORIZONTAL) {
+      this.field[coordinates[0][0]][coordinates[0][1]] = new PlacedPiece(DrMario.blockTypeEnum.LEFT, this.piece.firstColor)
+      this.field[coordinates[1][0]][coordinates[1][1]] = new PlacedPiece(DrMario.blockTypeEnum.RIGHT, this.piece.secondColor)
     } else {
-      this.field[coordinates[0][0]][coordinates[0][1]] = new PlacedPiece(this.piece.firstColor, DrMario.blockTypeEnum.BOTTOM_SIDE)
-      this.field[coordinates[1][0]][coordinates[1][1]] = new PlacedPiece(this.piece.secondColor, DrMario.blockTypeEnum.TOP_SIDE)
+      this.field[coordinates[0][0]][coordinates[0][1]] = new PlacedPiece(DrMario.blockTypeEnum.BOTTOM, this.piece.firstColor)
+      this.field[coordinates[1][0]][coordinates[1][1]] = new PlacedPiece(DrMario.blockTypeEnum.TOP, this.piece.secondColor)
     }
-    this.piece = this.upcomingPieces.unshift();
-    // TODO: Handle clears.
+    this.getNextPiece()
+
+    let totalNumCombos = 0
+    let currentNumCombos = 0;
+
+    let fields = [];
+    while (true) {
+      currentNumCombos = this.markFieldExplosions()
+      fields.push(this.copy(this.field))
+      if (currentNumCombos == 0) {
+        break
+      }
+      totalNumCombos += currentNumCombos
+      this.replaceExplodedWithEmpty()
+      while (true) {
+        let fieldChanged = this.applyGravityToField()
+        if (!fieldChanged) {
+          break;
+        }
+        fields.push(this.copy(this.field))
+      }
+    }
+    if (totalNumCombos > 0) {
+      this.playerState = Player.playerStatesEnum.ANIMATING
+    }
+    return [totalNumCombos, fields]
   }
 };
 
@@ -469,10 +575,6 @@ class PlacedPiece {
   constructor (type, color) {
     this.type = type;
     this.color = color;
-  }
-
-  getSpriteIndex () {
-    return DrMario.getSpriteIndex(this.type, this.color);
   }
 };
 
@@ -504,22 +606,15 @@ class Piece {
   }
 
   getCoordinates() {
-    ret = [];
+    let ret = [];
     ret.push([this.column, this.row]);
-    if (this.orientation == DrMario.orientation.HORIZONTAL) {
+    if (this.orientation == DrMario.orientationEnum.HORIZONTAL) {
       ret.push([this.column + 1, this.row]);
     } else {
       ret.push([this.column, this.row + 1]);
     }
-  }
-
-  getLeftSpriteIndex () {
-    return DrMario.getSpriteIndex(DrMario.blockTypeEnum.LEFT_SIDE, this.firstColor)
-  }
-
-  getRightSpriteIndex () {
-    return DrMario.getSpriteIndex(DrMario.blockTypeEnum.RIGHT_SIDE, this.secondColor)
+    return ret
   }
 };
 
-export { DrMario }
+export { DrMario, Player }
