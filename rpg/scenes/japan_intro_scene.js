@@ -1,11 +1,11 @@
-import { RpgScene } from '../common/rpg_scene.js';
+import { RpgScene } from '../common/rpg_scene.js'
 import { RpgUtils } from '../common/rpg_utils.js'
 import { States } from '../data/rpg_states.js'
 
 class JapanIntroScene extends RpgScene {
   constructor ()
   {
-    super('JapanIntroScene');
+    super('JapanIntroScene')
   }
 
   /**
@@ -16,16 +16,16 @@ class JapanIntroScene extends RpgScene {
   create (data) {
     super.create(
       'tokyo_tilemap',
-      'town_and_city_tileset',
+      ['town_and_city_tileset'],
       ['base_tiles', 'tiles2'],
       null, null, null,
       null,
       [],
       data)
 
-    this.james_ = RpgUtils.createNPCCharacter(this, this.map_, 'james', 'james_up');
-    this.miriam_ = RpgUtils.createNPCCharacter(this, this.map_, 'miriam', 'miriam_down');
-    super.setStates(States.japanIntro(this.miriam_, this.james_));
+    this.james_ = RpgUtils.createNPCCharacter(this, this.map_, 'james', 'james_up')
+    this.miriam_ = RpgUtils.createNPCCharacter(this, this.map_, 'miriam', 'miriam_down')
+    super.setStates(States.japanIntro(this.miriam_, this.james_))
   }
 
   /**
@@ -36,4 +36,4 @@ class JapanIntroScene extends RpgScene {
   }
 }
 
-export { JapanIntroScene };
+export { JapanIntroScene }

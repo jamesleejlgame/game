@@ -1,11 +1,11 @@
-import { RpgScene } from '../common/rpg_scene.js';
+import { RpgScene } from '../common/rpg_scene.js'
 import { RpgUtils } from '../common/rpg_utils.js'
 import { States } from '../data/rpg_states.js'
 
 class MiriamCallsHomeopathScene extends RpgScene {
   constructor ()
   {
-    super('MiriamCallsHomeopathScene');
+    super('MiriamCallsHomeopathScene')
   }
 
   /**
@@ -16,15 +16,15 @@ class MiriamCallsHomeopathScene extends RpgScene {
   create (data) {
     super.create(
       'sunnyvale_house_tilemap',
-      'town_and_city_tileset',
+      ['town_and_city_tileset'],
       ['base_tiles', 'tiles2'],
       null, null, null,
       null,
       States.miriamCallsHomeopath,
       data)
 
-    this.james_ = RpgUtils.createNPCCharacter(this, this.map_, 'james', 'james_left');
-    this.miriam_ = RpgUtils.createNPCCharacter(this, this.map_, 'miriam', 'miriam_left', true);
+    this.james_ = RpgUtils.createNPCCharacter(this, this.map_, 'james', 'james_left')
+    this.miriam_ = RpgUtils.createNPCCharacter(this, this.map_, 'miriam', 'miriam_left', true)
   }
 
   /**
@@ -35,4 +35,4 @@ class MiriamCallsHomeopathScene extends RpgScene {
   }
 }
 
-export { MiriamCallsHomeopathScene };
+export { MiriamCallsHomeopathScene }

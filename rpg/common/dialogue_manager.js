@@ -17,7 +17,7 @@ class DialogueManager {
     /**
      * @type {Phaser.Scene} The Phaser scene.
      */
-    this.scene = scene;
+    this.scene = scene
     /**
      * @type {DialogueScene} The dialogue scene.
      */
@@ -29,7 +29,7 @@ class DialogueManager {
    * @param {Boolean} visibility
    */
   setDialogueVisible (visibility) {
-    this.dialogueScene.setVisibility(visibility);
+    this.dialogueScene.setVisibility(visibility)
   }
 
   /**
@@ -37,7 +37,7 @@ class DialogueManager {
    * @param {Phaser.Scene} dialogueScene the dialogue scene.
    */
   setDialogueScene (dialogueScene) {
-    this.dialogueScene = dialogueScene;
+    this.dialogueScene = dialogueScene
   }
 
   /**
@@ -45,21 +45,21 @@ class DialogueManager {
    * @param {array<Dialogue object>} dialogueArray the array of dialogue strings.
    */
   setDialogue (dialogueArray) {
-    this.array = dialogueArray;
-    this.index = 0;
-    this.dialogueScene.updateDisplayedText();
+    this.array = dialogueArray
+    this.index = 0
+    this.dialogueScene.updateDisplayedText()
   }
 
   /**
    * @param {Phaser.Scene} dialogueScene the DialogueScene calling this.
    */
   advanceIndex () {
-    this.index++;
-    let didDialogueJustEnd = (this.index == this.array.length);
-    this.dialogueScene.updateDisplayedText();
+    this.index++
+    let didDialogueJustEnd = (this.index == this.array.length)
+    this.dialogueScene.updateDisplayedText()
     if (didDialogueJustEnd) {
-      this.scene.advanceToNextState();
-      return;
+      this.scene.advanceToNextState()
+      return
     }
   }
 }

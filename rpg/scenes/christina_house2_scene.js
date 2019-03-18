@@ -12,7 +12,7 @@ class ChristinaHouse2Scene extends RpgScene {
 
   constructor ()
   {
-    super('ChristinaHouse2Scene');
+    super('ChristinaHouse2Scene')
   }
 
   /**
@@ -21,19 +21,19 @@ class ChristinaHouse2Scene extends RpgScene {
   create (data) {
     super.create(
       'christina_house2_tilemap',
-      'town_and_city_tileset',
+      ['town_and_city_tileset'],
       ['base_tiles', 'tiles2'],
       'miriam_left', 'miriam_up', 'miriam_down',
       'miriam',
       [],
       data)
 
-    this.christina_ = RpgUtils.createNPCCharacter(this, this.map_, 'christina', 'christina_up');
-    this.james_ = RpgUtils.createNPCCharacter(this, this.map_, 'james', 'james_left', true);
-    super.setStates(States.christinaHouse2States(this.james_));
+    this.christina_ = RpgUtils.createNPCCharacter(this, this.map_, 'christina', 'christina_up')
+    this.james_ = RpgUtils.createNPCCharacter(this, this.map_, 'james', 'james_left', true)
+    super.setStates(States.christinaHouse2States(this.james_))
 
-    this.physics.add.collider(this.player_, this.christina_);
-    this.physics.add.collider(this.player_, this.james_);
+    this.physics.add.collider(this.player_, this.christina_)
+    this.physics.add.collider(this.player_, this.james_)
   }
 
   /**
@@ -44,4 +44,4 @@ class ChristinaHouse2Scene extends RpgScene {
   }
 }
 
-export { ChristinaHouse2Scene };
+export { ChristinaHouse2Scene }

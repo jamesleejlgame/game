@@ -1,11 +1,11 @@
-import { RpgScene } from '../common/rpg_scene.js';
+import { RpgScene } from '../common/rpg_scene.js'
 import { RpgUtils } from '../common/rpg_utils.js'
 import { States } from '../data/rpg_states.js'
 
 class BabysittingScene extends RpgScene {
   constructor ()
   {
-    super('BabysittingScene');
+    super('BabysittingScene')
   }
 
   /**
@@ -16,16 +16,16 @@ class BabysittingScene extends RpgScene {
   create (data) {
     super.create(
       'babysitting_tilemap',
-      'town_and_city_tileset',
+      ['town_and_city_tileset'],
       ['base_tiles', 'tiles2'],
       null, null, null,
       null,
       States.babysitting,
       data)
 
-    this.james_ = RpgUtils.createNPCCharacter(this, this.map_, 'james', 'james_down');
-    this.miriam_ = RpgUtils.createNPCCharacter(this, this.map_, 'miriam', 'miriam_down');
-    this.adrianna_ = RpgUtils.createNPCCharacter(this, this.map_, 'adrianna', 'adrianna_up');
+    this.james_ = RpgUtils.createNPCCharacter(this, this.map_, 'james', 'james_down')
+    this.miriam_ = RpgUtils.createNPCCharacter(this, this.map_, 'miriam', 'miriam_down')
+    this.adrianna_ = RpgUtils.createNPCCharacter(this, this.map_, 'adrianna', 'adrianna_up')
   }
 
   /**
@@ -36,4 +36,4 @@ class BabysittingScene extends RpgScene {
   }
 }
 
-export { BabysittingScene };
+export { BabysittingScene }

@@ -36,23 +36,23 @@ class Dialogue {
 
   static pubQuiz1 = [
     { m: "Announcer: That's right, Pocahontas is the only princess based on a real person. 10 points to the Mighty Morphing Flower Arrangers." },
-  ];
+  ]
 
   static pubQuiz2 = [
     { m: "Christina: So James, Karen's really into pool too. " },
     { m: "Karen: Actually I've never pla..." },
     { m: "Christina: ... and she loooooves video games!" },
     { m: "Karen: Oh yeah Candy Crush is so fun!" },
-  ];
+  ]
 
   static pubQuiz3 = [
     { m: "James: So how was your day, Miriam?" },
-  ];
+  ]
 
   static pubQuiz4 = [
     { m: "Miriam: It was good. Not as good as Karen's day, you should ask her about hers." },
     { m: "James: Oh okay maybe in a little while. Oh yeah I want to learn singing, can you teach me?" },
-  ];
+  ]
 
   static pubQuiz5 = [
     { m: "Christina & Miriam: Hmm this isn't working." }
@@ -88,7 +88,7 @@ class Dialogue {
     { m: "Miriam: Hello?" },
     { m: "James: Help!! Christina locked me in Alcatraz!" },
     { m: "Miriam: Omg, we're on our way!" },
-  ];
+  ]
 
   static jamesCallsMiriamFromAlcatraz2 = [
     { m: "Miriam: We have to save James, everyone!" },
@@ -106,7 +106,7 @@ class Dialogue {
     { m: "James: Wait.. we're still in SF." },
     { m: "Miriam: Oh, umm..." },
     { m: "Miriam: Hmm... so we have to iterate over everything in the array so I think it's..." },
-    { m: "for (int i = 0; i < 10; ++i) { performAction(); ..." },
+    { m: "for (int i = 0; i < 10; ++i) { performAction() ..." },
     { m: "Miriam: Ugh, I hate this. K let's go to Sunnyvale!" },
     { m: "James: Okay!" }
   ]
@@ -117,7 +117,7 @@ class Dialogue {
     { m: "Miriam: Okay... but you're gonna have to give me a handicap." },
     { m: "James: Oh yeah definitely, that sounds fair. I'll set it to level 20 for me, and level 1 for you." },
     { m: "James: Oops I accidentally set the handicap in the wrong direction. Bahahahaha." },
-    { m: "Miriam: What?! Wait.. I think I see a combo!" }
+    { m: "Miriam: What?! Wait.. I think I see a combo that clears the field!" }
   ]
 
   static postDrMario = [
@@ -207,7 +207,7 @@ class Dialogue {
 
   static hiking1 = [
     { m: "James: This hike was only supposed to be one mile!" },
-  ];
+  ]
 
   static hiking2 = [
     { m: "Miriam: Oh look there's a sign!" }
@@ -241,7 +241,7 @@ class Dialogue {
 
   static proposal2 = [
     { m: "Hello Kitty: Miriam, James has something to ask you in person." },
-  ];
+  ]
 
   static proposal3 = [
     { question: "Hello Kitty: What'd she say?", answers: [

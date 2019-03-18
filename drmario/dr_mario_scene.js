@@ -6,95 +6,95 @@ class DrMarioScene extends Phaser.Scene {
   /**
    * @type {number} the time in miliseconds before the piece should be moved down.
    */
-  static TIME_TO_MOVE_PIECE_DOWN_MS = 2500;
+  static TIME_TO_MOVE_PIECE_DOWN_MS = 2500
   /**
    * @type {number} the time in miliseconds between animated fields.
    */
-  static TIME_BETWEEN_ANIMATIONS_MS = 300;
+  static TIME_BETWEEN_ANIMATIONS_MS = 300
 
   constructor ()
   {
-    super({ key: 'DrMarioScene' });
+    super({ key: 'DrMarioScene' })
     /**
      * @type {DrMario} The dr mario game.
      */
-    this.drMario = new DrMario();
+    this.drMario = new DrMario()
     /**
      * @type {Phaser.Input.Keyboard.Key} the key to start the game.
      */
-    this.startGameKey_ = null;
+    this.startGameKey_ = null
     /**
      * @type {Phaser.Input.Keyboard.Key} the key to start the game.
      */
-    this.resetGameKey_ = null;
+    this.resetGameKey_ = null
     /**
      * @type {Phaser.Input.Keyboard.Key} the key to rotate the block clockwise.
      */
-    this.rotateClockwiseKey_ = null;
+    this.rotateClockwiseKey_ = null
     /**
      * @type {Phaser.Input.Keyboard.Key} the key to rotate the block counter clockwise.
      */
-    this.rotateCounterClockwiseKey_ = null;
+    this.rotateCounterClockwiseKey_ = null
     /**
      * Initializes the cursor keys.
      */
-    this.cursors_ = null;
+    this.cursors_ = null
     /**
      * @type {array<Phaser.Sprite>} the currently rendered sprites.
      */
-    this.currentSprites_ = [];
+    this.currentSprites_ = []
     /**
      * The player fields to animate
      */
-    this.playerFieldsToAnimate_ = [[], []];
+    this.playerFieldsToAnimate_ = [[], []]
     /**
      * When to animate each player.
      * @type {array<number>} the time in miliseconds for the next animation of each player.
      */
-    this.animatePieceTime = [0, 0];
+    this.animatePieceTime = [0, 0]
     /**
      * When to move down the piece per player
      * @type {array<number>} the time in miliseconds of the next time to move the piece down for each player.
      */
-    this.movePieceDownTime = [0, 0];
+    this.movePieceDownTime = [0, 0]
     /**
      * The animate piece index of each player.
      * @type {array<number>} the field index to animate.
      */
-    this.animatePieceIndex = [0, 0];
+    this.animatePieceIndex = [0, 0]
     /**
      * Whether to move the piece down automatically or not.
      * TODO: Don't disable this.
      */
-    this.movePieceAutomaticallyEnabled = false;
+    this.movePieceAutomaticallyEnabled = false
   }
 
   create () {
-    this.drMario.initializeForPuzzle();
-    this.add.image(400, 300, 'dr_mario_background');
-    this.cameras.main.setBounds(0, 0, 800, 600);
-    this.physics.world.setBounds(0, 0, 800, 600);
-    this.cameras.main.roundPixels = true; // avoid tile bleed
-    this.resetGameKey_ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
-    this.startGameKey_ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
-    this.rotateClockwiseKey_ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.X);
-    this.rotateCounterClockwiseKey_ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z);
-    this.cursors_ = this.input.keyboard.createCursorKeys();
+    this.drMario.initializeForPuzzle()
+    this.add.image(400, 300, 'dr_mario_background')
+    this.cameras.main.setBounds(0, 0, 800, 600)
+    this.physics.world.setBounds(0, 0, 800, 600)
+    this.cameras.main.roundPixels = true // avoid tile bleed
+    this.resetGameKey_ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R)
+    this.startGameKey_ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S)
+    this.rotateClockwiseKey_ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.X)
+    this.rotateCounterClockwiseKey_ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z)
+    this.cursors_ = this.input.keyboard.createCursorKeys()
     for (let p = 0; p < DrMario.NUM_PLAYERS; ++p) {
-      this.renderPlayer(p);
+      this.renderPlayer(p)
     }
   }
 
   resetGame () {
     if (this.drMario.gameState != DrMario.gameStatesEnum.GAME_OVER) {
-      return;
+      return
     }
-    this.drMario.initializeForPuzzle();
+    this.drMario.initializeForPuzzle()
   }
 
   update (time, delta) {
     this.currentSprites_.forEach(function(sprite) {
-      sprite.destroy();
+      sprite.destroy()
     })
     this.drMario.checkPlayerOutOfPieces()
     if (Phaser.Input.Keyboard.JustDown(this.resetGameKey_)) {
@@ -108,7 +108,7 @@ class DrMarioScene extends Phaser.Scene {
 
     if (this.drMario.gameState == DrMario.gameStatesEnum.IN_GAME) {
       for (let p = 0; p < DrMario.NUM_PLAYERS; ++p) {
-        let player = this.drMario.players[p];
+        let player = this.drMario.players[p]
         if (player.playerState == Player.playerStatesEnum.PLAYER_MOVE) {
           if (player.playerType == Player.playerTypeEnum.HUMAN) {
             if (Phaser.Input.Keyboard.JustDown(this.cursors_.left) && player.playerState == Player.playerStatesEnum.PLAYER_MOVE) {
@@ -125,16 +125,16 @@ class DrMarioScene extends Phaser.Scene {
             }
             if (Phaser.Input.Keyboard.JustDown(this.cursors_.down) && player.playerState == Player.playerStatesEnum.PLAYER_MOVE) {
               let movePieceDownRet = player.movePiece(DrMario.directionEnum.DOWN)
-              this.handlePieceDown(p, movePieceDownRet, time);
+              this.handlePieceDown(p, movePieceDownRet, time)
               this.movePieceDownTime[p] = time + DrMarioScene.TIME_TO_MOVE_PIECE_DOWN_MS
             }
           }
           if (this.movePieceAutomaticallyEnabled && time > this.movePieceDownTime[p]) {
-            let movePieceDownRet = player.maybeMovePieceDown();
-            this.handlePieceDown(p, movePieceDownRet, time);
+            let movePieceDownRet = player.maybeMovePieceDown()
+            this.handlePieceDown(p, movePieceDownRet, time)
             this.movePieceDownTime[p] = time + DrMarioScene.TIME_TO_MOVE_PIECE_DOWN_MS
           }
-          this.renderPlayer(p);
+          this.renderPlayer(p)
         } else {
           if (time > this.animatePieceTime[p]) {
             this.animatePieceIndex[p]++
@@ -142,28 +142,28 @@ class DrMarioScene extends Phaser.Scene {
               this.drMario.players[p].playerState = Player.playerStatesEnum.PLAYER_MOVE
               // TODO: This is puzzle mode only.
               if (p == 0 && this.drMario.players[p].numVirusesRemaining == 0) {
-                this.scene.start('PostDrMarioScene');
+                this.scene.start('PostDrMarioScene')
               }
             }
             this.animatePieceTime[p] = time + DrMarioScene.TIME_BETWEEN_ANIMATIONS_MS
           }
-          this.renderField(p, this.playerFieldsToAnimate_[p][this.animatePieceIndex[p]]);
+          this.renderField(p, this.playerFieldsToAnimate_[p][this.animatePieceIndex[p]])
         }
-        this.renderUpcomingBlocks(p);
+        this.renderUpcomingBlocks(p)
       }
     } else {
       for (let p = 0; p < DrMario.NUM_PLAYERS; ++p) {
-        this.renderPlayer(p);
-        this.renderUpcomingBlocks(p);
+        this.renderPlayer(p)
+        this.renderUpcomingBlocks(p)
       }
     }
   }
 
   handlePieceDown (playerIndex, movePieceDownRet, time) {
     if (movePieceDownRet && movePieceDownRet[0] > 0) {
-      this.playerFieldsToAnimate_[playerIndex] = movePieceDownRet[1];
+      this.playerFieldsToAnimate_[playerIndex] = movePieceDownRet[1]
       this.animatePieceTime[playerIndex] = time + DrMarioScene.TIME_BETWEEN_ANIMATIONS_MS
-      this.animatePieceIndex[playerIndex] = 0;
+      this.animatePieceIndex[playerIndex] = 0
     }
   }
 
@@ -178,9 +178,9 @@ class DrMarioScene extends Phaser.Scene {
   renderPlayer (playerNum) {
     for (let w = 0; w < DrMario.WIDTH; ++w) {
       for (let l = 0; l < DrMario.HEIGHT; ++l) {
-        let spriteIndex = DrMarioScene.getSpriteIndex(this.drMario.players[playerNum].field[w][l].type, this.drMario.players[playerNum].field[w][l].color);
+        let spriteIndex = DrMarioScene.getSpriteIndex(this.drMario.players[playerNum].field[w][l].type, this.drMario.players[playerNum].field[w][l].color)
         if (spriteIndex == null) {
-          continue;
+          continue
         } else if (spriteIndex == 100) {
           this.currentSprites_.push(this.physics.add.sprite(playerNum * 320 + 170 + w * 20, 510 - l * 20, 'dr_mario_yellow_virus', 0))
         } else if (spriteIndex == 200) {
@@ -192,13 +192,13 @@ class DrMarioScene extends Phaser.Scene {
         }
       }
     }
-    let piece = this.drMario.players[playerNum].piece;
+    let piece = this.drMario.players[playerNum].piece
     if (piece != null) {
       let coordinates = piece.getCoordinates()
       let firstPieceType = (piece.orientation == DrMario.orientationEnum.HORIZONTAL) ? DrMario.blockTypeEnum.LEFT : DrMario.blockTypeEnum.BOTTOM
       let secondPieceType = (piece.orientation == DrMario.orientationEnum.HORIZONTAL) ? DrMario.blockTypeEnum.RIGHT : DrMario.blockTypeEnum.TOP
-      let firstSpriteIndex = DrMarioScene.getSpriteIndex(firstPieceType, piece.firstColor);
-      let secondSpriteIndex = DrMarioScene.getSpriteIndex(secondPieceType, piece.secondColor);
+      let firstSpriteIndex = DrMarioScene.getSpriteIndex(firstPieceType, piece.firstColor)
+      let secondSpriteIndex = DrMarioScene.getSpriteIndex(secondPieceType, piece.secondColor)
       this.currentSprites_.push(this.physics.add.sprite(playerNum * 320 + 170 + coordinates[0][0] * 20, 510 - coordinates[0][1] * 20, 'dr_mario_sprites', firstSpriteIndex))
       this.currentSprites_.push(this.physics.add.sprite(playerNum * 320 + 170 + coordinates[1][0] * 20, 510 - coordinates[1][1] * 20, 'dr_mario_sprites', secondSpriteIndex))
     }
@@ -207,9 +207,9 @@ class DrMarioScene extends Phaser.Scene {
   renderField (playerNum, field) {
     for (let w = 0; w < DrMario.WIDTH; ++w) {
       for (let l = 0; l < DrMario.HEIGHT; ++l) {
-        let spriteIndex = DrMarioScene.getSpriteIndex(field[w][l].type, field[w][l].color);
+        let spriteIndex = DrMarioScene.getSpriteIndex(field[w][l].type, field[w][l].color)
         if (spriteIndex == null) {
-          continue;
+          continue
         } else if (spriteIndex == 100) {
           this.currentSprites_.push(this.physics.add.sprite(playerNum * 320 + 170 + w * 20, 510 - l * 20, 'dr_mario_yellow_virus', 0))
         } else if (spriteIndex == 200) {
@@ -237,39 +237,39 @@ class DrMarioScene extends Phaser.Scene {
    * TODO: Don't use hundreds for viruses.
    */
   static getSpriteIndex (type, color) {
-    let offset = -1;
+    let offset = -1
     if (type == DrMario.blockTypeEnum.TOP) {
-      offset = 0;
+      offset = 0
     } else if (type == DrMario.blockTypeEnum.BOTTOM) {
-      offset = 3;
+      offset = 3
     } else if (type == DrMario.blockTypeEnum.LEFT) {
-      offset = 6;
+      offset = 6
     } else if (type == DrMario.blockTypeEnum.RIGHT) {
-      offset = 9;
+      offset = 9
     } else if (type == DrMario.blockTypeEnum.SINGLE) {
-      offset = 12;
+      offset = 12
     } else if (type == DrMario.blockTypeEnum.EXPLODED) {
-      offset = 15;
+      offset = 15
     } else if (type == DrMario.blockTypeEnum.VIRUS) {
       if (color == DrMario.colorEnum.YELLOW) {
-        return 100;
+        return 100
       } else if (color == DrMario.colorEnum.RED) {
-        return 200;
+        return 200
       } else if (color == DrMario.colorEnum.BLUE) {
-        return 300;
+        return 300
       }
     } else {
-      return null;
+      return null
     }
     if (color == DrMario.colorEnum.RED) {
     } else if (color == DrMario.colorEnum.YELLOW) {
-      offset += 1;
+      offset += 1
     } else if (color == DrMario.colorEnum.BLUE) {
-      offset += 2;
+      offset += 2
     } else {
-      return null;
+      return null
     }
-    return offset;
+    return offset
   }
 }
 

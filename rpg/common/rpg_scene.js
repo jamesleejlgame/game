@@ -13,55 +13,55 @@ class RpgScene extends Phaser.Scene {
    */
   constructor (sceneKey)
   {
-    super({ key: sceneKey });
+    super({ key: sceneKey })
 
     /**
      * @type {StateManager} the state manager for this scene.
      */
-    this.stateManager_ = new StateManager(this);
+    this.stateManager_ = new StateManager(this)
     /**
      * @type {DialogueManager} the dialogue manager for this scene.
      */
-    this.dialogueManager_ = new DialogueManager(this);
+    this.dialogueManager_ = new DialogueManager(this)
     /**
      * @type {Phaser.Tilemap} the tilemap representing the map of this scene.
      */
-    this.map_ = null;
+    this.map_ = null
     /**
      * @type {Phaser.Physics.Action.Sprite} the phaser sprite the player is controlling.
      */
-    this.player_ = null;
+    this.player_ = null
     /**
      * @type {string} the name of the animation to play when the player walks left.
      */
-    this.playerLeftAnimationName_ = null;
+    this.playerLeftAnimationName_ = null
     /**
      * @type {string} the name of the animation to play when the player walks up.
      */
-    this.playerUpAnimationName_ = null;
+    this.playerUpAnimationName_ = null
     /**
      * @type {string} the name of the animation to play when the player walks down.
      */
-    this.playerDownAnimationName_ = null;
+    this.playerDownAnimationName_ = null
     /**
      * @type {Phaser.Input.Keyboard.Key} the key for taking actions.
      */
-    this.actionKey_ = null;
+    this.actionKey_ = null
     /**
      * Whether the scene is done fading in or not.
      */
-    this.fadeInComplete_ = null;
+    this.fadeInComplete_ = null
     /**
      * The name of the scene.
      */
-    this.sceneName_ = sceneKey;
+    this.sceneName_ = sceneKey
   }
 
   /**
    * Creates the scene. The subclasses implement this as follows:
    * @type {string} tilemapName the name of the tile map.
-   * @type {string} tilesetName the name of the tile set.
-   * @type {string} tilelayerNames the name of the tile layer.
+   * @type {array<string>} tilesetNames the names of the tile sets.
+   * @type {array<string>} tilelayerNames the name of the tile layer.
    * @type {string?} playerLeftAnimationName the name of the left animation. Nullable.
    * @type {string?} playerUpAnimationName the name of the up animation. Nullable.
    * @type {string?} playerDownAnimationName the name of the down animation. Nullable.
@@ -70,7 +70,7 @@ class RpgScene extends Phaser.Scene {
    *   startingLocation {startingLocationEnum} the starting location of the miriam sprite.
    *   fadeIn {boolean?} whether to fade in the scene or not. Defaults to false.
    */
-  create (tilemapName, tilesetName, tilelayerNames,
+  create (tilemapName, tilesetNames, tilelayerNames,
     playerLeftAnimationName, playerUpAnimationName, playerDownAnimationName,
     playerStartTileObjectName,
     states,
@@ -82,45 +82,45 @@ class RpgScene extends Phaser.Scene {
     let createMapRet = RpgUtils.createMap(
       this,
       tilemapName,
-      tilesetName,
-      tilelayerNames);
-    this.map_ = createMapRet[0];
-    let layers = createMapRet[1];
+      tilesetNames,
+      tilelayerNames)
+    this.map_ = createMapRet[0]
+    let layers = createMapRet[1]
 
-    RpgUtils.initializeAnimations(this, BootScene.ANIMATIONS);
+    RpgUtils.initializeAnimations(this, BootScene.ANIMATIONS)
 
-    this.player_ = null;
+    this.player_ = null
     if (playerStartTileObjectName) {
-      this.player_ = RpgUtils.createPlayerControlledRpgCharacter(this, this.map_, playerStartTileObjectName, playerDownAnimationName);
+      this.player_ = RpgUtils.createPlayerControlledRpgCharacter(this, this.map_, playerStartTileObjectName, playerDownAnimationName)
     }
 
     if (this.player_) {
-      RpgUtils.addIntersectionWithLayers(this, this.player_, layers);
+      RpgUtils.addIntersectionWithLayers(this, this.player_, layers)
     }
-    this.cursors_ = this.input.keyboard.createCursorKeys();
-    this.scene.launch('DialogueScene', {dialogueManager: this.dialogueManager_, visible: !data.fadeIn});
-    this.scene.moveAbove(this.sceneName_, 'DialogueScene');
-    this.stateManager_.setSceneInfo(this.map_, this.player_, states);
-    this.actionKey_ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z);
-    this.fadeInComplete_ = !data.fadeIn;
+    this.cursors_ = this.input.keyboard.createCursorKeys()
+    this.scene.launch('DialogueScene', {dialogueManager: this.dialogueManager_, visible: !data.fadeIn})
+    this.scene.moveAbove(this.sceneName_, 'DialogueScene')
+    this.stateManager_.setSceneInfo(this.map_, this.player_, states)
+    this.actionKey_ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z)
+    this.fadeInComplete_ = !data.fadeIn
     if (data.fadeIn) {
       this.cameras.main.fadeIn(RpgConstants.FADE_TIME_MS, 0, 0, 0, (camera, progress) => {
         if (progress == 1) {
-          this.fadeInComplete_ = true;
-          this.dialogueManager_.setDialogueVisible(true);
+          this.fadeInComplete_ = true
+          this.dialogueManager_.setDialogueVisible(true)
         }
-      });
+      })
     }
   }
 
   update (time, delta) {
     if (this.stateManager_.shouldAdvanceToNextState(this.actionKey_, this.player_)) {
-      this.stateManager_.advanceToNextState();
-      return;
+      this.stateManager_.advanceToNextState()
+      return
     }
     let state = this.stateManager_.getState()
     if (this.player_ && state && (state.type == 'player' || state.type == 'playerFreeMovement' || state.type == 'timer')) {
-      RpgUtils.updatePlayerAnimation(this, this.cursors_, this.player_, this.playerLeftAnimationName_, this.playerUpAnimationName_, this.playerDownAnimationName_);
+      RpgUtils.updatePlayerAnimation(this, this.cursors_, this.player_, this.playerLeftAnimationName_, this.playerUpAnimationName_, this.playerDownAnimationName_)
     }
   }
 
@@ -129,7 +129,7 @@ class RpgScene extends Phaser.Scene {
    * @param {Dialogue} dialogue the dialogue to set.
    */
   setDialogueOnDialogueManager (dialogue) {
-    this.dialogueManager_.setDialogue(dialogue);
+    this.dialogueManager_.setDialogue(dialogue)
   }
 
   /**
@@ -137,20 +137,20 @@ class RpgScene extends Phaser.Scene {
    */
   stopPlayerMovement () {
     if (!this.player_) {
-      return;
+      return
     }
     if (this.anims.get(this.player_.anims.getCurrentKey()) == undefined) {
-      return;
+      return
     }
-    this.player_.setVelocity(0);
-    this.player_.anims.stop();
+    this.player_.setVelocity(0)
+    this.player_.anims.stop()
   }
 
   /**
    * Advances to the next state in the state manager.
    */
   advanceToNextState () {
-    this.stateManager_.advanceToNextState();
+    this.stateManager_.advanceToNextState()
   }
 
   /**
@@ -160,16 +160,16 @@ class RpgScene extends Phaser.Scene {
    * @param {boolean?} fadeOut whether to fade out. Defaults to false.
    */
   switchScene (sceneName, params, fadeOut) {
-    this.scene.stop('DialogueScene');
+    this.scene.stop('DialogueScene')
     if (fadeOut) {
       this.cameras.main.fade(RpgConstants.FADE_TIME_MS, 0, 0, 0, false, (camera, progress) => {
         if (progress == 1) {
-          this.scene.start(sceneName, params);
+          this.scene.start(sceneName, params)
         }
-      });
-      return;
+      })
+      return
     }
-    this.scene.start(sceneName, params);
+    this.scene.start(sceneName, params)
   }
 
   /**
@@ -184,7 +184,7 @@ class RpgScene extends Phaser.Scene {
    * @param {array<State>} states the states of this scene.
    */
   setStates (states) {
-    this.stateManager_.setSceneInfo(this.map_, this.player_, states);
+    this.stateManager_.setSceneInfo(this.map_, this.player_, states)
   }
 }
 

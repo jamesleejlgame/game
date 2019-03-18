@@ -47,7 +47,7 @@ class States {
         ]}
       },
       { type: 'dialogue', dialogue: Dialogue.miriamMeetsJames2 },
-    ];
+    ]
   }
 
   static pubQuizStates (james, miriam) {
@@ -82,14 +82,14 @@ class States {
       },
       { type: 'dialogue', dialogue: Dialogue.pubQuiz5 }
     ]
-  };
+  }
 
   static christinaHouse2States (james) {
     return [
       { type: 'dialogue', dialogue: Dialogue.miriamAsksChristinaToWedding},
       { type: 'player', target: james },
       { type: 'dialogue', dialogue: Dialogue.miriamAsksJamesToWedding },
-    ];
+    ]
   }
 
   static alcatraz (christina, james) {
@@ -116,7 +116,7 @@ class States {
       { type: 'npcMove', npc: {target: christina, tweens: [{animation: 'christina_down', location: 'christina_2'}]} },
       { type: 'renderLayer', layer: 'tiles3', tilesetName: 'castle_tileset' },
       { type: 'dialogue', dialogue: Dialogue.christinaLocksJamesInAlcatraz2 },
-    ];
+    ]
   }
 
   static jamesCallsMiriamFromAlcatraz (miriam) {
@@ -124,35 +124,35 @@ class States {
       { type: 'dialogue', dialogue: Dialogue.jamesCallsMiriamFromAlcatraz1 },
       { type: 'npcMove', npc: {target: miriam, tweens: [{animation: 'miriam_up', location: 'miriam'}]} },
       { type: 'dialogue', dialogue: Dialogue.jamesCallsMiriamFromAlcatraz2 },
-    ];
+    ]
   }
 
   static jamesCallsMiriam = [
     { type: 'dialogue', dialogue: Dialogue.jamesCallsMiriamFromAlcatraz },
-  ];
+  ]
 
   static postAlcatraz = [
     { type: 'dialogue', dialogue: Dialogue.postAlcatraz },
-  ];
+  ]
 
   static miriamHouseBootCamp = [
     { type: 'dialogue', dialogue: Dialogue.miriamHouseBootCamp },
-  ];
+  ]
 
   static preDrMario = [
     { type: 'dialogue', dialogue: Dialogue.preDrMario },
-  ];
+  ]
 
   static postDrMario = [
     { type: 'dialogue', dialogue: Dialogue.postDrMario },
-  ];
+  ]
 
   static cookingClass (gaby) {
     return [
       { type: 'dialogue', dialogue: Dialogue.cookingClassMiriam },
       { type: 'npcMove', npc: {target: gaby, tweens: [{animation: 'gaby_down', location: 'gaby_1'}] } },
       { type: 'dialogue', dialogue: Dialogue.cookingClassJames },
-    ];
+    ]
   }
 
   static japanIntro (miriam, james) {
@@ -190,7 +190,7 @@ class States {
               location: 'james_2',
               flipX: true,
             }]}]},
-    ];
+    ]
   }
 
   static japanHike (miriam, james, star, jiraiya) {
@@ -236,20 +236,20 @@ class States {
               flipX: true,
             }]}]},
       { type: 'dialogue', dialogue: Dialogue.japanHikeBattle },
-    ];
+    ]
   }
 
   static preOvercookedGame = [
     { type: 'dialogue', dialogue: Dialogue.preOvercookedGame },
-  ];
+  ]
 
   static miriamCallsHomeopath = [
     { type: 'dialogue', dialogue: Dialogue.miriamHomeopath },
-  ];
+  ]
 
   static preHarryPotterBattle = [
     { type: 'dialogue', dialogue: Dialogue.preHarryPotterBattle },
-  ];
+  ]
 
   // TODO: Use this.
   static harryPotterBattle (harry, snape, spider, attack) {
@@ -259,14 +259,14 @@ class States {
       { type: 'npcMove', target: attack, tweens: ['attack_1'] },
       { type: 'npcAppear', target: snape, location: 'snape' },
       { type: 'dialogue', dialogue: Dialogue.duringHarryPotterBattle },
-    ];
+    ]
   }
 
   static miriamReceivesPills = [
     { type: 'dialogue', dialogue: Dialogue.miriamReceivesPills },
     { type: 'timer', time: 1000 },
     { type: 'dialogue', dialogue: Dialogue.miriamCured },
-  ];
+  ]
 
   static hike (miriam, james) {
     return [
@@ -295,17 +295,17 @@ class States {
       { type: 'dialogue', dialogue: Dialogue.hiking3 },
       { type: 'npcMove', npc: {target: james, tweens: [{animation: 'james_left', location: 'james_2'}] } },
       { type: 'dialogue', dialogue: Dialogue.hiking4 },
-    ];
+    ]
   }
 
   static babysitting = [
     { type: 'dialogue', dialogue: Dialogue.babysitting },
-  ];
+  ]
 
-  // TODO: Use this.
   static escapeRoom = [
     { type: 'dialogue', dialogue: Dialogue.escapeRoom },
-  ];
+    { type: 'playerFreeMovement' }
+  ]
 
   // TODO: Use this.
   static proposal (miriam, james, hello_kitty, stitch, wimblebear, homura) {
@@ -340,7 +340,7 @@ class States {
             location: 'james_1',
           }]}]},
     { type: 'dialogue', dialogue: Dialogue.proposal2 },
-  ];
+  ]
   }
 }
 

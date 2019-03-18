@@ -1,11 +1,11 @@
-import { RpgScene } from '../common/rpg_scene.js';
+import { RpgScene } from '../common/rpg_scene.js'
 import { RpgUtils } from '../common/rpg_utils.js'
 import { States } from '../data/rpg_states.js'
 
 class HikeScene extends RpgScene {
   constructor ()
   {
-    super('HikeScene');
+    super('HikeScene')
   }
 
   /**
@@ -16,15 +16,15 @@ class HikeScene extends RpgScene {
   create (data) {
     super.create(
       'hiking_tilemap',
-      'town_and_city_tileset',
+      ['town_and_city_tileset'],
       ['base_tiles', 'tiles2'],
       null, null, null,
       null,
       [],
       data)
-    this.miriam_ = RpgUtils.createNPCCharacter(this, this.map_, 'miriam', 'miriam_left', true);
-    this.james_ = RpgUtils.createNPCCharacter(this, this.map_, 'james', 'james_left', true);
-    super.setStates(States.hike(this.miriam_, this.james_));
+    this.miriam_ = RpgUtils.createNPCCharacter(this, this.map_, 'miriam', 'miriam_left', true)
+    this.james_ = RpgUtils.createNPCCharacter(this, this.map_, 'james', 'james_left', true)
+    super.setStates(States.hike(this.miriam_, this.james_))
   }
 
   /**
@@ -35,4 +35,4 @@ class HikeScene extends RpgScene {
   }
 }
 
-export { HikeScene };
+export { HikeScene }

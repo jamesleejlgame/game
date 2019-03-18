@@ -1,11 +1,11 @@
-import { RpgScene } from '../common/rpg_scene.js';
+import { RpgScene } from '../common/rpg_scene.js'
 import { RpgUtils } from '../common/rpg_utils.js'
 import { States } from '../data/rpg_states.js'
 
 class AlcatrazScene extends RpgScene {
   constructor ()
   {
-    super('AlcatrazScene');
+    super('AlcatrazScene')
   }
 
   /**
@@ -16,15 +16,15 @@ class AlcatrazScene extends RpgScene {
   create (data) {
     super.create(
       'alcatraz_tilemap',
-      'castle_tileset',
+      ['castle_tileset'],
       ['base_tiles', 'tiles2'],
       null, null, null,
       null,
       [],
       data)
-    this.christina_ = RpgUtils.createNPCCharacter(this, this.map_, 'christina', 'christina_left', true);
-    this.james_ = RpgUtils.createNPCCharacter(this, this.map_, 'james', 'james_left', true);
-    super.setStates(States.alcatraz(this.christina_, this.james_));
+    this.christina_ = RpgUtils.createNPCCharacter(this, this.map_, 'christina', 'christina_left', true)
+    this.james_ = RpgUtils.createNPCCharacter(this, this.map_, 'james', 'james_left', true)
+    super.setStates(States.alcatraz(this.christina_, this.james_))
   }
 
   /**
@@ -35,4 +35,4 @@ class AlcatrazScene extends RpgScene {
   }
 }
 
-export { AlcatrazScene };
+export { AlcatrazScene }

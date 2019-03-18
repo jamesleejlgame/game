@@ -12,7 +12,7 @@ class ChristinaHouseScene extends RpgScene {
 
   constructor ()
   {
-    super('ChristinaHouseScene');
+    super('ChristinaHouseScene')
   }
 
   /**
@@ -21,21 +21,21 @@ class ChristinaHouseScene extends RpgScene {
   create (data) {
     super.create(
       'christina_house_tilemap',
-      'town_and_city_tileset',
+      ['town_and_city_tileset'],
       ['base_tiles', 'tiles2'],
       'miriam_left', 'miriam_up', 'miriam_down',
       'miriam_enterdoor',
       [],
       data)
 
-    this.christina_ = RpgUtils.createNPCCharacter(this, this.map_, 'christina_start', 'christina_down');
-    this.james_ = RpgUtils.createNPCCharacter(this, this.map_, 'james_start', 'james_down');
-    super.setStates(States.christinaHouseStates(this.christina_, this.james_));
+    this.christina_ = RpgUtils.createNPCCharacter(this, this.map_, 'christina_start', 'christina_down')
+    this.james_ = RpgUtils.createNPCCharacter(this, this.map_, 'james_start', 'james_down')
+    super.setStates(States.christinaHouseStates(this.christina_, this.james_))
 
-    let door = RpgUtils.createSpriteAtStartTileName(this, this.map_, 'door');
-    this.physics.add.overlap(this.player_, door, (player, tile) => {this._overlapDoor();});
-    this.physics.add.collider(this.player_, this.christina_);
-    this.physics.add.collider(this.player_, this.james_);
+    let door = RpgUtils.createSpriteAtStartTileName(this, this.map_, 'door')
+    this.physics.add.overlap(this.player_, door, (player, tile) => {this._overlapDoor()})
+    this.physics.add.collider(this.player_, this.christina_)
+    this.physics.add.collider(this.player_, this.james_)
   }
 
   /**
@@ -53,4 +53,4 @@ class ChristinaHouseScene extends RpgScene {
   }
 }
 
-export { ChristinaHouseScene };
+export { ChristinaHouseScene }

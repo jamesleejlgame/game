@@ -8,18 +8,18 @@ class MiriamHouseScene extends RpgScene {
   /**
    * The time in miliseconds after the scene starts to start the dialogue.
    */
-  static DIALOGUE_START_TIME = 2000;
+  static DIALOGUE_START_TIME = 2000
   /**
    * The possible miriam starting locations.
    */
   static startingLocationEnum = {
     START_GAME: 0,
     ENTER_DOOR: 1
-  };
+  }
 
   constructor ()
   {
-    super('MiriamHouseScene');
+    super('MiriamHouseScene')
   }
 
   /**
@@ -28,23 +28,23 @@ class MiriamHouseScene extends RpgScene {
    *   startingLocation {startingLocationEnum} the starting location of the miriam sprite.
    */
   create (data) {
-    let miriamStartTileObjectName;
+    let miriamStartTileObjectName
     if (data.startingLocation === MiriamHouseScene.startingLocationEnum.START_GAME) {
-      miriamStartTileObjectName = "miriam_start";
+      miriamStartTileObjectName = "miriam_start"
     } else if (data.startingLocation === MiriamHouseScene.startingLocationEnum.ENTER_DOOR) {
-      miriamStartTileObjectName = "miriam_enterdoor";
+      miriamStartTileObjectName = "miriam_enterdoor"
     }
     super.create(
       'miriam_house_tilemap',
-      'town_and_city_tileset',
+      ['town_and_city_tileset'],
       ['base_tiles', 'tiles2'],
       'miriam_left', 'miriam_up', 'miriam_down',
       miriamStartTileObjectName,
       States.miriamHouseStates,
       data)
 
-    let door = RpgUtils.createSpriteAtStartTileName(this, this.map_, 'door');
-    this.physics.add.overlap(this.player_, door, (player, tile) => {this._overlapDoor();});
+    let door = RpgUtils.createSpriteAtStartTileName(this, this.map_, 'door')
+    this.physics.add.overlap(this.player_, door, (player, tile) => {this._overlapDoor()})
   }
 
   /**
@@ -55,4 +55,4 @@ class MiriamHouseScene extends RpgScene {
   }
 }
 
-export { MiriamHouseScene };
+export { MiriamHouseScene }
