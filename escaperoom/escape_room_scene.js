@@ -20,6 +20,14 @@ class EscapeRoomScene extends RpgScene {
      * The piano scene.
      */
     this.pianoScene_ = null
+    /**
+     * The mog scene.
+     */
+    this.mogScene_ = null
+    /**
+     * The clock scene.
+     */
+    this.clockScene_ = null
   }
 
   /**
@@ -62,12 +70,35 @@ class EscapeRoomScene extends RpgScene {
         this.popupImageScene_.togglePicture('escaperoom_musicsheet')
       } else if (RpgUtils.areSpritesInRangeToInteract(this.player_, this.piano_)) {
         this.pianoScene_.toggle()
+      } else if (RpgUtils.areSpritesInRangeToInteract(this.player_, this.monitor_)) {
+        if (this.mogScene_ == null) {
+          this.scene.launch('MogScene', {callingClass: this})
+          this.scene.moveAbove(this.sceneName_, 'MogScene')
+        } else {
+          this.scene.stop('MogScene')
+          this.mogScene_ = null
+        }
+      } else if (RpgUtils.areSpritesInRangeToInteract(this.player_, this.clock_)) {
+        if (this.clockScene_ == null) {
+          this.scene.launch('ClockScene', {callingClass: this})
+          this.scene.moveAbove(this.sceneName_, 'ClockScene')
+        } else {
+          this.scene.stop('ClockScene')
+          this.clockScene_ = null
+        }
       } else {
         this.popupImageScene_.hidePicture()
       }
     }
   }
 
+  solved () {
+    this.scene.stop('ClockScene')
+    this.scene.stop('MogScene')
+    this.scene.stop('PianoScene')
+    this.scene.stop('PopupImageScene')
+    this.advanceToNextScene()
+  }
   /**
    * @override
    */

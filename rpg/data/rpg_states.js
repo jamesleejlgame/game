@@ -7,6 +7,7 @@ import { Dialogue } from './rpg_dialogue.js'
  * @key {string} type the type of state. Currently could be 'timer', or 'dialogue'.
  * @key {number} time only present if the type is 'timer'. How long after the previous state to start the next one.
  * @key {Dialogue} dialogue {Dialogue} the dialogue.
+ * @key {number?} speed an optional speed for the character movement
  *
  * For Tweens,
  * @key {string} animationEnd the animation to play at the end of this tween.
@@ -340,7 +341,214 @@ class States {
             location: 'james_1',
           }]}]},
     { type: 'dialogue', dialogue: Dialogue.proposal2 },
-  ]
+    ]
+  }
+
+  static mog (mog1, mog2, mog3) {
+    return [
+    { speed: 100,
+      type: 'npcsMove',
+      npcs: [
+        { target: mog1,
+          tweens: [
+            {
+              animation: 'mog_down',
+              location: 'pos_22',
+            },
+            {
+              animation: 'mog_down',
+              location: 'pos_32',
+            },
+            {
+              animation: 'mog_down',
+              location: 'pos_31',
+            },
+            {
+              animation: 'mog_down',
+              location: 'pos_32',
+            },
+            {
+              animation: 'mog_down',
+              location: 'pos_33',
+            },
+            {
+              animation: 'mog_down',
+              location: 'pos_32',
+            },
+            {
+              animation: 'mog_down',
+              location: 'pos_31',
+            },
+            {
+              animation: 'mog_down',
+              location: 'pos_41',
+            },
+            {
+              animation: 'mog_down',
+              location: 'pos_42',
+            },
+            {
+              animation: 'mog_down',
+              location: 'pos_41',
+            },
+            {
+              animation: 'mog_down',
+              location: 'pos_51',
+            },
+            {
+              animation: 'mog_down',
+              location: 'pos_52',
+            },
+            {
+              animation: 'mog_down',
+              location: 'pos_53',
+            },
+            {
+              animation: 'mog_down',
+              location: 'pos_43',
+            },
+            {
+              animation: 'mog_down',
+              location: 'pos_44',
+            },
+            {
+              animation: 'mog_down',
+              location: 'pos_34',
+            },
+            {
+              animation: 'mog_down',
+              animationEnd: 'mog_celebrate',
+              location: 'pos_24',
+            },
+          ]},
+        { target: mog2,
+          tweens:
+          [
+            { animation: 'mog_down',
+              location: 'pos_23',
+            },
+            { animation: 'mog_down',
+              location: 'pos_24',
+            },
+            { animation: 'mog_down',
+              location: 'pos_34',
+            },
+            { animation: 'mog_down',
+              location: 'pos_33',
+            },
+            { animation: 'mog_down',
+              location: 'pos_43',
+            },
+            { animation: 'mog_down',
+              location: 'pos_33',
+            },
+            { animation: 'mog_down',
+              location: 'pos_32',
+            },
+            { animation: 'mog_down',
+              location: 'pos_22',
+            },
+            { animation: 'mog_down',
+              location: 'pos_23',
+            },
+            { animation: 'mog_down',
+              location: 'pos_13',
+            },
+            { animation: 'mog_down',
+              location: 'pos_14',
+            },
+            { animation: 'mog_down',
+              location: 'pos_24',
+            },
+            { animation: 'mog_down',
+              location: 'pos_34',
+            },
+            { animation: 'mog_down',
+              location: 'pos_33',
+            },
+            { animation: 'mog_down',
+              location: 'pos_34',
+            },
+            { animation: 'mog_down',
+              location: 'pos_35',
+            },
+            { animation: 'mog_down',
+              location: 'pos_25',
+            },
+        ]},
+        { target: mog3,
+          tweens: [
+            {
+              animation: 'mog_down',
+              location: 'pos_33',
+            },
+            {
+              animation: 'mog_down',
+              location: 'pos_23',
+            },
+            {
+              animation: 'mog_down',
+              location: 'pos_22',
+            },
+            {
+              animation: 'mog_down',
+              location: 'pos_12',
+            },
+            {
+              animation: 'mog_down',
+              location: 'pos_11',
+            },
+            {
+              animation: 'mog_down',
+              location: 'pos_12',
+            },
+            {
+              animation: 'mog_down',
+              location: 'pos_22',
+            },
+            {
+              animation: 'mog_down',
+              location: 'pos_21',
+            },
+            {
+              animation: 'mog_down',
+              location: 'pos_22',
+            },
+            {
+              animation: 'mog_down',
+              location: 'pos_23',
+            },
+            {
+              animation: 'mog_down',
+              location: 'pos_33',
+            },
+            {
+              animation: 'mog_down',
+              location: 'pos_43',
+            },
+            {
+              animation: 'mog_down',
+              location: 'pos_42',
+            },
+            {
+              animation: 'mog_down',
+              location: 'pos_32',
+            },
+            {
+              animation: 'mog_down',
+              location: 'pos_42',
+            },
+            {
+              animation: 'mog_down',
+              location: 'pos_41',
+            },
+            {
+              animation: 'mog_down',
+              location: 'pos_31',
+            },
+          ]},
+        ]},
+    ]
   }
 }
 

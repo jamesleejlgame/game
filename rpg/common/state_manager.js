@@ -47,6 +47,10 @@ class StateManager {
     this.states = states
   }
 
+  resetIndex () {
+    this.index = -1
+  }
+
   /**
    * Checks to see if we should advance to the next state due to time. Must be called in the update function.
    * @param {Phaser.Input.Keyboard.Key?} actionKey the action key to check. Nullable.
@@ -108,7 +112,7 @@ class StateManager {
       return
     }
     if (state.type == 'npcsMove') {
-      state.npcs.forEach((npc, index) => this.animateTweens(npc, index == 0))
+      state.npcs.forEach((npc, index) => this.animateTweens(npc, index == 0, state.speed))
       return
     }
     if (state.type == 'renderLayer') {
@@ -121,8 +125,9 @@ class StateManager {
   /**
    * @param {Npc object} npc the npc object defined in RpgStates.
    * @param {boolean} isFirst whether this is the first npc or not.
+   * @param {number?} speed the speed of the animation if present.
    */
-  animateTweens (npc, isFirst) {
+  animateTweens (npc, isFirst, speed) {
     let target = npc.target
     let tweens = []
     let currentX = target.x
@@ -132,7 +137,7 @@ class StateManager {
       tweens.push({
         x: obj.x,
         y: obj.y,
-        duration: this.calculateDuration(currentX, currentY, obj.x, obj.y),
+        duration: this.calculateDuration(currentX, currentY, obj.x, obj.y, speed),
         onStartCallback: () => {
           target.flipX = false
           if (tween.flipX) {
@@ -166,8 +171,11 @@ class StateManager {
     })
   }
 
-  calculateDuration (x1, y1, x2, y2) {
-    return Math.max(0.1, RpgUtils.distanceBetweenCoordinates(x1, y1, x2, y2) * 1000 / RpgConstants.CHARACTER_SPEED)
+  calculateDuration (x1, y1, x2, y2, speed) {
+    if (speed == null) {
+      speed = RpgConstants.CHARACTER_SPEED
+    }
+    return Math.max(0.1, RpgUtils.distanceBetweenCoordinates(x1, y1, x2, y2) * 1000 / speed)
   }
 }
 

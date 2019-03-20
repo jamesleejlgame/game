@@ -3,7 +3,7 @@ import { MiriamHouseScene } from './rpg/scenes/miriam_house_scene.js'
 
 class BootScene extends Phaser.Scene {
   static ANIMATIONS = ['miriam_up', 'miriam_left', 'miriam_down', 'christina_up', 'christina_left', 'christina_down',
-    'gaby_down', 'james_up', 'james_left', 'james_down', 'shuriken']
+    'gaby_down', 'james_up', 'james_left', 'james_down', 'shuriken', 'mog_down', 'mog_left', 'mog_up', 'mog_celebrate']
 
   constructor ()
   {
@@ -29,6 +29,7 @@ class BootScene extends Phaser.Scene {
     this.load.tilemapTiledJSON('san_francisco_tilemap', 'assets/san_francisco_tiled.json')
     this.load.tilemapTiledJSON('sunnyvale_house_tilemap', 'assets/sunnyvale_house.json')
     this.load.tilemapTiledJSON('tokyo_tilemap', 'assets/tokyo.json')
+    this.load.tilemapTiledJSON('mog_tilemap', 'assets/mog.json')
 
     this.load.image('escaperoom_layout', 'assets/escaperoom_layout.png')
     this.load.image('escaperoom_grid', 'assets/escaperoom_grid.png')
@@ -68,12 +69,32 @@ class BootScene extends Phaser.Scene {
     this.load.spritesheet('karen_up', 'assets/karen_up.gif', { frameWidth: 30, frameHeight: 48 })
     this.load.spritesheet('gaby_down', 'assets/gaby_down.png', { frameWidth: 30, frameHeight: 48 })
     this.load.spritesheet('shuriken', 'assets/shuriken.png', { frameWidth: 16, frameHeight: 16 })
-
-    // From https://github.com/wasi0013/Phaser-Piano.
-    // TODO: Remove this.
-    this.load.image('keys', 'assets/tingting/p.png')
-    this.load.image('body', 'assets/tingting/bg.png')
-    this.load.audio('notes', ['assets/tingting/keys.mp3'] )
+    this.load.image('keys', 'assets/piano_keys_layout.png')
+    this.load.audio('PianoC4', ['assets/audio/Piano.mf.C4.mp3'])
+    this.load.audio('PianoD4', ['assets/audio/Piano.mf.D4.mp3'])
+    this.load.audio('PianoDb4', ['assets/audio/Piano.mf.Db4.mp3'])
+    this.load.audio('PianoE4', ['assets/audio/Piano.mf.E4.mp3'])
+    this.load.audio('PianoEb4', ['assets/audio/Piano.mf.Eb4.mp3'])
+    this.load.audio('PianoF4', ['assets/audio/Piano.mf.F4.mp3'])
+    this.load.audio('PianoG4', ['assets/audio/Piano.mf.G4.mp3'])
+    this.load.audio('PianoGb4', ['assets/audio/Piano.mf.Gb4.mp3'])
+    this.load.audio('PianoA4', ['assets/audio/Piano.mf.A4.mp3'])
+    this.load.audio('PianoAb4', ['assets/audio/Piano.mf.Ab4.mp3'])
+    this.load.audio('PianoB4', ['assets/audio/Piano.mf.B4.mp3'])
+    this.load.audio('PianoBb4', ['assets/audio/Piano.mf.Bb4.mp3'])
+    this.load.audio('PianoC5', ['assets/audio/Piano.mf.C5.mp3'])
+    this.load.audio('PianoD5', ['assets/audio/Piano.mf.D5.mp3'])
+    this.load.audio('PianoDb5', ['assets/audio/Piano.mf.Db5.mp3'])
+    this.load.audio('PianoE5', ['assets/audio/Piano.mf.E5.mp3'])
+    this.load.audio('PianoEb5', ['assets/audio/Piano.mf.Eb5.mp3'])
+    this.load.audio('PianoF5', ['assets/audio/Piano.mf.F5.mp3'])
+    this.load.audio('PianoG5', ['assets/audio/Piano.mf.G5.mp3'])
+    this.load.audio('PianoGb5', ['assets/audio/Piano.mf.Gb5.mp3'])
+    this.load.audio('PianoA5', ['assets/audio/Piano.mf.A5.mp3'])
+    this.load.audio('PianoAb5', ['assets/audio/Piano.mf.Ab5.mp3'])
+    this.load.audio('PianoB5', ['assets/audio/Piano.mf.B5.mp3'])
+    this.load.audio('PianoBb5', ['assets/audio/Piano.mf.Bb5.mp3'])
+    this.load.audio('song', ['assets/audio/song.mp3'])
   }
 
   create () {

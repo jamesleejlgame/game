@@ -30,6 +30,8 @@ import { PubQuizScene } from './rpg/scenes/pub_quiz_scene.js'
 import { SanFranciscoScene } from './rpg/scenes/san_francisco_scene.js'
 import { DrMarioScene } from './drmario/dr_mario_scene.js'
 import { PianoScene } from './escaperoom/piano_scene.js'
+import { MogScene } from './escaperoom/mog_scene.js'
+import { ClockScene } from './escaperoom/clock_scene.js'
 
 let scenes = [ BootScene ]
 
@@ -70,7 +72,9 @@ let config = {
     PreHarryPotterBattleScene,
     DrMarioScene,
     PopupImageScene,
-    PianoScene
+    PianoScene,
+    MogScene,
+    ClockScene
   ]
 }
 

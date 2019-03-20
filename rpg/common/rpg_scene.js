@@ -186,6 +186,13 @@ class RpgScene extends Phaser.Scene {
   setStates (states) {
     this.stateManager_.setSceneInfo(this.map_, this.player_, states)
   }
+
+  /**
+   * Resets the state index.
+   */
+  resetStateIndex () {
+    this.stateManager_.resetIndex()
+  }
 }
 
 export { RpgScene }
