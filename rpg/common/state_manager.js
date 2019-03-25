@@ -154,7 +154,7 @@ class StateManager {
             if (tween.animationFlipXOnEnd) {
                 target.flipX = tween.animationFlipXOnEnd
               }
-              target.anims.play(tween.animationEnd, true)
+              target.anims.play(tween.animationEnd, false, 0)
           }
           target.anims.stop()
         }

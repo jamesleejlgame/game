@@ -32,14 +32,17 @@ import { DrMarioScene } from './drmario/dr_mario_scene.js'
 import { PianoScene } from './escaperoom/piano_scene.js'
 import { MogScene } from './escaperoom/mog_scene.js'
 import { ClockScene } from './escaperoom/clock_scene.js'
+import { RpgBattleScene } from './rpg_battle/rpg_battle_scene.js'
+import { RpgBattleUIScene } from './rpg_battle/rpg_battle_ui_scene.js'
+import { Constants } from './constants.js'
 
 let scenes = [ BootScene ]
 
 let config = {
   type: Phaser.AUTO,
   parent: 'content',
-  width: 800,
-  height: 600,
+  width: Constants.WIDTH,
+  height: Constants.HEIGHT,
   pixelArt: true,
   physics: {
     default: 'arcade',
@@ -74,7 +77,9 @@ let config = {
     PopupImageScene,
     PianoScene,
     MogScene,
-    ClockScene
+    ClockScene,
+    RpgBattleScene,
+    RpgBattleUIScene
   ]
 }
 

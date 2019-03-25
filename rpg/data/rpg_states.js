@@ -474,6 +474,7 @@ class States {
             },
             { animation: 'mog_down',
               location: 'pos_25',
+              animationEnd: 'mog_down',
             },
         ]},
         { target: mog3,
@@ -545,6 +546,7 @@ class States {
             {
               animation: 'mog_down',
               location: 'pos_31',
+              animationEnd: 'mog_down',
             },
           ]},
         ]},

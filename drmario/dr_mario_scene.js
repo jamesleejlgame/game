@@ -1,5 +1,6 @@
 // TODO: The 's' key is used to start the game.
 import { DrMario, Player } from './dr_mario.js'
+import { Constants } from '../constants.js'
 
 class DrMarioScene extends Phaser.Scene {
 
@@ -71,9 +72,9 @@ class DrMarioScene extends Phaser.Scene {
 
   create () {
     this.drMario.initializeForPuzzle()
-    this.add.image(400, 300, 'dr_mario_background')
-    this.cameras.main.setBounds(0, 0, 800, 600)
-    this.physics.world.setBounds(0, 0, 800, 600)
+    this.add.image(Constants.WIDTH / 2, Constants.HEIGHT / 2, 'dr_mario_background')
+    this.cameras.main.setBounds(0, 0, Constants.WIDTH, Constants.HEIGHT)
+    this.physics.world.setBounds(0, 0, Constants.WIDTH, Constants.HEIGHT)
     this.cameras.main.roundPixels = true // avoid tile bleed
     this.resetGameKey_ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R)
     this.startGameKey_ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S)
@@ -182,13 +183,13 @@ class DrMarioScene extends Phaser.Scene {
         if (spriteIndex == null) {
           continue
         } else if (spriteIndex == 100) {
-          this.currentSprites_.push(this.physics.add.sprite(playerNum * 320 + 170 + w * 20, 510 - l * 20, 'dr_mario_yellow_virus', 0))
+          this.currentSprites_.push(this.physics.add.sprite(playerNum * 320 + 490 + w * 20, 660 - l * 20, 'dr_mario_yellow_virus', 0))
         } else if (spriteIndex == 200) {
-          this.currentSprites_.push(this.physics.add.sprite(playerNum * 320 + 170 + w * 20, 510 - l * 20, 'dr_mario_red_virus', 0))
+          this.currentSprites_.push(this.physics.add.sprite(playerNum * 320 + 490 + w * 20, 660 - l * 20, 'dr_mario_red_virus', 0))
         } else if (spriteIndex == 300) {
-          this.currentSprites_.push(this.physics.add.sprite(playerNum * 320 + 170 + w * 20, 510 - l * 20, 'dr_mario_blue_virus', 0))
+          this.currentSprites_.push(this.physics.add.sprite(playerNum * 320 + 490 + w * 20, 660 - l * 20, 'dr_mario_blue_virus', 0))
         } else {
-          this.currentSprites_.push(this.physics.add.sprite(playerNum * 320 + 170 + w * 20, 510 - l * 20, 'dr_mario_sprites', spriteIndex))
+          this.currentSprites_.push(this.physics.add.sprite(playerNum * 320 + 490 + w * 20, 660 - l * 20, 'dr_mario_sprites', spriteIndex))
         }
       }
     }
@@ -199,8 +200,8 @@ class DrMarioScene extends Phaser.Scene {
       let secondPieceType = (piece.orientation == DrMario.orientationEnum.HORIZONTAL) ? DrMario.blockTypeEnum.RIGHT : DrMario.blockTypeEnum.TOP
       let firstSpriteIndex = DrMarioScene.getSpriteIndex(firstPieceType, piece.firstColor)
       let secondSpriteIndex = DrMarioScene.getSpriteIndex(secondPieceType, piece.secondColor)
-      this.currentSprites_.push(this.physics.add.sprite(playerNum * 320 + 170 + coordinates[0][0] * 20, 510 - coordinates[0][1] * 20, 'dr_mario_sprites', firstSpriteIndex))
-      this.currentSprites_.push(this.physics.add.sprite(playerNum * 320 + 170 + coordinates[1][0] * 20, 510 - coordinates[1][1] * 20, 'dr_mario_sprites', secondSpriteIndex))
+      this.currentSprites_.push(this.physics.add.sprite(playerNum * 320 + 490 + coordinates[0][0] * 20, 660 - coordinates[0][1] * 20, 'dr_mario_sprites', firstSpriteIndex))
+      this.currentSprites_.push(this.physics.add.sprite(playerNum * 320 + 490 + coordinates[1][0] * 20, 660 - coordinates[1][1] * 20, 'dr_mario_sprites', secondSpriteIndex))
     }
   }
 
@@ -211,22 +212,22 @@ class DrMarioScene extends Phaser.Scene {
         if (spriteIndex == null) {
           continue
         } else if (spriteIndex == 100) {
-          this.currentSprites_.push(this.physics.add.sprite(playerNum * 320 + 170 + w * 20, 510 - l * 20, 'dr_mario_yellow_virus', 0))
+          this.currentSprites_.push(this.physics.add.sprite(playerNum * 320 + 490 + w * 20, 660 - l * 20, 'dr_mario_yellow_virus', 0))
         } else if (spriteIndex == 200) {
-          this.currentSprites_.push(this.physics.add.sprite(playerNum * 320 + 170 + w * 20, 510 - l * 20, 'dr_mario_red_virus', 0))
+          this.currentSprites_.push(this.physics.add.sprite(playerNum * 320 + 490 + w * 20, 660 - l * 20, 'dr_mario_red_virus', 0))
         } else if (spriteIndex == 300) {
-          this.currentSprites_.push(this.physics.add.sprite(playerNum * 320 + 170 + w * 20, 510 - l * 20, 'dr_mario_blue_virus', 0))
+          this.currentSprites_.push(this.physics.add.sprite(playerNum * 320 + 490 + w * 20, 660 - l * 20, 'dr_mario_blue_virus', 0))
         } else {
-          this.currentSprites_.push(this.physics.add.sprite(playerNum * 320 + 170 + w * 20, 510 - l * 20, 'dr_mario_sprites', spriteIndex))
+          this.currentSprites_.push(this.physics.add.sprite(playerNum * 320 + 490 + w * 20, 660 - l * 20, 'dr_mario_sprites', spriteIndex))
         }
       }
     }
   }
 
   renderUpcomingBlocks (playerNum) {
-    for (let i = 0; i < Math.min(6, this.drMario.players[playerNum].upcomingPieces.length); ++i) {
-      this.currentSprites_.push(this.physics.add.sprite(playerNum * 600 + 90, 210 + i * 20, 'dr_mario_sprites', DrMarioScene.getLeftSpriteIndex(this.drMario.players[playerNum].upcomingPieces[i])))
-      this.currentSprites_.push(this.physics.add.sprite(playerNum * 600 + 90 + 20, 210 + i * 20, 'dr_mario_sprites', DrMarioScene.getRightSpriteIndex(this.drMario.players[playerNum].upcomingPieces[i])))
+    for (let i = 0; i < Math.min(7, this.drMario.players[playerNum].upcomingPieces.length); ++i) {
+      this.currentSprites_.push(this.physics.add.sprite(playerNum * 600 + 410, 360 + i * 20, 'dr_mario_sprites', DrMarioScene.getLeftSpriteIndex(this.drMario.players[playerNum].upcomingPieces[i])))
+      this.currentSprites_.push(this.physics.add.sprite(playerNum * 600 + 410 + 20, 360 + i * 20, 'dr_mario_sprites', DrMarioScene.getRightSpriteIndex(this.drMario.players[playerNum].upcomingPieces[i])))
     }
   }
 

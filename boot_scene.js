@@ -49,6 +49,15 @@ class BootScene extends Phaser.Scene {
     this.load.image('hermione_down', 'assets/hermione_down.png')
     this.load.image('ron_down', 'assets/ron_down.png')
     this.load.image('snape_left', 'assets/snape_left.png')
+    this.load.image('forest_battle', 'assets/forest_battle.gif')
+    this.load.image('harry_potter_battle', 'assets/harry_potter_battle.png')
+    this.load.image('hermione_battle', 'assets/hermione_battle.png')
+    this.load.image('ron_battle', 'assets/ron_battle.png')
+    this.load.image('snape_battle', 'assets/snape_battle.png')
+    this.load.image('spider_battle1', 'assets/spider_battle1.gif')
+    this.load.image('spider_battle2', 'assets/spider_battle2.gif')
+    this.load.image('spider_egg_battle', 'assets/spider_egg_battle.png')
+    this.load.image('voldemort_battle', 'assets/voldemort_battle.png')
     this.load.spritesheet('dr_mario_sprites', 'assets/dr_mario_sprites2.png', { frameWidth: 19, frameHeight: 19, spacing: 1 })
     this.load.spritesheet('dr_mario_yellow_virus', 'assets/dr_mario_yellow_virus.png', { frameWidth: 20, frameHeight: 20 })
     this.load.spritesheet('dr_mario_blue_virus', 'assets/dr_mario_blue_virus.png', { frameWidth: 20, frameHeight: 20 })
@@ -99,7 +108,7 @@ class BootScene extends Phaser.Scene {
 
   create () {
     //this.scene.start('MiriamHouseScene', {startingLocation: MiriamHouseScene.startingLocationEnum.START_GAME, fadeIn: true})
-    this.scene.start('EscapeRoomScene')
+    this.scene.start('RpgBattleScene')
   }
 }
 

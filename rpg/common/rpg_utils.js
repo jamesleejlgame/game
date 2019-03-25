@@ -1,4 +1,5 @@
 import { RpgConstants } from './constants.js'
+import { Constants } from '../../constants.js'
 
 class RpgUtils {
   // Non configurable.
@@ -27,8 +28,8 @@ class RpgUtils {
       layer.setCollisionByProperty({ collides: true })
       layers.push(layer)
     })
-    scene.cameras.main.setBounds(0, 0, 1024, 1024)
-    scene.physics.world.setBounds(0, 0, 1024, 1024)
+    scene.cameras.main.setBounds(0, 0, Constants.WIDTH, Constants.HEIGHT)
+    scene.physics.world.setBounds(0, 0, Constants.WIDTH, Constants.HEIGHT)
     scene.cameras.main.roundPixels = true // avoid tile bleed
     ret.push(layers)
     return ret
