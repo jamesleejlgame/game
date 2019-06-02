@@ -78,8 +78,8 @@ let config = {
     PianoScene,
     MogScene,
     ClockScene,
-    RpgBattleScene,
-    RpgBattleUIScene
+    //RpgBattleScene, Do not submit
+    //RpgBattleUIScene Do not submit.
   ]
 }
 

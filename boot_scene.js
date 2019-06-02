@@ -3,7 +3,8 @@ import { MiriamHouseScene } from './rpg/scenes/miriam_house_scene.js'
 
 class BootScene extends Phaser.Scene {
   static ANIMATIONS = ['miriam_up', 'miriam_left', 'miriam_down', 'christina_up', 'christina_left', 'christina_down',
-    'gaby_down', 'james_up', 'james_left', 'james_down', 'shuriken', 'mog_down', 'mog_left', 'mog_up', 'mog_celebrate']
+    'gaby_down', 'james_up', 'james_left', 'james_down', 'shuriken', 'mog_down', 'mog_left', 'mog_up', 'mog_celebrate',
+    'firemagic', 'curemagic', 'airblast', 'evilmagic']
 
   constructor ()
   {
@@ -58,6 +59,7 @@ class BootScene extends Phaser.Scene {
     this.load.image('spider_battle2', 'assets/spider_battle2.gif')
     this.load.image('spider_egg_battle', 'assets/spider_egg_battle.png')
     this.load.image('voldemort_battle', 'assets/voldemort_battle.png')
+    this.load.image('dementor_battle', 'assets/dementor_battle.png')
     this.load.spritesheet('dr_mario_sprites', 'assets/dr_mario_sprites2.png', { frameWidth: 19, frameHeight: 19, spacing: 1 })
     this.load.spritesheet('dr_mario_yellow_virus', 'assets/dr_mario_yellow_virus.png', { frameWidth: 20, frameHeight: 20 })
     this.load.spritesheet('dr_mario_blue_virus', 'assets/dr_mario_blue_virus.png', { frameWidth: 20, frameHeight: 20 })
@@ -78,6 +80,10 @@ class BootScene extends Phaser.Scene {
     this.load.spritesheet('karen_up', 'assets/karen_up.gif', { frameWidth: 30, frameHeight: 48 })
     this.load.spritesheet('gaby_down', 'assets/gaby_down.png', { frameWidth: 30, frameHeight: 48 })
     this.load.spritesheet('shuriken', 'assets/shuriken.png', { frameWidth: 16, frameHeight: 16 })
+    this.load.spritesheet('firemagic', 'assets/firemagic.png', { frameWidth: 32, frameHeight: 64 })
+    this.load.spritesheet('curemagic', 'assets/curemagic.png', { frameWidth: 30, frameHeight: 28 })
+    this.load.spritesheet('airblast', 'assets/airblast.png', { frameWidth: 32, frameHeight: 20 })
+    this.load.spritesheet('evilmagic', 'assets/evilmagic.png', { frameWidth: 32, frameHeight: 32 })
     this.load.image('keys', 'assets/piano_keys_layout.png')
     this.load.audio('PianoC4', ['assets/audio/Piano.mf.C4.mp3'])
     this.load.audio('PianoD4', ['assets/audio/Piano.mf.D4.mp3'])
@@ -107,8 +113,8 @@ class BootScene extends Phaser.Scene {
   }
 
   create () {
-    //this.scene.start('MiriamHouseScene', {startingLocation: MiriamHouseScene.startingLocationEnum.START_GAME, fadeIn: true})
-    this.scene.start('RpgBattleScene')
+    this.scene.start('MiriamHouseScene', {startingLocation: MiriamHouseScene.startingLocationEnum.START_GAME, fadeIn: true})
+    //this.scene.start('RpgBattleScene')
   }
 }
 
